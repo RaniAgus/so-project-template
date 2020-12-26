@@ -19,7 +19,14 @@ Ambos makefiles:
 
 Además, se incluye:
 
-✔️ Un script para correr cada módulo, incluso con gdb o valgrind (memcheck o helgrind), configurando automáticamente `LD_LIBRARY_PATH` antes de cada ejecución. 
+✔️ Un script para correr cada módulo, incluso con gdb o valgrind (memcheck o helgrind), configurando automáticamente `LD_LIBRARY_PATH` antes de cada ejecución. Para ejecutarlo se debe ingresar:
+
+```
+./run.sh [OPTION] [MODULE] [ARGS]
+``` 
+- `[OPTION]`: Es opcional. Puede ser `valgrind`, `helgrind` o `gdb`.
+- `[MODULE]`: Es el nombre del proyecto a correr, en este caso `project`.
+- `[ARGS]`: Son los parámetros que se le pasan a la función `main()`.
 
 ## Requerimientos
 
