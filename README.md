@@ -23,7 +23,7 @@ Además, el makefile del proyecto incluye:
 
 ## Uso
 
-Hay un ejemplo de uso en [este repo](https://github.com/RaniAgus/utnso-project-example). 
+Hay un ejemplo de uso en [este repo](https://github.com/RaniAgus/utnso-project-example/commit/adc00988e951a6c2a4b07cdcd0412b40d5a2ef55). 
 
 ### Requerimientos
 
