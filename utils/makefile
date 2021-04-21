@@ -1,5 +1,3 @@
-# Include libraries here
-LIBRARIES=
 # Include custom library paths here
 LIBRARY_PATHS=
 
@@ -13,11 +11,8 @@ CC=gcc
 CFLAGS=-Wall -DDEBUG -g
 INCLUDES=$(LIBRARY_PATHS:%=-I"%")
 
-# Linker
-LINKS=$(LIBRARY_PATHS:%=-L"%/bin") $(LIBRARIES:%=-l%)
-
 # Main subirectories
-SRCDIR=src
+SRCDIR=$(PROJECT)
 OBJDIR=obj
 BINDIR=bin
 
@@ -25,11 +20,8 @@ BINDIR=bin
 DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR) -type d | tr '\n' ' '))
 
 # Objects
-BINARY=$(BINDIR)/$(PROJECT)
+BINARY=$(BINDIR)/lib$(PROJECT).a
 OBJECTS=$(patsubst ./$(SRCDIR)/%.c, $(OBJDIR)/%.o, $(shell find . -iname "*.c" | tr '\n' ' '))
-
-# Dependencies
-DEPENDENCIES=$(foreach THERE, $(LIBRARY_PATHS), $(patsubst ./%,$(THERE)/%,$(shell make --no-print-directory -C $(THERE) dependencies)))
 
 # ==============================================================================================================
 
@@ -42,27 +34,24 @@ release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
 
-memcheck: all
-	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" $(BINARY)
-
-helgrind: all
-	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" $(BINARY)
+dependencies:
+	@echo $(shell find . -iname "*.c" | tr '\n' ' ') $(shell find . -iname "*.h" | tr '\n' ' ')
 
 # ==============================================================================================================
 
 # Build project
 $(BINARY): $(DIRECTORIES) $(OBJECTS)
-	$(CC) $(CFLAGS) -o "$@" $(OBJECTS) $(LINKS)
+	ar rcs -o "$@" $(OBJECTS)
 
 # Create directories for objects
 $(DIRECTORIES):
 	mkdir -p $@
 
 # Build objects
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPENDENCIES)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-.PHONY: all clean debug release memcheck helgrind
+.PHONY: all clean debug release dependencies

@@ -1,6 +1,7 @@
-#include <shared/hello.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 int main(int argc, char* argv[]) {
-    helloWorld();
+    puts("Hello world!!");
     return 0;
 }

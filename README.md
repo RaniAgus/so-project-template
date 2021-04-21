@@ -1,67 +1,69 @@
 # utnso-project
-Template para facilitar la creación de proyectos en C con una biblioteca compartida.
+Template para facilitar la creación de proyectos en C con una biblioteca 
+compartida.
 
 ## Features
 
 Ambos makefiles:
 
-✔️ Compilan solamente las dependencias necesarias (incluso se verifica si la shared library está actualizada)
+✔️ Compilan solamente los archivos fuente necesarios, incluso detecta cuándo las
+bibliotecas hechas por el usuario fueron modificadas para volver a compilar
+todos los objetos.
 
-✔️ Permiten el uso de subcarpetas
+✔️ Permiten el uso de subcarpetas.
 
-✔️ Se pueden importar desde Eclipse, CLion, VSCode o cualquier editor de texto u entorno de desarrollo
+✔️ Se pueden importar desde Eclipse, CLion, VSCode o cualquier editor de texto u
+ entorno de desarrollo.
 
-✔️ Permiten que el repo se pueda deployar usando el script [so-deploy](https://github.com/sisoputnfrba/so-deploy)
+✔️ Permiten que el repo se pueda deployar usando el script 
+[so-deploy](https://github.com/sisoputnfrba/so-deploy).
 
-✔️ No requieren que se especifique el nombre del proyecto al que pertenecen (alcanza con copiar la carpeta `example/` y modificar su nombre para configurar el nombre del proyecto)
+✔️ No requieren que se especifique el nombre del proyecto al que pertenecen 
+(alcanza con copiar la carpeta `project/` o `utils/` y modificar su nombre para 
+configurar el nombre del proyecto).
 
-Además, se incluye:
+Además, el makefile del proyecto incluye:
 
-✔️ Un script para correr cada módulo, incluso con gdb o valgrind (memcheck o helgrind), configurando automáticamente `LD_LIBRARY_PATH` antes de cada ejecución. 
+✔️ Flags de debug para `make all` y flags de release para `make release`.
+
+✔️ Ejecución con Valgrind mediante `make memcheck` y `make helgrind`.
 
 ## Uso
 
-Hay un ejemplo de uso en [este repo](https://github.com/RaniAgus/utnso-project-example). 
+Hay un ejemplo de uso en 
+[este repo](https://github.com/RaniAgus/utnso-project-example). 
 
 ### Requerimientos
 
-Ambos makefiles y el script `run.sh` funcionan bajo la siguiente estructura, adaptada para que [so-deploy](https://github.com/sisoputnfrba/so-deploy) funcione:
+Los proyectos funcionan bajo la siguiente estructura, adaptada para que 
+[so-deploy](https://github.com/sisoputnfrba/so-deploy) funcione:
 ```
 .
 │  
-└─── proyecto1/  
-|     └─── src/  
-|     └─── makefile  
-└─── proyecto2/  
-|     └─── src/  
-|     └─── makefile  
-└─── ...
-└─── proyectoN/  
-|     └─── src/  
-|     └─── makefile  
-└─── shared/  
-|     └─── shared/  
+└─── <project1>/
+|     └─── src/
 |     └─── makefile
-└─── run.sh  
+└─── <project2>/
+|     └─── src/
+|     └─── makefile
+└─── ...
+└─── <projectN>/
+|     └─── src/
+|     └─── makefile
+└─── <staticLib>/
+      └─── <staticLib>/
+      └─── makefile
 ```
-- Para la shared library es **obligatorio** que tanto la carpeta con el nombre del mismo como la subcarpeta en donde se encuentran los `*.c` y `*.h` tengan el mismo nombre. Además, cada proyecto debe tener configurada correctamente la macro `LIB_NAME` con el nombre de la carpeta de la shared library (ídem para la macro `SHARED_NAME` en el script). El nombre por defecto de la biblioteca es `shared`.
-- Para cada proyecto, el nombre por defecto de la subcarpeta en donde se encuentran los `*.c` y `*.h` es `src/`
 
 ### ¿Cómo incluyo una library?
 
-Para incluir una library, alcanza con editar la macro `LIBS` del makefile como [en el ejemplo](https://github.com/RaniAgus/utnso-project-example/blob/190e1d65aada9bed30bd0f9483b57d6cbd1e57f3/project/makefile#L8).
-
-### ¿Cómo ejecuto el script?
-
-Para ejecutar `run.sh`, se debe ingresar:
-
-```
-./run.sh [OPTION] [MODULE] [ARGS]
-``` 
-- `[OPTION]`: Es opcional. Puede ser `valgrind`, `helgrind` o `gdb`.
-- `[MODULE]`: Es el nombre del proyecto a correr, en este caso `project`.
-- `[ARGS]`: Son los parámetros que se le pasan a la función `main()`.
+Para incluir una library alcanza con editar la macro `LIBRARIES` del makefile. 
+También, para incluir una library propia se debe editar tanto `LIBRARIES` como 
+`LIBRARY_PATHS`. Se puede ver un ejemplo 
+[aquí](https://github.com/RaniAgus/utnso-project-example/commit/adc00988e951a6c2a4b07cdcd0412b40d5a2ef55).
 
 ## Contacto
 
-Si encontrás algun error en los makefiles o tenés alguna sugerencia, no dudes en levantar un issue en este repositorio!
+Si encontrás algun error en los makefiles o tenés alguna sugerencia, ¡no dudes 
+en levantar un issue en este repositorio!
+
