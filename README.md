@@ -6,7 +6,7 @@ compartida.
 
 Ambos makefiles:
 
-✔️ Compilan solamente las dependencias necesarias.
+✔️ Compilan solamente las dependencias necesarias (incluyendo las libraries).
 
 ✔️ Permiten el uso de subcarpetas.
 

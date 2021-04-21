@@ -28,6 +28,9 @@ DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell fin
 BINARY=$(BINDIR)/$(PROJECT)
 OBJECTS=$(patsubst ./$(SRCDIR)/%.c, $(OBJDIR)/%.o, $(shell find . -iname "*.c" | tr '\n' ' '))
 
+# Dependencies
+DEPENDENCIES=$(foreach THERE, $(LIBRARY_PATHS), $(patsubst ./%,$(THERE)/%,$(shell make --no-print-directory -C $(THERE) dependencies)))
+
 # ==============================================================================================================
 
 all: $(BINARY)
@@ -56,10 +59,12 @@ $(DIRECTORIES):
 	mkdir -p $@
 
 # Build objects
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
+	@for f in $(LIBRARY_PATHS); do make --no-print-directory -C $$f; done
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPENDENCIES)
+	@for f in $(LIBRARY_PATHS); do make --no-print-directory -C $$f; done
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 .PHONY: all clean debug release memcheck helgrind

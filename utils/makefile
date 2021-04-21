@@ -34,6 +34,9 @@ release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
 
+dependencies:
+	@echo $(shell find . -iname "*.c" | tr '\n' ' ') $(shell find . -iname "*.h" | tr '\n' ' ')
+
 # ==============================================================================================================
 
 # Build project
@@ -51,4 +54,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-.PHONY: all clean debug release
+.PHONY: all clean debug release dependencies
