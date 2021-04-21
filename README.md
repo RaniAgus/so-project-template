@@ -5,19 +5,22 @@ Template para facilitar la creación de proyectos en C con una biblioteca compar
 
 Ambos makefiles:
 
-✔️ Compilan solamente las dependencias necesarias (incluso se verifica si la shared library está actualizada)
+✔️ Compilan solamente las dependencias necesarias (incluso se verifica si la shared library está actualizada).
 
-✔️ Permiten el uso de subcarpetas
+✔️ Permiten el uso de subcarpetas.
 
-✔️ Se pueden importar desde Eclipse, CLion, VSCode o cualquier editor de texto u entorno de desarrollo
+✔️ Se pueden importar desde Eclipse, CLion, VSCode o cualquier editor de texto u entorno de desarrollo.
 
-✔️ Permiten que el repo se pueda deployar usando el script [so-deploy](https://github.com/sisoputnfrba/so-deploy)
+✔️ Permiten que el repo se pueda deployar usando el script [so-deploy](https://github.com/sisoputnfrba/so-deploy).
 
-✔️ No requieren que se especifique el nombre del proyecto al que pertenecen (alcanza con copiar la carpeta `example/` y modificar su nombre para configurar el nombre del proyecto)
+✔️ No requieren que se especifique el nombre del proyecto al que pertenecen (alcanza con copiar la carpeta `project/` o `utils/` y modificar su nombre para configurar el nombre del proyecto).
+
+Además, el makefile del proyecto incluye:
 
 ✔️ Flags de debug para `make all` y flags de release para `make release`.
 
-✔️ Permiten ejecutar con Valgrind mediante `make memcheck` y `make helgrind`.
+✔️ Ejecución con Valgrind mediante `make memcheck` y `make helgrind`.
+
 ## Uso
 
 Hay un ejemplo de uso en [este repo](https://github.com/RaniAgus/utnso-project-example). 
@@ -28,24 +31,24 @@ Los proyectos funcionan bajo la siguiente estructura, adaptada para que [so-depl
 ```
 .
 │  
-└─── <proyecto1>/
+└─── <project1>/
 |     └─── src/
 |     └─── makefile
-└─── <proyecto2>/
+└─── <project2>/
 |     └─── src/
 |     └─── makefile
 └─── ...
-└─── <proyectoN>/
+└─── <projectN>/
 |     └─── src/
 |     └─── makefile
-└─── <shared>/
-      └─── <shared>/
+└─── <staticLib>/
+      └─── <staticLib>/
       └─── makefile
 ```
 
 ### ¿Cómo incluyo una library?
 
-Para incluir una library alcanza con editar la macro `LIBRARIES` del makefile.También, para incluir una library propia se debe editar tanto `LIBRARIES` como `LIBRARY_PATHS`. Se puede ver un ejemplo [aquí](https://github.com/RaniAgus/utnso-project-example/blob/master/project/makefile#L1:L5).
+Para incluir una library alcanza con editar la macro `LIBRARIES` del makefile. También, para incluir una library propia se debe editar tanto `LIBRARIES` como `LIBRARY_PATHS`. Se puede ver un ejemplo [aquí](https://github.com/RaniAgus/utnso-project-example/blob/master/client/makefile#L1:L5).
 
 ## Contacto
 
