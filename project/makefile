@@ -1,44 +1,65 @@
-# Edit sources folder and objects folder name here
-SRC=src
-OBJ=obj
+# Include libraries here
+LIBRARIES=
+# Include custom library paths here
+LIBRARY_PATHS=
 
-# Include dependencies here
-LIB_NAME:=shared
-LIB_PATH:=../$(LIB_NAME)
-LIBS:=-L "$(LIB_PATH)" -l$(LIB_NAME)
+# ==============================================================================================================
 
-# Setup
-CC:=gcc
-NAME:=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
-SRC_DIRS=$(shell find $(SRC) -type d)
-OBJ_DIRS=$(patsubst $(SRC)%,$(OBJ)%,$(SRC_DIRS))
-C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
-H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
-LIB_SRCS=$(patsubst .%,$(LIB_PATH)%,$(shell make --no-print-directory -C $(LIB_PATH) srcs | tr '\n' ' ')) 
-OBJS=$(C_SRCS:./$(SRC)/%.c=$(OBJ)/%.o)
+# Project name
+PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
 
-# All target
-all: $(NAME).out
+# Compiler
+CC=gcc
+CFLAGS=-Wall -DDEBUG -g
+INCLUDES=$(LIBRARY_PATHS:%=-I"%")
+
+# Linker
+LINKS=$(LIBRARY_PATHS:%=-L"%/bin") $(LIBRARIES:%=-l%)
+
+# Main subirectories
+SRCDIR=src
+OBJDIR=obj
+BINDIR=bin
+
+# Directories
+DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR) -type d))
+
+# Objects
+BINARY=$(BINDIR)/$(PROJECT)
+OBJECTS=$(patsubst ./$(SRCDIR)/%.c, $(OBJDIR)/%.o, $(shell find . -iname "*.c" | tr '\n' ' '))
+
+# ==============================================================================================================
+
+all: $(BINARY)
+
+clean:
+	rm -rf $(BINDIR) $(OBJDIR)
+
+release: CFLAGS = -Wall -DNDEBUG
+release: clean
+release: all
+
+memcheck: all
+	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" $(BINARY)
+
+helgrind: all
+	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" $(BINARY)
+
+# ==============================================================================================================
 
 # Build project
-$(NAME).out: $(LIB_PATH)/lib$(LIB_NAME).so $(OBJ_DIRS) $(OBJS)
-	$(CC) -I$(LIB_PATH) -g -Wall -o "$(NAME).out" $(OBJS) $(LIBS)
-
-# Build own shared library
-$(LIB_PATH)/lib$(LIB_NAME).so: $(LIB_SRCS)
-	make -C $(LIB_PATH)
+$(BINARY): $(DIRECTORIES) $(OBJECTS)
+	$(CC) $(CFLAGS) -o "$@" $(OBJECTS) $(LINKS)
 
 # Create directories for objects
-$(OBJ_DIRS):
+$(DIRECTORIES):
 	mkdir -p $@
 
 # Build objects
-$(OBJ)/%.o: $(SRC)/%.c
-	$(CC) -I$(LIB_PATH) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-# Clean target
-clean:
-	rm -f $(NAME).out
-	rm -rf $(OBJ)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-.PHONY: all clean
+.PHONY: all clean debug release memcheck helgrind

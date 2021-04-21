@@ -1,50 +1,54 @@
-# Edit objects folder name here
-OBJ=obj
+# Include custom library paths here
+LIBRARY_PATHS=
 
-# Setup
+# ==============================================================================================================
+
+# Project name
+PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
+
+# Compiler
 CC=gcc
-NAME:=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
-SRC_DIRS=$(shell find $(NAME) -type d)
-OBJ_DIRS=$(patsubst $(NAME)%,$(OBJ)%,$(SRC_DIRS))
-C_SRCS=$(shell find . -iname "*.c" | tr '\n' ' ')
-H_SRCS=$(shell find . -iname "*.h" | tr '\n' ' ')
-OBJS=$(C_SRCS:./$(NAME)/%.c=$(OBJ)/%.o)
+CFLAGS=-Wall -DDEBUG -g
+INCLUDES=$(LIBRARY_PATHS:%=-I"%")
 
-# All target
-all: lib$(NAME).so
+# Main subirectories
+SRCDIR=$(PROJECT)
+OBJDIR=obj
+BINDIR=bin
 
-# Compile .so
-lib$(NAME).so: $(OBJ_DIRS) $(OBJS)
-	$(CC) -shared -o "lib$(NAME).so" $(OBJS)
+# Directories
+DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR) -type d))
 
-# Create dirs
-$(OBJ_DIRS):
+# Objects
+BINARY=$(BINDIR)/lib$(PROJECT).a
+OBJECTS=$(patsubst ./$(SRCDIR)/%.c, $(OBJDIR)/%.o, $(shell find . -iname "*.c" | tr '\n' ' '))
+
+# ==============================================================================================================
+
+all: $(BINARY)
+
+clean:
+	rm -rf $(BINDIR) $(OBJDIR)
+
+release: CFLAGS = -Wall -DNDEBUG
+release: clean
+release: all
+
+# ==============================================================================================================
+
+# Build project
+$(BINARY): $(DIRECTORIES) $(OBJECTS)
+	ar rcs -o "$@" $(OBJECTS)
+
+# Create directories for objects
+$(DIRECTORIES):
 	mkdir -p $@
 
 # Build objects
-$(OBJ)/%.o: $(NAME)/%.c $(NAME)/%.h
-	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-# Print all sources
-srcs:
-	@echo $(C_SRCS) $(H_SRCS)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-# Add debug parameters and compile
-debug: CC += -DDEBUG -g
-debug: all
-
-# Clean build files
-clean:
-	rm -f lib$(NAME).so
-	rm -rf $(OBJ)
-
-# Shared library installation
-install: all
-	sudo cp -u lib$(NAME).so /usr/lib
-	sudo cp --parents -u $(H_SRCS) /usr/include
-
-uninstall:
-	sudo rm -f /usr/lib/lib$(NAME).so
-	sudo rm -rf /usr/include/$(NAME)
-
-.PHONY: all clean install uninstall
+.PHONY: all clean debug release
