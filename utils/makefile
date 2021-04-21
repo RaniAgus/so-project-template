@@ -17,7 +17,7 @@ OBJDIR=obj
 BINDIR=bin
 
 # Directories
-DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR) -type d))
+DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR) -type d | tr '\n' ' '))
 
 # Objects
 BINARY=$(BINDIR)/lib$(PROJECT).a
