@@ -60,11 +60,9 @@ $(DIRECTORIES):
 
 # Build objects
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
-	@for f in $(LIBRARY_PATHS); do make --no-print-directory -C $$f; done
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPENDENCIES)
-	@for f in $(LIBRARY_PATHS); do make --no-print-directory -C $$f; done
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 .PHONY: all clean debug release memcheck helgrind

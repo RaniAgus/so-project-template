@@ -6,7 +6,9 @@ compartida.
 
 Ambos makefiles:
 
-✔️ Compilan solamente las dependencias necesarias (incluyendo las libraries).
+✔️ Compilan solamente los archivos fuente necesarios, incluso detecta cuándo las
+bibliotecas hechas por el usuario fueron modificadas para volver a compilar
+todos los objetos.
 
 ✔️ Permiten el uso de subcarpetas.
 
