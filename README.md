@@ -23,7 +23,7 @@ Además, el makefile del proyecto incluye:
 
 ## Uso
 
-Hay un ejemplo de uso en [este repo](https://github.com/RaniAgus/utnso-project-example/commit/adc00988e951a6c2a4b07cdcd0412b40d5a2ef55). 
+Hay un ejemplo de uso en [este repo](https://github.com/RaniAgus/utnso-project-example). 
 
 ### Requerimientos
 
@@ -48,7 +48,7 @@ Los proyectos funcionan bajo la siguiente estructura, adaptada para que [so-depl
 
 ### ¿Cómo incluyo una library?
 
-Para incluir una library alcanza con editar la macro `LIBRARIES` del makefile. También, para incluir una library propia se debe editar tanto `LIBRARIES` como `LIBRARY_PATHS`. Se puede ver un ejemplo [aquí](https://github.com/RaniAgus/utnso-project-example/blob/master/client/makefile#L1:L5).
+Para incluir una library alcanza con editar la macro `LIBRARIES` del makefile. También, para incluir una library propia se debe editar tanto `LIBRARIES` como `LIBRARY_PATHS`. Se puede ver un ejemplo [aquí](https://github.com/RaniAgus/utnso-project-example/commit/adc00988e951a6c2a4b07cdcd0412b40d5a2ef55).
 
 ## Contacto
 
