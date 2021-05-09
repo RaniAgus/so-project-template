@@ -26,6 +26,9 @@ INCLUDES=$(LIBRARY_PATHS:%=-I"%")
 BINARY=$(BINDIR)/lib$(PROJECT).a
 OBJECTS=$(SOURCES:./$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
+# Dependencies
+DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell cd $(LIBPATH) && make sources)))
+
 # ==============================================================================================================
 
 all: $(BINARY)
@@ -51,10 +54,10 @@ $(DIRECTORIES):
 	mkdir -p $@
 
 # Build objects
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # ==============================================================================================================
@@ -62,6 +65,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 makefile-test:
 	@echo "Project name:  $(PROJECT)"
 	@echo "Source files:  $(SOURCES)"
+	@echo "Dependencies:  $(DEPENDENCIES)"
 	@echo "Include flags: $(INCLUDES)"
 	@echo "Directories:   $(DIRECTORIES)"
 
