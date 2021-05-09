@@ -51,7 +51,7 @@ Los proyectos funcionan bajo la siguiente estructura, adaptada para que
 |     └─── src/
 |     └─── makefile
 └─── <staticLib>/
-      └─── <staticLib>/
+      └─── src/
       └─── makefile
 ```
 

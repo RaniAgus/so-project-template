@@ -19,7 +19,7 @@ DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-INCLUDES=$(LIBRARY_PATHS:%=-I"%")
+INCLUDES=$(LIBRARY_PATHS:%=-I"%/src")
 
 # Linker
 SOURCES=$(filter ./$(SRCDIR)/%, $(shell find . -iname "*.c" | tr '\n' ' '))

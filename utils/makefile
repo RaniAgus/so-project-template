@@ -7,7 +7,7 @@ LIBRARY_PATHS=
 PROJECT=$(shell basename $(PWD))
 
 # Main subirectories
-SRCDIR=$(PROJECT)
+SRCDIR=src
 OBJDIR=obj
 BINDIR=bin
 
