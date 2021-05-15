@@ -1,4 +1,4 @@
-# utnso-project
+# so-project-template
 Template para facilitar la creación de proyectos en C con una biblioteca 
 compartida.
 
@@ -19,7 +19,7 @@ todos los objetos.
 [so-deploy](https://github.com/sisoputnfrba/so-deploy).
 
 ✔️ No requieren que se especifique el nombre del proyecto al que pertenecen 
-(alcanza con copiar la carpeta `project/` o `utils/` y modificar su nombre para 
+(alcanza con copiar la carpeta `/project/` o `/utils/` y modificar su nombre para 
 configurar el nombre del proyecto).
 
 Además, el makefile del proyecto incluye:
@@ -30,10 +30,10 @@ Además, el makefile del proyecto incluye:
 
 ## Uso
 
-Hay un ejemplo de uso en 
-[este repo](https://github.com/RaniAgus/utnso-project-example). 
+Hay un ejemplo de su uso en 
+[este repo](https://github.com/RaniAgus/so-project-example). 
 
-### Requerimientos
+### Estructura de archivos
 
 Los proyectos funcionan bajo la siguiente estructura, adaptada para que 
 [so-deploy](https://github.com/sisoputnfrba/so-deploy) funcione:
@@ -55,12 +55,37 @@ Los proyectos funcionan bajo la siguiente estructura, adaptada para que
       └─── makefile
 ```
 
+### ¿Cómo creo mis proyectos?
+
+- Para crear un proyecto estándar se deberá copiar la carpeta `/project/` y
+renombrarla para configurar el nombre del proyecto. Luego, se deberán
+[incluir las bibliotecas](#cómo-incluyo-una-library) que utilice.
+
+- Para crear una static library se deberá hacer el mismo procedimiento, en este
+caso mediante la carpeta `/utils/`. Luego, se deberá
+[incluir esa library](#cómo-incluyo-una-library) en los proyectos que la
+utilicen.
+
 ### ¿Cómo incluyo una library?
 
 Para incluir una library alcanza con editar la macro `LIBRARIES` del makefile. 
 También, para incluir una library propia se debe editar tanto `LIBRARIES` como 
-`LIBRARY_PATHS`. Se puede ver un ejemplo 
-[aquí](https://github.com/RaniAgus/utnso-project-example/commit/adc00988e951a6c2a4b07cdcd0412b40d5a2ef55).
+`LIBRARY_PATHS`. 
+
+Por ejemplo, para incluir las `commons` y una biblioteca propia llamada `utils`
+ubicada en el mismo repo se deberá agregar lo siguiente:
+
+```make
+# Include libraries here
+LIBRARIES=utils commons pthread
+
+# Include custom library paths here
+LIBRARY_PATHS=../utils
+```
+
+### ¿Cómo importo los proyectos en el IDE?
+
+- Cómo importar en Eclipse: [#wiki/Eclipse](../../wiki/Eclipse)
 
 ## Contacto
 
