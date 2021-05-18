@@ -6,15 +6,7 @@ LIBRARY_PATHS=
 # ==============================================================================================================
 
 # Project name
-PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
-
-# Compiler
-CC=gcc
-CFLAGS=-Wall -DDEBUG -g
-INCLUDES=$(LIBRARY_PATHS:%=-I"%")
-
-# Linker
-LINKS=$(LIBRARY_PATHS:%=-L"%/bin") $(LIBRARIES:%=-l%)
+PROJECT=$(shell basename $(PWD))
 
 # Main subirectories
 SRCDIR=src
@@ -22,14 +14,23 @@ OBJDIR=obj
 BINDIR=bin
 
 # Directories
-DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR) -type d | tr '\n' ' '))
+DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' ')) $(BINDIR)
+
+# Compiler
+CC=gcc
+CFLAGS=-Wall -DDEBUG -g
+INCLUDES=$(LIBRARY_PATHS:%=-I"%/src")
+
+# Linker
+SOURCES=$(filter ./$(SRCDIR)/%, $(shell find . -iname "*.c" | tr '\n' ' '))
+LINKS=$(LIBRARY_PATHS:%=-L"%/bin") $(LIBRARIES:%=-l%)
 
 # Objects
 BINARY=$(BINDIR)/$(PROJECT)
-OBJECTS=$(patsubst ./$(SRCDIR)/%.c, $(OBJDIR)/%.o, $(shell find . -iname "*.c" | tr '\n' ' '))
+OBJECTS=$(SOURCES:./$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # Dependencies
-DEPENDENCIES=$(foreach THERE, $(LIBRARY_PATHS), $(patsubst ./%,$(THERE)/%,$(shell make --no-print-directory -C $(THERE) dependencies)))
+DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell cd $(LIBPATH) && make sources)))
 
 # ==============================================================================================================
 
@@ -65,4 +66,14 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-.PHONY: all clean debug release memcheck helgrind
+# ==============================================================================================================
+
+makefile-test:
+	@echo "Project name:  $(PROJECT)"
+	@echo "Source files:  $(SOURCES)"
+	@echo "Dependencies:  $(DEPENDENCIES)"
+	@echo "Include flags: $(INCLUDES)"
+	@echo "Link flags:    $(LINKS)"
+	@echo "Directories:   $(DIRECTORIES)"
+
+.PHONY: all clean debug release memcheck helgrind makefile-test

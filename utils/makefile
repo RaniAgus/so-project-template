@@ -4,24 +4,30 @@ LIBRARY_PATHS=
 # ==============================================================================================================
 
 # Project name
-PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
-
-# Compiler
-CC=gcc
-CFLAGS=-Wall -DDEBUG -g
-INCLUDES=$(LIBRARY_PATHS:%=-I"%")
+PROJECT=$(shell basename $(PWD))
 
 # Main subirectories
-SRCDIR=$(PROJECT)
+SRCDIR=src
 OBJDIR=obj
 BINDIR=bin
 
 # Directories
-DIRECTORIES=$(BINDIR) $(OBJDIR) $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(shell find $(SRCDIR) -type d | tr '\n' ' '))
+DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' ')) $(BINDIR)
+
+# Compiler
+CC=gcc
+CFLAGS=-Wall -DDEBUG -g
+
+# Linker
+SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
+INCLUDES=$(LIBRARY_PATHS:%=-I"%")
 
 # Objects
 BINARY=$(BINDIR)/lib$(PROJECT).a
-OBJECTS=$(patsubst ./$(SRCDIR)/%.c, $(OBJDIR)/%.o, $(shell find . -iname "*.c" | tr '\n' ' '))
+OBJECTS=$(SOURCES:./$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+
+# Dependencies
+DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell cd $(LIBPATH) && make sources)))
 
 # ==============================================================================================================
 
@@ -34,8 +40,8 @@ release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
 
-dependencies:
-	@echo $(shell find . -iname "*.c" | tr '\n' ' ') $(shell find . -iname "*.h" | tr '\n' ' ')
+sources:
+	@echo $(SOURCES) $(filter ./$(SRCDIR)/%, $(shell find . -iname "*.h" | tr '\n' ' '))
 
 # ==============================================================================================================
 
@@ -48,10 +54,19 @@ $(DIRECTORIES):
 	mkdir -p $@
 
 # Build objects
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-.PHONY: all clean debug release dependencies
+# ==============================================================================================================
+
+makefile-test:
+	@echo "Project name:  $(PROJECT)"
+	@echo "Source files:  $(SOURCES)"
+	@echo "Dependencies:  $(DEPENDENCIES)"
+	@echo "Include flags: $(INCLUDES)"
+	@echo "Directories:   $(DIRECTORIES)"
+
+.PHONY: all clean debug release dependencies makefile-test
