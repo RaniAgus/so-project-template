@@ -43,6 +43,16 @@ release: all
 sources:
 	@echo $(SOURCES) $(filter ./$(SRCDIR)/%, $(shell find . -iname "*.h" | tr '\n' ' '))
 
+help:
+	@echo "COMMANDS:"
+	@echo "    make / make all -- Build project using debug flags."
+	@echo "    make project    -- Build project using release flags."
+	@echo "    make clean      -- Remove generated files from file system."
+	@echo "VARIABLES:"
+	@echo "    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'pthread commons utils')."
+	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
+	@echo "    PROJECT       -- Your project name. By default it will be your pwd basename."
+
 # ==============================================================================================================
 
 # Build project
