@@ -17,10 +17,8 @@ DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-
-# Linker
 SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
-INCLUDES=$(LIBRARY_PATHS:%=-I"%/src")
+INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell cd $(LIBPATH) && make idir))
 
 # Objects
 BINARY=$(BINDIR)/lib$(PROJECT).a
@@ -39,10 +37,6 @@ clean:
 release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
-
-sources:
-	@echo $(SOURCES) $(filter ./$(SRCDIR)/%, $(shell find . -iname "*.h" | tr '\n' ' '))
-
 help:
 	@echo "COMMANDS:"
 	@echo "    make / make all -- Build project using debug flags."
@@ -79,4 +73,13 @@ makefile-test:
 	@echo "Include flags: $(INCLUDES)"
 	@echo "Directories:   $(DIRECTORIES)"
 
-.PHONY: all clean debug release dependencies makefile-test
+sources:
+	@echo $(SOURCES) $(filter ./$(SRCDIR)/%, $(shell find . -iname "*.h" | tr '\n' ' '))
+
+idir:
+	@echo $(SRCDIR)
+
+bindir:
+	@echo $(BINDIR)
+
+.PHONY: all clean debug release dependencies makefile-test help idir bindir

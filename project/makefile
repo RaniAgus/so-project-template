@@ -19,11 +19,11 @@ DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-INCLUDES=$(LIBRARY_PATHS:%=-I"%/src")
+SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
+INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell cd $(LIBPATH) && make idir))
 
 # Linker
-SOURCES=$(filter ./$(SRCDIR)/%, $(shell find . -iname "*.c" | tr '\n' ' '))
-LINKS=$(LIBRARY_PATHS:%=-L"%/bin") $(LIBRARIES:%=-l%)
+LINKS=$(foreach LIBPATH,$(LIBRARY_PATHS),-L$(LIBPATH)/$(shell cd $(LIBPATH) && make bindir)) $(LIBRARIES:%=-l%)
 
 # Objects
 BINARY=$(BINDIR)/$(PROJECT)
