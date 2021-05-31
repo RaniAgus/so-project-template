@@ -87,6 +87,23 @@ LIBRARY_PATHS=../utils
 
 - Cómo importar en Eclipse: [#wiki/Eclipse](../../wiki/Eclipse)
 
+### ¿Cómo ejecuto Valgrind usando el makefile?
+
+Para ejecutar Valgrind utilizamos las reglas `memcheck` o `helgrind`:
+
+```
+$ make memcheck
+
+$ make helgrind
+```
+
+¡También se pueden pasar parámetros al `main()`!
+```
+$ make memcheck ARGS="arg1 arg2 arg3"
+
+$ make helgrind ARGS="arg1 arg2 arg3"
+```
+
 ## Contacto
 
 Si encontrás algun error en los makefiles o tenés alguna sugerencia, ¡no dudes 
