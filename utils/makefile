@@ -20,7 +20,7 @@ CFLAGS=-Wall -DDEBUG -g
 
 # Linker
 SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
-INCLUDES=$(LIBRARY_PATHS:%=-I"%")
+INCLUDES=$(LIBRARY_PATHS:%=-I"%/src")
 
 # Objects
 BINARY=$(BINDIR)/lib$(PROJECT).a
