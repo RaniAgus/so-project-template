@@ -6,7 +6,8 @@ LIBRARY_PATHS=
 # ==============================================================================================================
 
 # Project name
-PROJECT=$(shell basename $(PWD))
+PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
+
 
 # Main subirectories
 SRCDIR=src
@@ -19,18 +20,18 @@ DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-INCLUDES=$(LIBRARY_PATHS:%=-I"%/src")
+SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
+INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir))
 
 # Linker
-SOURCES=$(filter ./$(SRCDIR)/%, $(shell find . -iname "*.c" | tr '\n' ' '))
-LINKS=$(LIBRARY_PATHS:%=-L"%/bin") $(LIBRARIES:%=-l%)
+LINKS=$(foreach LIBPATH,$(LIBRARY_PATHS),-L$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) bindir)) $(LIBRARIES:%=-l%)
 
 # Objects
 BINARY=$(BINDIR)/$(PROJECT)
 OBJECTS=$(SOURCES:./$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # Dependencies
-DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell cd $(LIBPATH) && make sources)))
+DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
 
 # ==============================================================================================================
 
@@ -44,10 +45,23 @@ release: clean
 release: all
 
 memcheck: all
-	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" $(BINARY)
+	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" $(BINARY) $(ARGS)
 
 helgrind: all
-	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" $(BINARY)
+	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" $(BINARY) $(ARGS)
+
+help:
+	@echo "COMMANDS:"
+	@echo "    make / make all -- Build project using debug flags."
+	@echo "    make project    -- Build project using release flags."
+	@echo "    make clean      -- Remove generated files from file system."
+	@echo "    make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file."
+	@echo "    make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file."
+	@echo "VARIABLES:"
+	@echo "    ARGS          -- Arguments to be passed to main() using valgrind tools (eg: 'make helgrind ARGS=\"arg1 arg2 arg3\"')."
+	@echo "    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'pthread commons utils')."
+	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
+	@echo "    PROJECT       -- Your project name. By default it will be your pwd basename."
 
 # ==============================================================================================================
 
@@ -76,4 +90,4 @@ makefile-test:
 	@echo "Link flags:    $(LINKS)"
 	@echo "Directories:   $(DIRECTORIES)"
 
-.PHONY: all clean debug release memcheck helgrind makefile-test
+.PHONY: all clean debug release memcheck helgrind makefile-test help

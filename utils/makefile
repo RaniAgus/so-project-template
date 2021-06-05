@@ -4,7 +4,8 @@ LIBRARY_PATHS=
 # ==============================================================================================================
 
 # Project name
-PROJECT=$(shell basename $(PWD))
+PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
+
 
 # Main subirectories
 SRCDIR=src
@@ -17,17 +18,15 @@ DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-
-# Linker
 SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
-INCLUDES=$(LIBRARY_PATHS:%=-I"%")
+INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir))
 
 # Objects
 BINARY=$(BINDIR)/lib$(PROJECT).a
 OBJECTS=$(SOURCES:./$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # Dependencies
-DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell cd $(LIBPATH) && make sources)))
+DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
 
 # ==============================================================================================================
 
@@ -39,9 +38,15 @@ clean:
 release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
-
-sources:
-	@echo $(SOURCES) $(filter ./$(SRCDIR)/%, $(shell find . -iname "*.h" | tr '\n' ' '))
+help:
+	@echo "COMMANDS:"
+	@echo "    make / make all -- Build project using debug flags."
+	@echo "    make project    -- Build project using release flags."
+	@echo "    make clean      -- Remove generated files from file system."
+	@echo "VARIABLES:"
+	@echo "    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'pthread commons utils')."
+	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
+	@echo "    PROJECT       -- Your project name. By default it will be your pwd basename."
 
 # ==============================================================================================================
 
@@ -69,4 +74,13 @@ makefile-test:
 	@echo "Include flags: $(INCLUDES)"
 	@echo "Directories:   $(DIRECTORIES)"
 
-.PHONY: all clean debug release dependencies makefile-test
+sources:
+	@echo $(SOURCES) $(filter ./$(SRCDIR)/%, $(shell find . -iname "*.h" | tr '\n' ' '))
+
+idir:
+	@echo $(SRCDIR)
+
+bindir:
+	@echo $(BINDIR)
+
+.PHONY: all clean debug release dependencies makefile-test help idir bindir
