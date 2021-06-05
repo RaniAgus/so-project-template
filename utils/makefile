@@ -4,7 +4,8 @@ LIBRARY_PATHS=
 # ==============================================================================================================
 
 # Project name
-PROJECT=$(shell basename $(PWD))
+PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
+
 
 # Main subirectories
 SRCDIR=src
@@ -18,14 +19,14 @@ DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
 SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
-INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell cd $(LIBPATH) && make idir))
+INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir))
 
 # Objects
 BINARY=$(BINDIR)/lib$(PROJECT).a
 OBJECTS=$(SOURCES:./$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # Dependencies
-DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell cd $(LIBPATH) && make sources)))
+DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
 
 # ==============================================================================================================
 
