@@ -22,16 +22,18 @@ todos los objetos.
 (alcanza con copiar la carpeta `/project/` o `/utils/` y modificar su nombre para 
 configurar el nombre del proyecto).
 
-Además, el makefile del proyecto incluye:
+✔️ Incluyen flags de debug para `make all` y flags de release para `make release`.
 
-✔️ Flags de debug para `make all` y flags de release para `make release`.
+✔️ ¡No hace falta configurar variables de entorno! La biblioteca compartida es una
+static library, que luego es compilada directamente en el binario final del
+proyecto. Para saber más info sobre static vs shared libraries, podés
+[ver este video](https://www.youtube.com/watch?v=JbHmin2Wtmc).
+
+Además, el makefile del proyecto incluye:
 
 ✔️ Ejecución con Valgrind mediante `make memcheck` y `make helgrind`.
 
 ## Uso
-
-Hay un ejemplo de su uso en 
-[este repo](https://github.com/RaniAgus/so-project-example). 
 
 ### Estructura de archivos
 
@@ -40,36 +42,49 @@ Los proyectos funcionan bajo la siguiente estructura, adaptada para que
 ```
 .
 │  
-└─── <project1>/
+└─── <project_1>/
 |     └─── src/
 |     └─── makefile
-└─── <project2>/
+└─── <project_2>/
 |     └─── src/
 |     └─── makefile
 └─── ...
-└─── <projectN>/
+└─── <project_n>/
 |     └─── src/
 |     └─── makefile
-└─── <staticLib>/
+└─── <static_lib>/
       └─── src/
       └─── makefile
 ```
 
 ### ¿Cómo creo mis proyectos?
 
-- Para crear un proyecto estándar se deberá copiar la carpeta `/project/` y
-renombrarla para configurar el nombre del proyecto. Luego, se deberán
-[incluir las bibliotecas](#cómo-incluyo-una-library) que utilice.
+- Para crear un proyecto estándar podés descargar la carpeta `project/` desde las 
+[releases](https://github.com/RaniAgus/so-project-template/releases) (recordá 
+cambiar `<project_name>` por el nombre de tu proyecto antes de ejecutar):
+
+```
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/project.tar.gz\
+ | tar -xvzf - --strip-components 1 --one-top-level=<project_name>
+```
+
+Luego, deberás [incluir las bibliotecas](#cómo-incluyo-una-biblioteca) que utilices.
 
 - Para crear una static library se deberá hacer el mismo procedimiento, en este
-caso mediante la carpeta `/utils/`. Luego, se deberá
-[incluir esa library](#cómo-incluyo-una-library) en los proyectos que la
-utilicen.
+caso mediante la carpeta `utils/` (recordá cambiar `<lib_name>` por el nombre de 
+tu biblioteca antes de ejecutar):
 
-### ¿Cómo incluyo una library?
+```
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/utils.tar.gz\
+ | tar -xvzf - --strip-components 1 --one-top-level=<lib_name>
+```
+Luego, deberás [incluir esa library](#cómo-incluyo-una-biblioteca) en los proyectos 
+que la utilicen.
 
-Para incluir una library alcanza con editar la macro `LIBRARIES` del makefile. 
-También, para incluir una library propia se debe editar tanto `LIBRARIES` como 
+### ¿Cómo incluyo una biblioteca?
+
+Para incluir una biblioteca alcanza con editar la macro `LIBRARIES` del makefile. 
+También, para incluir una biblioteca propia se debe editar tanto `LIBRARIES` como 
 `LIBRARY_PATHS`. 
 
 Por ejemplo, para incluir las `commons` y una biblioteca propia llamada `utils`
@@ -85,7 +100,7 @@ LIBRARY_PATHS=../utils
 
 ### ¿Cómo importo los proyectos en el IDE?
 
-- Cómo importar en Eclipse: [#wiki/Eclipse](../../wiki/Eclipse)
+- [Cómo importar en Eclipse](../../wiki/Eclipse)
 
 ### ¿Cómo ejecuto Valgrind usando el makefile?
 
@@ -104,7 +119,7 @@ $ make memcheck ARGS="arg1 arg2 arg3"
 $ make helgrind ARGS="arg1 arg2 arg3"
 ```
 
-## ¿Cómo hago para acordarme de todos estos comandos?
+### ¿Cómo hago para acordarme de todos estos comandos?
 
 ¡No hace falta! Podés usar la regla `help`:
 
