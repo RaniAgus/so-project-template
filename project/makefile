@@ -44,6 +44,9 @@ release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
 
+start: all
+	valgrind --tool=none $(BINARY) $(ARGS)
+
 memcheck: all
 	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" $(BINARY) $(ARGS)
 
@@ -55,6 +58,7 @@ help:
 	@echo "    make / make all -- Build project using debug flags."
 	@echo "    make project    -- Build project using release flags."
 	@echo "    make clean      -- Remove generated files from file system."
+	@echo "    make start      -- Run using valgrind without any extra tool."
 	@echo "    make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file."
 	@echo "    make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file."
 	@echo "VARIABLES:"
@@ -90,4 +94,4 @@ makefile-test:
 	@echo "Link flags:    $(LINKS)"
 	@echo "Directories:   $(DIRECTORIES)"
 
-.PHONY: all clean debug release memcheck helgrind makefile-test help
+.PHONY: all clean debug release start memcheck helgrind makefile-test help

@@ -31,7 +31,7 @@ proyecto. Para saber más info sobre static vs shared libraries, podés
 
 Además, el makefile del proyecto incluye:
 
-✔️ Ejecución con Valgrind mediante `make memcheck` y `make helgrind`.
+✔️ Ejecución con Valgrind mediante `make start`, `make memcheck` y `make helgrind`.
 
 ## Uso
 
@@ -104,20 +104,49 @@ LIBRARY_PATHS=../utils
 
 ### ¿Cómo ejecuto Valgrind usando el makefile?
 
-Para ejecutar Valgrind utilizamos las reglas `memcheck` o `helgrind`:
+Para ejecutar Valgrind utilizamos las reglas `start`, `memcheck` o `helgrind`.
+
+¡También se pueden pasar parámetros al `main()`! Para esto, le asignamos un 
+valor a la variable `ARGS` de la siguiente forma:
+```
+$ make start ARGS="arg1 arg2 arg3"
+```
+
+#### Start
+
+Útil para su uso al debugear el TP sin ninguna herramienta extra, ya que 
+Valgrind permite imprimir stack traces custom utilizando la función de Valgrind
+`VALGRIND_PRINTF_BACKTRACE(...)`. Para más info recomiendo ver 
+[este artículo](https://blog.mozilla.org/nnethercote/2011/01/11/using-valgrind-to-get-stack-traces/).
+
+```
+$ make start
+```
+
+### Memcheck
+
+Útil para verificar errores de manejo de memoria: uso de variables sin 
+inicializar, memory leaks, etc. Para más info, ver 
+[esta guía](https://faq.utnso.com.ar/valgrind).
 
 ```
 $ make memcheck
+```
 
+Los resultados se imprimen en un log file con el formato 
+`memcheck_<proyecto>.log`.
+
+### Helgrind
+
+Útil para diagnosticar problemas de sincronización, como por ejemplo posibles
+condiciones de carrera. Para más info, ver: https://youtu.be/knRei6OBU4Q?t=536
+
+```
 $ make helgrind
 ```
 
-¡También se pueden pasar parámetros al `main()`!
-```
-$ make memcheck ARGS="arg1 arg2 arg3"
-
-$ make helgrind ARGS="arg1 arg2 arg3"
-```
+Los resultados se imprimen en un log file con el formato 
+`helgrind_<proyecto>.log`.
 
 ### ¿Cómo hago para acordarme de todos estos comandos?
 
