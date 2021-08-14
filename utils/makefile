@@ -6,13 +6,14 @@ LIBRARY_PATHS=
 # Project name
 PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
 
-
 # Main subirectories
 SRCDIR=src
 OBJDIR=obj
 BINDIR=bin
 
 # Directories
+MKDIR=mkdir -pv
+RM=rm -rfv
 DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' ')) $(BINDIR)
 
 # Compiler
@@ -33,7 +34,7 @@ DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(sh
 all: $(BINARY)
 
 clean:
-	rm -rf $(BINDIR) $(OBJDIR)
+	$(RM) $(DIRECTORIES)
 
 release: CFLAGS = -Wall -DNDEBUG
 release: clean
@@ -56,7 +57,7 @@ $(BINARY): $(DIRECTORIES) $(OBJECTS)
 
 # Create directories for objects
 $(DIRECTORIES):
-	mkdir -p $@
+	$(MKDIR) $@
 
 # Build objects
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
