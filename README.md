@@ -35,27 +35,25 @@ Además, el makefile del proyecto incluye:
 
 ## Uso
 
-### Estructura de archivos
+### Cómo estructurar cada proyecto
 
-Los proyectos funcionan bajo la siguiente estructura, adaptada para que 
+Los proyectos funcionan bajo la siguiente estructura, adaptada para que sdaasdsa
 [so-deploy](https://github.com/sisoputnfrba/so-deploy) funcione:
-```
+
+```makefile
 .
-│  
-└─── <project_1>/
-|     └─── src/
-|     └─── makefile
-└─── <project_2>/
-|     └─── src/
-|     └─── makefile
-└─── ...
-└─── <project_n>/
-|     └─── src/
-|     └─── makefile
-└─── <static_lib>/
-      └─── src/
+└─── <project>
+      └─── bin
+      |     └─── <project>    # Archivo binario final 
+      └─── obj
+      |     └─── *.o / *.d    # Archivos generados al compilar
+      └─── src
+      |     └─── *.c / *.h    # Código y headers
       └─── makefile
 ```
+
+Para cambiar esta configuración por la que a vos te sea más cómodo/a, ver 
+[Estructurá tu proyecto](../../wiki/Estructurá-tu-proyecto).
 
 ### ¿Cómo creo mis proyectos?
 
@@ -83,6 +81,8 @@ que la utilicen.
 
 ### ¿Cómo incluyo una biblioteca?
 
+#### 1. Incluir en el makefile
+
 Para incluir una biblioteca alcanza con editar la macro `LIBRARIES` del makefile. 
 También, para incluir una biblioteca propia se debe editar tanto `LIBRARIES` como 
 `LIBRARY_PATHS`. 
@@ -90,12 +90,30 @@ También, para incluir una biblioteca propia se debe editar tanto `LIBRARIES` co
 Por ejemplo, para incluir las `commons` y una biblioteca propia llamada `utils`
 ubicada en el mismo repo se deberá agregar lo siguiente:
 
-```make
+```makefile
 # Include libraries here
 LIBRARIES=utils commons pthread
 
 # Include custom library paths here
 LIBRARY_PATHS=../utils
+```
+
+#### 2. Incluir en el código
+
+Los includes se pueden poner entre `<>` como path relativo a 
+`{LIBRARY_PATH}/{IDIR}`.
+
+Por ejemplo, para incluir las funciones de `utils` podemos hacer:
+
+```c
+#include <utils/hello.h>
+```
+
+Ya que `LIBRARY_PATH` es `../utils` e `IDIR` es `src/`, entonces 
+`{LIBRARY_PATH}/{IDIR}utils/hello.h` nos da por resultado lo mismo que:
+
+```c
+#include "../utils/src/utils/hello.h"
 ```
 
 ### ¿Cómo importo los proyectos en el IDE?

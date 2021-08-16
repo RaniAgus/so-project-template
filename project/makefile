@@ -8,51 +8,52 @@ LIBRARY_PATHS=
 # Project name
 PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
 
-# Main subirectories
-SRCDIR=src
-OBJDIR=obj
-BINDIR=bin
+# Project structure
+SRCDIR=src/
+IDIR=src/
+OBJDIR=obj/
+BINDIR=bin/
 
 # Directories
 MKDIR=mkdir -pv
 RM=rm -rfv
-DIRECTORIES=$(patsubst $(SRCDIR)%,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' ')) $(BINDIR)
+DIRECTORIES=$(BINDIR) $(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' '))
 
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-SOURCES=$(filter ./$(SRCDIR)/%,$(shell find . -iname "*.c" | tr '\n' ' '))
-INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir))
+SOURCES=$(shell find $(SRCDIR) -iname "*.c" | tr '\n' ' ')
+INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir)) $(IDIR:%=-I%)
 
 # Linker
 LINKS=$(foreach LIBPATH,$(LIBRARY_PATHS),-L$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) bindir)) $(LIBRARIES:%=-l%)
 
 # Objects
-BINARY=$(BINDIR)/$(PROJECT)
-OBJECTS=$(SOURCES:./$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+BINARY=$(BINDIR)$(PROJECT).out
+OBJECTS=$(SOURCES:%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst ./%,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
+DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst %,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
 
 # ==============================================================================================================
 
 all: $(BINARY)
 
 clean:
-	$(RM) $(DIRECTORIES)
+	$(RM) $(OBJDIR) $(BINARY)
 
 release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
 
 start: all
-	valgrind --tool=none $(BINARY) $(ARGS)
+	valgrind --tool=none ./$(BINARY) $(ARGS)
 
 memcheck: all
-	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" $(BINARY) $(ARGS)
+	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
 
 helgrind: all
-	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" $(BINARY) $(ARGS)
+	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
 
 help:
 	@echo "COMMANDS:"
@@ -72,17 +73,17 @@ help:
 
 # Build project
 $(BINARY): $(DIRECTORIES) $(OBJECTS)
-	$(CC) $(CFLAGS) -o "$@" $(OBJECTS) $(LINKS)
+	$(CC) $(INCLUDES) $(CFLAGS) -o "$@" $(OBJECTS) $(LINKS)
 
 # Create directories for objects
 $(DIRECTORIES):
 	$(MKDIR) $@
 
 # Build objects
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h $(DEPENDENCIES)
+$(OBJDIR)%.o: %.c %.h $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPENDENCIES)
+$(OBJDIR)%.o: %.c $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # ==============================================================================================================
@@ -95,4 +96,4 @@ makefile-test:
 	@echo "Link flags:    $(LINKS)"
 	@echo "Directories:   $(DIRECTORIES)"
 
-.PHONY: all clean debug release start memcheck helgrind makefile-test help
+.PHONY: all clean debug release start test memcheck helgrind makefile-test help
