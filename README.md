@@ -37,23 +37,36 @@ Además, el makefile del proyecto incluye:
 
 ### Cómo estructurar cada proyecto
 
-Los proyectos funcionan bajo la siguiente estructura, adaptada para que sdaasdsa
+Los proyectos funcionan bajo la siguiente estructura, adaptada para que
 [so-deploy](https://github.com/sisoputnfrba/so-deploy) funcione:
 
 ```makefile
 .
-└─── <project>
+└─── {ProjectName}
       └─── bin
-      |     └─── <project>    # Archivo binario final 
+      |     └─── {ProjectName}.out    # Archivo binario final 
+      └─── include
+      |     └─── *.h                  # Headers
       └─── obj
-      |     └─── *.o / *.d    # Archivos generados al compilar
+      |     └─── *.o / *.d            # Archivos generados al compilar
       └─── src
-      |     └─── *.c / *.h    # Código y headers
+      |     └─── *.c                  # Código
       └─── makefile
 ```
 
-Para cambiar esta configuración por la que a vos te sea más cómodo/a, ver 
-[Estructurá tu proyecto](../../wiki/Estructurá-tu-proyecto).
+Sin embargo, podés ajustarla a tus preferencias modificando las siguientes
+variables:
+
+```makefile
+# Project structure
+SRCDIR=src/
+IDIR=include/
+OBJDIR=obj/
+BINDIR=bin/
+```
+
+La única restricción a la hora de estructurar el proyecto es que todas las 
+variables excepto `BINDIR` deben no estar vacías.
 
 ### ¿Cómo creo mis proyectos?
 

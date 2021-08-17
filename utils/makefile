@@ -8,7 +8,7 @@ PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/nul
 
 # Project structure
 SRCDIR=src/
-IDIR=src/
+IDIR=include/
 OBJDIR=obj/
 BINDIR=bin/
 
