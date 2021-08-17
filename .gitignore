@@ -52,12 +52,15 @@ Mkfile.old
 dkms.conf
 
 # Eclipse files
-*/.settings/
-*/.cproject
-*/.project
+**/RemoteSystemsTempFiles/
+**/Debug/
+**/Release/
+**/.settings/
+**/.cproject
+**/.project
 
 # CLion files
-*/.idea/
+**/.idea/
 
 # Visual Studio Code files
 **/.vscode/
