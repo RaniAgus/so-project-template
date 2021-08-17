@@ -154,7 +154,7 @@ Valgrind permite imprimir stack traces custom utilizando la función de Valgrind
 $ make start
 ```
 
-### Memcheck
+#### Memcheck
 
 Útil para verificar errores de manejo de memoria: uso de variables sin 
 inicializar, memory leaks, etc. Para más info, ver 
@@ -167,7 +167,7 @@ $ make memcheck
 Los resultados se imprimen en un log file con el formato 
 `memcheck_<proyecto>.log`.
 
-### Helgrind
+#### Helgrind
 
 Útil para diagnosticar problemas de sincronización, como por ejemplo posibles
 condiciones de carrera. Para más info, ver: https://youtu.be/knRei6OBU4Q?t=536
@@ -200,6 +200,34 @@ VARIABLES:
     PROJECT       -- Your project name. By default it will be your pwd basename.
 ```
 
+## Consejos extra
+
+### Uso de un .gitignore
+
+Aconsejo agregar al archivo .gitignore del repo del proyecto las siguientes
+reglas para evitar pushear archivos que no son necesarios para que funcione el
+TP:
+
+```makefile
+# Eclipse files
+**/RemoteSystemsTempFiles/
+**/Debug/
+**/Release/
+**/.settings/
+**/.cproject
+**/.project
+
+# CLion files
+**/.idea/
+
+# Visual Studio Code files
+**/.vscode/
+
+# Other
+**/bin/
+**/obj/
+*.log
+```
 
 ## Contacto
 
