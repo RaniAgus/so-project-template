@@ -31,31 +31,42 @@ proyecto. Para saber más info sobre static vs shared libraries, podés
 
 Además, el makefile del proyecto incluye:
 
-✔️ Ejecución con Valgrind mediante `make memcheck` y `make helgrind`.
+✔️ Ejecución con Valgrind mediante `make start`, `make memcheck` y `make helgrind`.
 
 ## Uso
 
-### Estructura de archivos
+### Cómo estructurar cada proyecto
 
-Los proyectos funcionan bajo la siguiente estructura, adaptada para que 
+Los proyectos funcionan bajo la siguiente estructura, adaptada para que
 [so-deploy](https://github.com/sisoputnfrba/so-deploy) funcione:
-```
+
+```makefile
 .
-│  
-└─── <project_1>/
-|     └─── src/
-|     └─── makefile
-└─── <project_2>/
-|     └─── src/
-|     └─── makefile
-└─── ...
-└─── <project_n>/
-|     └─── src/
-|     └─── makefile
-└─── <static_lib>/
-      └─── src/
+└─── {ProjectName}
+      └─── bin
+      |     └─── {ProjectName}.out    # Archivo binario final 
+      └─── include
+      |     └─── *.h                  # Headers
+      └─── obj
+      |     └─── *.o / *.d            # Archivos generados al compilar
+      └─── src
+      |     └─── *.c                  # Código
       └─── makefile
 ```
+
+Sin embargo, podés ajustarla a tus preferencias modificando las siguientes
+variables:
+
+```makefile
+# Project structure
+SRCDIR=src/
+IDIR=include/
+OBJDIR=obj/
+BINDIR=bin/
+```
+
+La única restricción a la hora de estructurar el proyecto es que todas las 
+variables excepto `BINDIR` deben no estar vacías.
 
 ### ¿Cómo creo mis proyectos?
 
@@ -83,6 +94,8 @@ que la utilicen.
 
 ### ¿Cómo incluyo una biblioteca?
 
+#### 1. Incluir en el makefile
+
 Para incluir una biblioteca alcanza con editar la macro `LIBRARIES` del makefile. 
 También, para incluir una biblioteca propia se debe editar tanto `LIBRARIES` como 
 `LIBRARY_PATHS`. 
@@ -90,12 +103,30 @@ También, para incluir una biblioteca propia se debe editar tanto `LIBRARIES` co
 Por ejemplo, para incluir las `commons` y una biblioteca propia llamada `utils`
 ubicada en el mismo repo se deberá agregar lo siguiente:
 
-```make
+```makefile
 # Include libraries here
 LIBRARIES=utils commons pthread
 
 # Include custom library paths here
 LIBRARY_PATHS=../utils
+```
+
+#### 2. Incluir en el código
+
+Los includes se pueden poner entre `<>` como path relativo a 
+`{LIBRARY_PATH}/{IDIR}`.
+
+Por ejemplo, para incluir las funciones de `utils` podemos hacer:
+
+```c
+#include <utils/hello.h>
+```
+
+Ya que `LIBRARY_PATH` es `../utils` e `IDIR` es `src/`, entonces 
+`{LIBRARY_PATH}/{IDIR}utils/hello.h` nos da por resultado lo mismo que:
+
+```c
+#include "../utils/src/utils/hello.h"
 ```
 
 ### ¿Cómo importo los proyectos en el IDE?
@@ -104,20 +135,49 @@ LIBRARY_PATHS=../utils
 
 ### ¿Cómo ejecuto Valgrind usando el makefile?
 
-Para ejecutar Valgrind utilizamos las reglas `memcheck` o `helgrind`:
+Para ejecutar Valgrind utilizamos las reglas `start`, `memcheck` o `helgrind`.
+
+¡También se pueden pasar parámetros al `main()`! Para esto, le asignamos un 
+valor a la variable `ARGS` de la siguiente forma:
+```
+$ make start ARGS="arg1 arg2 arg3"
+```
+
+#### Start
+
+Útil para su uso al debugear el TP sin ninguna herramienta extra, ya que 
+Valgrind permite imprimir stack traces custom utilizando la función de Valgrind
+`VALGRIND_PRINTF_BACKTRACE(...)`. Para más info recomiendo ver 
+[este artículo](https://blog.mozilla.org/nnethercote/2011/01/11/using-valgrind-to-get-stack-traces/).
+
+```
+$ make start
+```
+
+### Memcheck
+
+Útil para verificar errores de manejo de memoria: uso de variables sin 
+inicializar, memory leaks, etc. Para más info, ver 
+[esta guía](https://faq.utnso.com.ar/valgrind).
 
 ```
 $ make memcheck
+```
 
+Los resultados se imprimen en un log file con el formato 
+`memcheck_<proyecto>.log`.
+
+### Helgrind
+
+Útil para diagnosticar problemas de sincronización, como por ejemplo posibles
+condiciones de carrera. Para más info, ver: https://youtu.be/knRei6OBU4Q?t=536
+
+```
 $ make helgrind
 ```
 
-¡También se pueden pasar parámetros al `main()`!
-```
-$ make memcheck ARGS="arg1 arg2 arg3"
-
-$ make helgrind ARGS="arg1 arg2 arg3"
-```
+Los resultados se imprimen en un log file con el formato 
+`helgrind_<proyecto>.log`.
 
 ### ¿Cómo hago para acordarme de todos estos comandos?
 
@@ -130,11 +190,12 @@ COMMANDS:
     make / make all -- Build project using debug flags.
     make project    -- Build project using release flags.
     make clean      -- Remove generated files from file system.
+    make start      -- Run using valgrind without any extra tool.
     make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file.
     make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file.
 VARIABLES:
     ARGS          -- Arguments to be passed to main() using valgrind tools (eg: 'make helgrind ARGS="arg1 arg2 arg3"').
-    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'pthread commons utils').
+    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'utils pthread commons').
     LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils').
     PROJECT       -- Your project name. By default it will be your pwd basename.
 ```

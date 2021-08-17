@@ -60,9 +60,9 @@ dkms.conf
 */.idea/
 
 # Visual Studio Code files
-*/.vscode/
+**/.vscode/
 
 # Other
-*/bin/
-*/obj/
+**/bin/
+**/obj/
 *.log
