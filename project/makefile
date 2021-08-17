@@ -65,7 +65,7 @@ help:
 	@echo "    make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file."
 	@echo "VARIABLES:"
 	@echo "    ARGS          -- Arguments to be passed to main() using valgrind tools (eg: 'make helgrind ARGS=\"arg1 arg2 arg3\"')."
-	@echo "    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'pthread commons utils')."
+	@echo "    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'utils pthread commons')."
 	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
 	@echo "    PROJECT       -- Your project name. By default it will be your pwd basename."
 

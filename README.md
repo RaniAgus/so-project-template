@@ -177,11 +177,12 @@ COMMANDS:
     make / make all -- Build project using debug flags.
     make project    -- Build project using release flags.
     make clean      -- Remove generated files from file system.
+    make start      -- Run using valgrind without any extra tool.
     make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file.
     make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file.
 VARIABLES:
     ARGS          -- Arguments to be passed to main() using valgrind tools (eg: 'make helgrind ARGS="arg1 arg2 arg3"').
-    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'pthread commons utils').
+    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'utils pthread commons').
     LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils').
     PROJECT       -- Your project name. By default it will be your pwd basename.
 ```
