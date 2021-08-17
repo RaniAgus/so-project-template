@@ -62,7 +62,7 @@ $(DIRECTORIES):
 	$(MKDIR) $@
 
 # Build objects
-$(OBJDIR)%.o: %.c %.h $(DEPENDENCIES)
+$(OBJDIR)$(SRCDIR)%.o: $(SRCDIR)%.c $(IDIR)%.h $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 $(OBJDIR)%.o: %.c $(DEPENDENCIES)
