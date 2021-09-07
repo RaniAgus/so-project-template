@@ -1,5 +1,5 @@
 PROJECTS=project
-LIBS=utils
+LIBS=
 
 all: $(PROJECTS)
 
