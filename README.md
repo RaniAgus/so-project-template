@@ -19,7 +19,7 @@ todos los objetos.
 [so-deploy](https://github.com/sisoputnfrba/so-deploy).
 
 ✔️ No requieren que se especifique el nombre del proyecto al que pertenecen 
-(alcanza con copiar la carpeta `/project/` o `/utils/` y modificar su nombre para 
+(alcanza con copiar la carpeta `./project` o `./static` y modificar su nombre para 
 configurar el nombre del proyecto).
 
 ✔️ Incluyen flags de debug para `make all` y flags de release para `make release`.
@@ -28,6 +28,10 @@ configurar el nombre del proyecto).
 static library, que luego es compilada directamente en el binario final del
 proyecto. Para saber más info sobre static vs shared libraries, podés
 [ver este video](https://www.youtube.com/watch?v=JbHmin2Wtmc).
+
+✔️ En caso de que tu TP también requiera utilizar la interfaz de una shared library,
+podés utilizar el proyecto que se enucuentra en `./shared`. Incluye reglas para
+instalarla y desinstalarla: `make install` y `make uninstall`.
 
 Además, el makefile del proyecto incluye:
 
@@ -71,23 +75,27 @@ variables excepto `BINDIR` deben no estar vacías.
 ### ¿Cómo creo mis proyectos?
 
 - Para crear un proyecto estándar podés descargar la carpeta `project/` desde las 
-[releases](https://github.com/RaniAgus/so-project-template/releases) (recordá 
-cambiar `<project_name>` por el nombre de tu proyecto antes de ejecutar):
+[releases](https://github.com/RaniAgus/so-project-template/releases):
 
 ```
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/project.tar.gz\
- | tar -xvzf - --strip-components 1 --one-top-level=<project_name>
+bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) project
 ```
 
 Luego, deberás [incluir las bibliotecas](#cómo-incluyo-una-biblioteca) que utilices.
 
 - Para crear una static library se deberá hacer el mismo procedimiento, en este
-caso mediante la carpeta `utils/` (recordá cambiar `<lib_name>` por el nombre de 
-tu biblioteca antes de ejecutar):
+caso mediante la carpeta `static/`:
 
 ```
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/utils.tar.gz\
- | tar -xvzf - --strip-components 1 --one-top-level=<lib_name>
+bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) static
+```
+Luego, deberás [incluir esa library](#cómo-incluyo-una-biblioteca) en los proyectos 
+que la utilicen.
+
+- Para crear una shared library se deberá hacer el mismo procedimiento, en este
+caso mediante la carpeta `shared/`:
+```
+bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) shared
 ```
 Luego, deberás [incluir esa library](#cómo-incluyo-una-biblioteca) en los proyectos 
 que la utilicen.
