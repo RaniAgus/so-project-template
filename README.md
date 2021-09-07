@@ -116,7 +116,8 @@ ubicada en el mismo repo se deberá agregar lo siguiente:
 LIBRARIES=utils commons pthread
 
 # Include custom library paths here
-LIBRARY_PATHS=../utils
+SHARED_LIBRARY_PATHS=
+STATIC_LIBRARY_PATHS=../utils
 ```
 
 #### 2. Incluir en el código

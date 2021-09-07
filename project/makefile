@@ -1,7 +1,8 @@
 # Include libraries here
 LIBRARIES=
 # Include custom library paths here
-LIBRARY_PATHS=
+SHARED_LIBRARY_PATHS=
+STATIC_LIBRARY_PATHS=
 
 # ==============================================================================================================
 
@@ -23,6 +24,7 @@ DIRECTORIES=$(BINDIR) $(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | t
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
 SOURCES=$(shell find $(SRCDIR) -iname "*.c" | tr '\n' ' ')
+LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
 INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir)) $(IDIR:%=-I%)
 
 # Linker
@@ -36,7 +38,7 @@ OBJECTS=$(SOURCES:%.c=$(OBJDIR)%.o)
 DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst %,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
 
 # Shared Libraries (this isn't required for static libraries btw)
-LD_LIBRARY_PATH+=:$(subst $() $(),:,$(LIBRARY_PATHS))
+RUNTIME_LINKS=:$(subst $() $(),:,$(foreach LIBPATH,$(SHARED_LIBRARY_PATHS),$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) bindir)))
 
 # ==============================================================================================================
 
@@ -50,12 +52,15 @@ release: clean
 release: all
 
 start: all
+	export LD_LIBRARY_PATH=$(RUNTIME_LINKS); \
 	valgrind --tool=none ./$(BINARY) $(ARGS)
 
 memcheck: all
+	export LD_LIBRARY_PATH=$(RUNTIME_LINKS); \
 	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
 
 helgrind: all
+	export LD_LIBRARY_PATH=$(RUNTIME_LINKS); \
 	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
 
 help:
@@ -98,6 +103,6 @@ makefile-test:
 	@echo "Include flags: $(INCLUDES)"
 	@echo "Link flags:    $(LINKS)"
 	@echo "Directories:   $(DIRECTORIES)"
-	@echo "LD lib path:   $(LD_LIBRARY_PATH)"
+	@echo "Runtime links: $(RUNTIME_LINKS)"
 
 .PHONY: all clean debug release start test memcheck helgrind makefile-test help
