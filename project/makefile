@@ -7,7 +7,7 @@ STATIC_LIBRARY_PATHS=
 # ==============================================================================================================
 
 # Project name
-PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
+PROJECT != cd . && pwd | xargs basename
 
 # Project structure
 SRCDIR=src/
@@ -16,19 +16,20 @@ OBJDIR=obj/
 BINDIR=bin/
 
 # Functions
-import = $(shell make --no-print-directory -C $(1) $(2) | tr ' ' '\n' | xargs -i echo $(3)$(1)/{})
+import = $(shell make --no-print-directory -C $(1) $(2) | xargs -i echo $(3)$(1)/{})
 import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
 
 # Directories
 MKDIR=mkdir -pv
 RM=rm -rfv
-DIRECTORIES=$(BINDIR) $(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d))
+SOURCE_DIRECTORIES != find $(SRCDIR) -type d
+DIRECTORIES=$(SOURCE_DIRECTORIES:$(SRCDIR)%=$(OBJDIR)%) $(BINDIR)
 
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-SOURCES=$(shell find $(SRCDIR) -iname "*.c")
-HEADERS=$(shell find $(IDIR) -iname "*.h")
+SOURCES != find $(SRCDIR) -iname "*.c"
+HEADERS != find $(IDIR) -iname "*.h"
 LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
 INCLUDES=$(call import_all,$(LIBRARY_PATHS),idir,-I) $(IDIR:%=-I%)
 
@@ -37,13 +38,13 @@ LINKS=$(call import_all,$(LIBRARY_PATHS),bindir,-L) $(LIBRARIES:%=-l%)
 
 # Objects
 BINARY=$(BINDIR)$(PROJECT).out
-OBJECTS=$(SOURCES:%.c=$(OBJDIR)%.o)
+OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
 # Dependencies
 DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),sources,)
 
 # Shared Libraries
-RUNTIME_LINKS=$(subst $() $(),:,$(call import_all,$(SHARED_LIBRARY_PATHS),bindir,))
+RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBRARY_PATHS),bindir,) | tr ' ' ':'
 
 # ==============================================================================================================
 
@@ -98,7 +99,7 @@ $(DIRECTORIES):
 	$(MKDIR) $@
 
 # Build objects
-$(OBJDIR)$(SRCDIR)%.o: $(SRCDIR)%.c $(HEADERS) $(DEPENDENCIES)
+$(OBJDIR)%.o: $(SRCDIR)%.c $(HEADERS) $(DEPENDENCIES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -o "$@" "$<"
 
 # ==============================================================================================================
