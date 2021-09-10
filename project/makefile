@@ -15,6 +15,10 @@ IDIR=include/
 OBJDIR=obj/
 BINDIR=bin/
 
+# Functions
+import = $(shell make --no-print-directory -C $(1) $(2) | tr ' ' '\n' | xargs -i echo $(3)$(1)/{})
+import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
+
 # Directories
 MKDIR=mkdir -pv
 RM=rm -rfv
@@ -25,20 +29,20 @@ CC=gcc
 CFLAGS=-Wall -DDEBUG -g
 SOURCES=$(shell find $(SRCDIR) -iname "*.c" | tr '\n' ' ')
 LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
-INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir)) $(IDIR:%=-I%)
+INCLUDES=$(call import_all,$(LIBRARY_PATHS),idir,-I) $(IDIR:%=-I%)
 
 # Linker
-LINKS=$(foreach LIBPATH,$(LIBRARY_PATHS),-L$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) bindir)) $(LIBRARIES:%=-l%)
+LINKS=$(call import_all,$(LIBRARY_PATHS),bindir,-L) $(LIBRARIES:%=-l%)
 
 # Objects
 BINARY=$(BINDIR)$(PROJECT).out
 OBJECTS=$(SOURCES:%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst %,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
+DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),sources,)
 
-# Shared Libraries (this isn't required for static libraries btw)
-RUNTIME_LINKS=:$(subst $() $(),:,$(foreach LIBPATH,$(SHARED_LIBRARY_PATHS),$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) bindir)))
+# Shared Libraries
+RUNTIME_LINKS=$(subst $() $(),:,$(call import_all,$(SHARED_LIBRARY_PATHS),bindir,))
 
 # ==============================================================================================================
 

@@ -12,6 +12,10 @@ IDIR=include/
 OBJDIR=obj/
 BINDIR=bin/
 
+# Functions
+import = $(shell make --no-print-directory -C $(1) $(2) | tr ' ' '\n' | xargs -i echo $(3)$(1)/{})
+import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
+
 # Directories
 MKDIR=mkdir -pv
 RM=rm -rfv
@@ -21,14 +25,14 @@ DIRECTORIES=$(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' '
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
 SOURCES=$(shell find $(SRCDIR) -iname "*.c" | tr '\n' ' ')
-INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir)) $(IDIR:%=-I%)
+INCLUDES=$(call import_all,$(LIBRARY_PATHS),idir,-I) $(IDIR:%=-I%)
 
 # Objects
 BINARY=$(BINDIR)lib$(PROJECT).a
 OBJECTS=$(SOURCES:%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst %,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
+DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),sources,)
 
 # ==============================================================================================================
 
