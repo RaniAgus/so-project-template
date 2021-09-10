@@ -86,11 +86,8 @@ $(DIRECTORIES):
 	$(MKDIR) $@
 
 # Build objects
-$(OBJDIR)$(SRCDIR)%.o: $(SRCDIR)%.c $(IDIR)%.h $(DEPENDENCIES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-
-$(OBJDIR)%.o: %.c $(DEPENDENCIES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+$(OBJDIR)$(SRCDIR)%.o: $(SRCDIR)%.c $(HEADERS) $(DEPENDENCIES)
+	$(CC) $(INCLUDES) $(CFLAGS) -fPIC -c -o "$@" "$<"
 
 # ==============================================================================================================
 
