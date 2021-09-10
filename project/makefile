@@ -31,20 +31,20 @@ CFLAGS=-Wall -DDEBUG -g
 SOURCES != find $(SRCDIR) -iname "*.c"
 HEADERS != find $(IDIR) -iname "*.h"
 LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
-INCLUDES=$(call import_all,$(LIBRARY_PATHS),idir,-I) $(IDIR:%=-I%)
+INCLUDES=$(call import_all,$(LIBRARY_PATHS),IDIR,-I) $(IDIR:%=-I%)
 
 # Linker
-LINKS=$(call import_all,$(LIBRARY_PATHS),bindir,-L) $(LIBRARIES:%=-l%)
+LINKS=$(call import_all,$(LIBRARY_PATHS),BINDIR,-L) $(LIBRARIES:%=-l%)
 
 # Objects
 BINARY=$(BINDIR)$(PROJECT).out
 OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),sources,)
+DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS,)
 
 # Shared Libraries
-RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBRARY_PATHS),bindir,) | tr ' ' ':'
+RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBRARY_PATHS),BINDIR,) | tr ' ' ':'
 
 # ==============================================================================================================
 
@@ -131,3 +131,6 @@ maketest:
 	@echo "Link flags:    $(LINKS)"
 	@echo "Directories:   $(DIRECTORIES)"
 	@echo "Runtime links: $(RUNTIME_LINKS)"
+
+%:
+	@echo $($@) | tr ' ' '\n'

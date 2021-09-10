@@ -27,14 +27,14 @@ CC=gcc
 CFLAGS=-Wall -DDEBUG -g
 SOURCES != find $(SRCDIR) -iname "*.c"
 HEADERS != find $(IDIR) -iname "*.h"
-INCLUDES=$(call import_all,$(LIBRARY_PATHS),idir,-I) $(IDIR:%=-I%)
+INCLUDES=$(call import_all,$(LIBRARY_PATHS),IDIR,-I) $(IDIR:%=-I%)
 
 # Objects
 BINARY=$(BINDIR)lib$(PROJECT).so
 OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),sources,)
+DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS,)
 
 # Installation targets
 INSTLIB=/usr/lib/
@@ -92,22 +92,6 @@ $(OBJDIR)%.o: $(SRCDIR)%.c $(HEADERS) $(DEPENDENCIES)
 
 # ==============================================================================================================
 
-.PHONY: sources
-
-sources:
-	@echo $(SOURCES) $(HEADERS) | tr ' ' '\n'
-
-.PHONY: idir
-
-idir:
-	@echo $(IDIR) | tr ' ' '\n'
-
-.PHONY: bindir
-
-bindir:
-	@echo $(BINDIR) | tr ' ' '\n'
-
-
 .PHONY: help
 
 help:
@@ -131,3 +115,6 @@ maketest:
 	@echo "Dependencies:  $(DEPENDENCIES)"
 	@echo "Include flags: $(INCLUDES)"
 	@echo "Directories:   $(DIRECTORIES)"
+
+%:
+	@echo $($@) | tr ' ' '\n'
