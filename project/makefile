@@ -22,12 +22,13 @@ import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
 # Directories
 MKDIR=mkdir -pv
 RM=rm -rfv
-DIRECTORIES=$(BINDIR) $(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' '))
+DIRECTORIES=$(BINDIR) $(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d))
 
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-SOURCES=$(shell find $(SRCDIR) -iname "*.c" | tr '\n' ' ')
+SOURCES=$(shell find $(SRCDIR) -iname "*.c")
+HEADERS=$(shell find $(IDIR) -iname "*.h")
 LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
 INCLUDES=$(call import_all,$(LIBRARY_PATHS),idir,-I) $(IDIR:%=-I%)
 

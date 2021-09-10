@@ -19,12 +19,13 @@ import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
 # Directories
 MKDIR=mkdir -pv
 RM=rm -rfv
-DIRECTORIES=$(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' ')) $(BINDIR)
+DIRECTORIES=$(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d)) $(BINDIR)
 
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-SOURCES=$(shell find $(SRCDIR) -iname "*.c" | tr '\n' ' ')
+SOURCES=$(shell find $(SRCDIR) -iname "*.c")
+HEADERS=$(shell find $(IDIR) -iname "*.h")
 INCLUDES=$(call import_all,$(LIBRARY_PATHS),idir,-I) $(IDIR:%=-I%)
 
 # Objects
@@ -35,7 +36,6 @@ OBJECTS=$(SOURCES:%.c=$(OBJDIR)%.o)
 DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),sources,)
 
 # Installation targets
-HEADERS=$(shell find $(IDIR) -iname "*.h" | tr '\n' ' ')
 INSTDIR=/usr/lib/
 INCLDIR=/usr/include/
 
