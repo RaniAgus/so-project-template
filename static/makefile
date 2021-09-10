@@ -91,11 +91,13 @@ help:
 .PHONY: maketest
 
 maketest:
-	@echo "Project name:  $(PROJECT)"
-	@echo "Source files:  $(SOURCES)"
-	@echo "Dependencies:  $(DEPENDENCIES)"
-	@echo "Include flags: $(INCLUDES)"
-	@echo "Directories:   $(DIRECTORIES)"
+	@echo "PROJECT:       $(PROJECT)"
+	@echo "DIRECTORIES:   $(DIRECTORIES)"
+	@echo "SOURCES:       $(SOURCES)"
+	@echo "HEADERS:       $(HEADERS)"
+	@echo "INCLUDES:      $(INCLUDES)"
+	@echo "OBJECTS:       $(OBJECTS)"
+	@echo "DEPENDENCIES:  $(DEPENDENCIES)"
 
 %:
 	@echo $($@) | tr ' ' '\n'

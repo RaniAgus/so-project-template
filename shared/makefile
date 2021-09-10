@@ -39,6 +39,8 @@ DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS,)
 # Installation targets
 INSTLIB=/usr/lib/
 INSTINCLUDE=/usr/include/
+INSTBIN=$(BINARY:$(BINDIR)%=$(INSTLIB)%)
+INSTHEADERS=$(HEADERS:$(IDIR)%=$(INSTINCLUDE)%)
 
 # ==============================================================================================================
 
@@ -73,8 +75,8 @@ install: release
 .PHONY: uninstall
 
 uninstall:
-	sudo rm -fv $(BINARY:$(BINDIR)%=$(INSTLIB)%)
-	sudo rm -fvr $(HEADERS:$(IDIR)%=$(INSTINCLUDE)%)
+	sudo rm -fv $(INSTBIN)
+	sudo rm -fvr $(INSTHEADERS)
 
 # ==============================================================================================================
 
@@ -109,12 +111,15 @@ help:
 .PHONY: maketest
 
 maketest:
-	@echo "Project name:  $(PROJECT)"
-	@echo "Source files:  $(SOURCES)"
-	@echo "Header files:  $(HEADERS)"
-	@echo "Dependencies:  $(DEPENDENCIES)"
-	@echo "Include flags: $(INCLUDES)"
-	@echo "Directories:   $(DIRECTORIES)"
+	@echo "PROJECT:       $(PROJECT)"
+	@echo "DIRECTORIES:   $(DIRECTORIES)"
+	@echo "SOURCES:       $(SOURCES)"
+	@echo "HEADERS:       $(HEADERS)"
+	@echo "INCLUDES:      $(INCLUDES)"
+	@echo "OBJECTS:       $(OBJECTS)"
+	@echo "DEPENDENCIES:  $(DEPENDENCIES)"
+	@echo "INSTBIN:       $(INSTBIN)"
+	@echo "INSTHEADERS:   $(INSTHEADERS)"
 
 %:
 	@echo $($@) | tr ' ' '\n'

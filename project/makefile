@@ -124,13 +124,15 @@ help:
 .PHONY: maketest
 
 maketest:
-	@echo "Project name:  $(PROJECT)"
-	@echo "Source files:  $(SOURCES)"
-	@echo "Dependencies:  $(DEPENDENCIES)"
-	@echo "Include flags: $(INCLUDES)"
-	@echo "Link flags:    $(LINKS)"
-	@echo "Directories:   $(DIRECTORIES)"
-	@echo "Runtime links: $(RUNTIME_LINKS)"
+	@echo "PROJECT:       $(PROJECT)"
+	@echo "DIRECTORIES:   $(DIRECTORIES)"
+	@echo "SOURCES:       $(SOURCES)"
+	@echo "HEADERS:       $(HEADERS)"
+	@echo "INCLUDES:      $(INCLUDES)"
+	@echo "LINKS:         $(LINKS)"
+	@echo "OBJECTS:       $(OBJECTS)"
+	@echo "DEPENDENCIES:  $(DEPENDENCIES)"
+	@echo "RUNTIME_LINKS: $(RUNTIME_LINKS)"
 
 %:
 	@echo $($@) | tr ' ' '\n'
