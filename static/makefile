@@ -42,6 +42,11 @@ all: $(BINARY)
 clean:
 	$(RM) $(OBJDIR) $(BINARY)
 
+watch:
+	while true; do \
+	find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
+	done;
+
 release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
@@ -49,7 +54,8 @@ release: all
 help:
 	@echo "COMMANDS:"
 	@echo "    make / make all -- Build project using debug flags."
-	@echo "    make project    -- Build project using release flags."
+	@echo "    make release    -- Build project using release flags."
+	@echo "    make watch      -- Run make when files change."
 	@echo "    make clean      -- Remove generated files from file system."
 	@echo "VARIABLES:"
 	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
@@ -90,4 +96,4 @@ idir:
 bindir:
 	@echo $(BINDIR)
 
-.PHONY: all clean debug release dependencies makefile-test help idir bindir
+.PHONY: all clean watch release dependencies makefile-test help idir bindir

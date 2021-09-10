@@ -52,6 +52,11 @@ all: $(BINARY)
 clean:
 	$(RM) $(OBJDIR) $(BINARY)
 
+watch:
+	while true; do \
+	find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
+	done;
+
 release: CFLAGS = -Wall -DNDEBUG
 release: clean
 release: all
@@ -71,8 +76,9 @@ helgrind: all
 help:
 	@echo "COMMANDS:"
 	@echo "    make / make all -- Build project using debug flags."
-	@echo "    make project    -- Build project using release flags."
+	@echo "    make release    -- Build project using release flags."
 	@echo "    make clean      -- Remove generated files from file system."
+	@echo "    make watch      -- Run make when files change."
 	@echo "    make start      -- Run using valgrind without any extra tool."
 	@echo "    make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file."
 	@echo "    make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file."
@@ -110,4 +116,4 @@ makefile-test:
 	@echo "Directories:   $(DIRECTORIES)"
 	@echo "Runtime links: $(RUNTIME_LINKS)"
 
-.PHONY: all clean debug release start test memcheck helgrind makefile-test help
+.PHONY: all clean watch debug release start test memcheck helgrind makefile-test help
