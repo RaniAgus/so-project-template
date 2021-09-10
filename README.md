@@ -24,6 +24,9 @@ configurar el nombre del proyecto).
 
 ✔️ Incluyen flags de debug para `make all` y flags de release para `make release`.
 
+✔️ Poder observar cambios en los archivos y recompilar
+automáticamente mediante `make watch`.
+
 ✔️ ¡No hace falta configurar variables de entorno! La biblioteca compartida es una
 static library, que luego es compilada directamente en el binario final del
 proyecto. Para saber más info sobre static vs shared libraries, podés
@@ -142,7 +145,39 @@ Ya que `LIBRARY_PATH` es `../utils` e `IDIR` es `src/`, entonces
 
 - [Cómo importar en Eclipse](../../wiki/Eclipse)
 
-### ¿Cómo ejecuto Valgrind usando el makefile?
+### Comandos básicos
+
+#### All
+Compila el proyecto con flags de Debug (cualquiera de los dos es válido):
+```
+$ make
+$ make all
+```
+
+#### Clean
+Elimina los archivos generados al compilar:
+```
+$ make clean
+```
+Nos permite, por ejemplo, realizar una compilación limpia utilizando `clean all`:
+```
+$ make clean all
+```
+
+#### Watch
+Esta regla utiliza la herramienta [entr](http://eradman.com/entrproject/), que 
+debemos instalar de la siguiente forma:
+```
+$ sudo apt install entr
+```
+
+Sirve para observar cambios en los archivos del proyecto y ejecutar `make all`
+cada vez que esto suceda:
+```
+$ make watch
+```
+
+### Comandos de Valgrind
 
 Para ejecutar Valgrind utilizamos las reglas `start`, `memcheck` o `helgrind`.
 
@@ -197,8 +232,9 @@ $ make help
 
 COMMANDS:
     make / make all -- Build project using debug flags.
-    make project    -- Build project using release flags.
+    make release    -- Build project using release flags.
     make clean      -- Remove generated files from file system.
+    make watch      -- Run make when files change.
     make start      -- Run using valgrind without any extra tool.
     make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file.
     make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file.
@@ -231,6 +267,7 @@ TP:
 
 # Visual Studio Code files
 **/.vscode/
+*.code-workspace
 
 # Other
 **/bin/
