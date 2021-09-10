@@ -56,15 +56,15 @@ release: clean
 release: all
 
 start: all
-	export LD_LIBRARY_PATH=$(RUNTIME_LINKS); \
+	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
 	valgrind --tool=none ./$(BINARY) $(ARGS)
 
 memcheck: all
-	export LD_LIBRARY_PATH=$(RUNTIME_LINKS); \
+	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
 	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
 
 helgrind: all
-	export LD_LIBRARY_PATH=$(RUNTIME_LINKS); \
+	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
 	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
 
 help:
