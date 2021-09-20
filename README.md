@@ -66,6 +66,7 @@ variables:
 
 ```makefile
 # Project structure
+ENTRYPOINT=src/main.c
 SRCDIR=src/
 IDIR=include/
 OBJDIR=obj/

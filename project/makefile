@@ -10,6 +10,7 @@ STATIC_LIBRARY_PATHS=
 PROJECT != cd . && pwd | xargs basename
 
 # Project structure
+ENTRYPOINT=src/main.c
 SRCDIR=src/
 IDIR=include/
 OBJDIR=obj/
@@ -28,7 +29,7 @@ DIRECTORIES=$(SOURCE_DIRECTORIES:$(SRCDIR)%=$(OBJDIR)%) $(BINDIR)
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-SOURCES != find $(SRCDIR) -iname "*.c"
+SOURCES != find $(SRCDIR) -iname "*.c" -not -iwholename "$(ENTRYPOINT)"
 HEADERS != find $(IDIR) -iname "*.h"
 LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
 INCLUDES=$(call import_all,$(LIBRARY_PATHS),IDIR,-I) $(IDIR:%=-I%)
@@ -91,8 +92,8 @@ helgrind: all
 # ==============================================================================================================
 
 # Build project
-$(BINARY): $(DIRECTORIES) $(OBJECTS)
-	$(CC) $(INCLUDES) $(CFLAGS) -o "$@" $(OBJECTS) $(LINKS)
+$(BINARY): $(DIRECTORIES) $(OBJECTS) $(ENTRYPOINT)
+	$(CC) $(INCLUDES) $(CFLAGS) -o "$@" $(ENTRYPOINT) $(OBJECTS) $(LINKS)
 
 # Create directories for objects
 $(DIRECTORIES):
