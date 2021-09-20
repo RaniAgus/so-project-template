@@ -1,5 +1,6 @@
 PROJECTS=project
 LIBS=
+TESTS=
 
 all: $(PROJECTS)
 
@@ -10,9 +11,15 @@ $(LIBS):
 	$(MAKE) -C $@ all
 
 clean:
-	$(foreach P, $(LIBS) $(PROJECTS), $(MAKE) -C $P clean;)
+	$(foreach P, $(LIBS) $(PROJECTS) $(TESTS), $(MAKE) -C $P clean;)
 
-release:
+release: test
 	$(foreach P, $(LIBS) $(PROJECTS), $(MAKE) -C $P release;)
 
-.PHONY: all $(PROJECTS) $(LIBS) clean release
+test:
+	$(foreach P, $(TESTS), $(MAKE) -C $P start;)
+
+.PHONY: all $(PROJECTS) $(LIBS) clean release test
+
+%:
+	@echo $($@) | tr ' ' '\n'
