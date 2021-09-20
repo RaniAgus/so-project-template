@@ -41,10 +41,10 @@ BINARY=$(BINDIR)$(PROJECT).out
 OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS,)
+DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS)
 
 # Shared Libraries
-RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBRARY_PATHS),BINDIR,) | tr ' ' ':'
+RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBRARY_PATHS),BINDIR) | tr ' ' ':'
 
 # ==============================================================================================================
 
@@ -67,7 +67,7 @@ release: all
 
 watch:
 	while true; do \
-	find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
+		find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
 	done;
 
 .PHONY: start

@@ -34,7 +34,7 @@ BINARY=$(BINDIR)lib$(PROJECT).so
 OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS,)
+DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS)
 
 # Installation targets
 INSTLIB=/usr/lib/
@@ -63,7 +63,7 @@ release: all
 
 watch:
 	while true; do \
-	find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
+		find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
 	done;
 
 .PHONY: install

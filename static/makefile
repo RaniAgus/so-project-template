@@ -30,11 +30,12 @@ HEADERS != find $(IDIR) -iname "*.h"
 INCLUDES=$(call import_all,$(LIBRARY_PATHS),IDIR,-I) $(IDIR:%=-I%)
 
 # Objects
+AR=ar rcs
 BINARY=$(BINDIR)lib$(PROJECT).a
 OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
 # Dependencies
-DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS,)
+DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS)
 
 # ==============================================================================================================
 
@@ -57,14 +58,14 @@ release: all
 
 watch:
 	while true; do \
-	find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
+		find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
 	done;
 
 # ==============================================================================================================
 
 # Build project
 $(BINARY): $(DIRECTORIES) $(OBJECTS)
-	ar rcs -o "$@" $(OBJECTS)
+	$(AR) -o "$@" $(OBJECTS)
 
 # Create directories for objects
 $(DIRECTORIES):
