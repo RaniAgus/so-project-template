@@ -74,7 +74,7 @@ BINDIR=bin/
 ```
 
 La única restricción a la hora de estructurar el proyecto es que todas las 
-variables excepto `BINDIR` deben no estar vacías.
+variables excepto `BINDIR` deben ser no vacías y ninguna puede ser `.` o `./`.
 
 ### ¿Cómo creo mis proyectos?
 

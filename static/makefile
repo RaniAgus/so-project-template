@@ -46,7 +46,7 @@ all: $(BINARY)
 .PHONY: clean
 
 clean:
-	$(RM) $(OBJDIR) $(BINARY)
+	$(RM) $(OBJDIR) $(BINARY) $(BINDIR)
 
 .PHONY: release
 
