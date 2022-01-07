@@ -193,17 +193,6 @@ $ make debug
 make: Nothing to be done for 'debug'.
 ```
 
-#### `make release`
-
-Compila el proyecto con flags de release. Al igual que `make debug`, solamente
-recompila cuando es necesario:
-
-```bash
-$ make release
-gcc -O3 -Wall -DNDEBUG -c -o "obj/main.o" src/main.c -I./include
-gcc -O3 -Wall -DNDEBUG -o "bin/project.out" obj/main.o -I./include  
-```
-
 #### `make clean`
 
 Elimina los archivos generados al compilar:
@@ -225,7 +214,7 @@ gcc -Wall -DDEBUG -g -c -o "obj/main.o" src/main.c -I./include
 gcc -Wall -DDEBUG -g -o "bin/project.out" obj/main.o -I./include  
 ```
 
-#### Watch
+#### `make watch`
 
 Esta regla utiliza la herramienta [entr](http://eradman.com/entrproject/), que 
 se deberá tener instalada antes de usar esta regla:
@@ -240,11 +229,23 @@ $ make watch
 while sleep 0.1; do \
         find src/ include/ | entr -d make debug --no-print-directory; \
 done
-make[1]: Nothing to be done for 'debug'.
-# Guardo un cambio en el archivo "src/main.c"
+# Primero, compila con un error...
 gcc -Wall -DDEBUG -g -c -o "obj/main.o" src/main.c -I./include
-gcc -Wall -DDEBUG -g -o "bin/project.out" obj/main.o -I./include  
+src/main.c: In function ‘main’:
+src/main.c:5:26: error: expected ‘;’ before ‘return’
+    5 |     puts("Hello world!!")
+      |                          ^
+      |                          ;
+    6 |     return 0;
+      |     ~~~~~~                
+make[1]: *** [makefile:34: obj/main.o] Error 1
+# Luego, corrijo el error y al guardar...
+gcc -Wall -DDEBUG -g -c -o "obj/main.o" src/main.c -I./include
+gcc -Wall -DDEBUG -g -o "bin/project.out" obj/main.o -I./include 
+# Y sigue escuchando...
 ```
+
+Se puede cortar la ejecución con `Ctrl`+`C`.
 
 ### 6. ¿Cómo uso Valgrind?
 
@@ -321,10 +322,7 @@ Hola mundo!!
 ==14652== 
 ```
 
-También requiere tener `entr` instalado:
-```
-$ sudo apt install entr
-```
+Se puede reiniciar con `q` o finalizar con `Ctrl`+`C`.
 
 #### `make memcheck`
 
@@ -352,7 +350,7 @@ Hello world!!
 ==13429== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
-#### Helgrind
+#### `make helgrind`
 
 Útil para diagnosticar problemas de sincronización, como por ejemplo posibles
 condiciones de carrera. Para más info, ver: https://youtu.be/knRei6OBU4Q?t=536
@@ -372,26 +370,59 @@ Hello world!!
 ==13540== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
+### 7. ¿Cómo despliego el proyecto?
+
+Utilizando las reglas `make release` y `make install`, podemos desplegar el 
+repo con un solo comando usando el script de deploy que se encuentra en
+[so-deploy](https://github.com/sisoputnfrba/so-deploy). 
+
+#### `make release`
+
+Compila el proyecto con flags de release. Al igual que `make debug`, solamente
+recompila cuando es necesario:
+
+```bash
+$ make release
+gcc -O3 -Wall -DNDEBUG -c -o "obj/main.o" src/main.c -I./include
+gcc -O3 -Wall -DNDEBUG -o "bin/project.out" obj/main.o -I./include  
+```
+
+Para usar esta regla, debemos pasarle el flag `-m=release` al script.
+
+#### `make install`
+
+Para instalar una biblioteca compartida, se pueden usar las comandos 
+`make install` y `make uninstall` respectivamente.
+
+Ambos copian la biblioteca (`*.so`) y los headers (`*.h`) a las carpetas que
+indiquen las variables ` ` y ` `:
+
+```makefile
+# Path where the library will be installed
+INST_LIB=/usr/local/lib
+INST_H=/usr/local/include
+```
+
 ### ¿Cómo hago para acordarme de todos estos comandos?
 
-¡No hace falta! Podés usar la regla `help`:
+¡No hace falta! Podés usar la regla `help` para ver todos los comandos 
+disponibles:
 
 ```
 $ make help
-
-COMMANDS:
-    make / make all -- Build project using debug flags.
-    make release    -- Build project using release flags.
-    make clean      -- Remove generated files from file system.
-    make watch      -- Run make when files change.
-    make start      -- Run using valgrind without any extra tool.
-    make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file.
-    make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file.
-VARIABLES:
-    ARGS          -- Arguments to be passed to main() using valgrind tools (eg: 'make helgrind ARGS="arg1 arg2 arg3"').
-    LIBS     -- External libraries to be included and linked, separated by spaces (eg: 'utils pthread commons').
-    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils').
-    PROJECT       -- Your project name. By default it will be your pwd basename.
+COMPILATION COMMANDS:
+    make / make debug -- Build project using debug flags.
+    make release      -- Build project using release flags.
+    make clean        -- Remove generated files from file system.
+    make watch        -- Run 'make debug' when any file is modified.
+PROFILING COMMANDS:
+    make start        -- Run using valgrind without any extra tool.
+    make daemon       -- Run 'make start' when any file is modified.
+    make memcheck     -- Run using valgrind memcheck tool.
+    make helgrind     -- Run using valgrind helgrind tool.
+INSTALLATION COMMANDS:
+    make install      -- Install the shared library and its headers.
+    make uninstall    -- Remove the shared object and its headers.
 ```
 
 ## Contacto
