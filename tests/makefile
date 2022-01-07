@@ -27,8 +27,8 @@ TEST_IDIRS = $(addsuffix /include,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS
 # Set library files' directories to (-L)ook
 TEST_LIBDIRS = $(addsuffix /bin,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS))
 
-.PHONY: build
-build: $(TEST_BIN)
+.PHONY: debug
+debug: $(TEST_BIN)
 
 $(TEST_BIN): $(SRCS_C) $(TEST_SRCS_C) | $(TEST_BINDIR)
 	gcc $(CFLAGS) -o "$@" $^ $(TEST_IDIRS:%=-I%) $(TEST_LIBDIRS:%=-L%) $(TEST_LIBS:%=-l%)
@@ -43,7 +43,7 @@ clean:
 .PHONY: watch
 watch:
 	while sleep 0.1; do \
-		find src/ $(PROJ_PATH)/src/ $(PROJ_PATH)/include/ | entr -d make build --no-print-directory; \
+		find src/ $(PROJ_PATH)/src/ $(PROJ_PATH)/include/ | entr -d make debug --no-print-directory; \
 	done
 
 # ============================[ Profiling rules ]============================ #
@@ -52,7 +52,7 @@ watch:
 LD_LIBRARY_PATH != echo $(addsuffix /bin,$(TEST_SHARED_LIBPATHS)) | tr ' ' ':'
 
 .PHONY: start
-start: build ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+start: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
 	valgrind --tool=none ./$(TEST_BIN) $(TEST_ARGS)
 
 .PHONY: daemon
@@ -62,11 +62,11 @@ daemon:
 	done
 
 .PHONY: memcheck
-memcheck: build ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+memcheck: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
 	valgrind --leak-check=full $(TEST_MEMCHECK_FLAGS) ./$(TEST_BIN) $(TEST_ARGS)
 
 .PHONY: helgrind
-helgrind: build ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+helgrind: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
 	valgrind --tool=helgrind $(TEST_HELGRIND_FLAGS) ./$(TEST_BIN) $(TEST_ARGS)
 
 # ==================================[ Help ]================================== #
@@ -74,7 +74,7 @@ helgrind: build ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
 .PHONY: help
 help:
 	@echo "COMMANDS:"
-	@echo "    make / make build -- Build project using debug flags."
+	@echo "    make / make debug -- debug project using debug flags."
 	@echo "    make clean        -- Remove generated files from file system."
 	@echo "    make watch        -- Run 'make debug' when any file is modified."
 	@echo "PROFILING COMMANDS:"

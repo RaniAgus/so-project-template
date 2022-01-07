@@ -6,7 +6,7 @@ compartida.
 
 ## Features
 
-Ambos makefiles:
+Todos los makefiles:
 
 ✔️ Compilan solamente los archivos fuente necesarios.
 
@@ -372,7 +372,58 @@ Hello world!!
 ==13540== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
-### 7. ¿Cómo despliego el proyecto?
+### 7. ¿Cómo agrego tests unitarios?
+
+¡Es muy sencillo! 
+
+- Primero deberás descargar el template de la misma forma que con los otros:
+```bash
+bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) project
+```
+
+- Segundo ~Brasil~, especificar qué biblioteca o framework vas a usar (las más 
+comunes son [cspec](https://faq.utnso.com.ar/guia-cspec) y 
+[cunit](https://faq.utnso.com.ar/guia-cunit)).
+
+```makefile
+# Testing library
+TEST_LIB=cspecs
+```
+
+- También deberás configurar dónde está **el** proyecto al que hacer referencia
+y la ruta hacia el archivo fuente que contiene la función `main()`. Esto se debe
+a que para los tests vamos a querer definir un `main` distinto.
+
+```makefile
+# Test project name
+TEST_NAME=$(shell cd . && pwd | xargs basename)
+
+# Original project path
+PROJ_PATH=../project
+```
+
+- ¡Eso es todo!
+
+**Advertencia**: Es probable que los proyectos que cuenten 
+con la biblioteca `readline` crasheen si usan este framework por un bug. Una 
+posible solución sencilla a esto es incluir todas las funciones que usen 
+`readline` dentro del `main()`.
+
+Debido a este bug, el makefile incluye una línea para forzar excluir `readline`
+del proyecto. 
+
+```makefile
+# Testing libraries
+TEST_LIBS=$(TEST_LIB) $(filter-out readline,$(LIBS))
+```
+
+Si estás usando CUnit, deberás cambiarlo por:
+```makefile
+# Testing libraries
+TEST_LIBS=$(TEST_LIB) $(LIBS)
+```
+
+### 8. ¿Cómo despliego el proyecto?
 
 Utilizando las reglas `make release` y `make install`, podemos desplegar el 
 repo con un solo comando usando el script de deploy que se encuentra en
