@@ -3,9 +3,6 @@
 # Project name
 NAME=$(shell cd . && pwd | xargs basename)
 
-# Main function source file
-MAIN=src/main.c
-
 # Libraries
 LIBS=
 

@@ -3,7 +3,7 @@ include settings.mk
 # ===========================[ Compilation rules ]=========================== #
 
 # Set prerrequisites
-SRCS_C != find src/ -iname "*.c" -not -iwholename "$(MAIN)"
+SRCS_C != find src/ -iname "*.c"
 SRCS_H != find include/ -iname "*.h"
 DEPS = $(addsuffix /src,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
@@ -27,7 +27,7 @@ debug: $(BIN)
 release: CFLAGS = $(CRELEASE)
 release: $(BIN)
 
-$(BIN): $(MAIN) $(OBJS) | $(BINDIR)
+$(BIN): $(OBJS) | $(BINDIR)
 	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
 
 obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
