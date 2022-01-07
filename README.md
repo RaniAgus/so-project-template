@@ -61,21 +61,6 @@ Los proyectos funcionan bajo la siguiente estructura, adaptada para que
       └─── makefile
 ```
 
-Sin embargo, podés ajustarla a tus preferencias modificando las siguientes
-variables:
-
-```makefile
-# Project structure
-ENTRYPOINT=src/main.c
-SRCDIR=src/
-IDIR=include/
-OBJDIR=obj/
-BINDIR=bin/
-```
-
-La única restricción a la hora de estructurar el proyecto es que todas las 
-variables excepto `BINDIR` deben ser no vacías y ninguna puede ser `.` o `./`.
-
 ### ¿Cómo creo mis proyectos?
 
 - Para crear un proyecto estándar podés descargar la carpeta `project/` desde las 
@@ -108,8 +93,8 @@ que la utilicen.
 
 #### 1. Incluir en el makefile
 
-Para incluir una biblioteca alcanza con editar la macro `LIBRARIES` del makefile. 
-También, para incluir una biblioteca propia se debe editar tanto `LIBRARIES` como 
+Para incluir una biblioteca alcanza con editar la macro `LIBS` del makefile. 
+También, para incluir una biblioteca propia se debe editar tanto `LIBS` como 
 `LIBRARY_PATHS`. 
 
 Por ejemplo, para incluir las `commons` y una biblioteca propia llamada `utils`
@@ -117,17 +102,17 @@ ubicada en el mismo repo se deberá agregar lo siguiente:
 
 ```makefile
 # Include libraries here
-LIBRARIES=utils commons pthread
+LIBS=utils commons pthread
 
 # Include custom library paths here
-SHARED_LIBRARY_PATHS=
+SHARED_LIBS_PATHS=
 STATIC_LIBRARY_PATHS=../utils
 ```
 
 #### 2. Incluir en el código
 
 Los includes se pueden poner entre `<>` como path relativo a 
-`{LIBRARY_PATH}/{IDIR}`.
+`{LIBRARY_PATH}/{INC_DIR}`.
 
 Por ejemplo, para incluir las funciones de `utils` podemos hacer:
 
@@ -135,8 +120,8 @@ Por ejemplo, para incluir las funciones de `utils` podemos hacer:
 #include <utils/hello.h>
 ```
 
-Ya que `LIBRARY_PATH` es `../utils` e `IDIR` es `src/`, entonces 
-`{LIBRARY_PATH}/{IDIR}utils/hello.h` nos da por resultado lo mismo que:
+Ya que `LIBRARY_PATH` es `../utils` e `INC_DIR` es `src/`, entonces 
+`{LIBRARY_PATH}/{INC_DIR}utils/hello.h` nos da por resultado lo mismo que:
 
 ```c
 #include "../utils/src/utils/hello.h"
@@ -241,7 +226,7 @@ COMMANDS:
     make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file.
 VARIABLES:
     ARGS          -- Arguments to be passed to main() using valgrind tools (eg: 'make helgrind ARGS="arg1 arg2 arg3"').
-    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'utils pthread commons').
+    LIBS     -- External libraries to be included and linked, separated by spaces (eg: 'utils pthread commons').
     LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils').
     PROJECT       -- Your project name. By default it will be your pwd basename.
 ```

@@ -1,125 +1,73 @@
-# Include custom library paths here
-LIBRARY_PATHS=
+include settings.mk
 
-# ==============================================================================================================
+# Set prerrequisites
+SRCS_C != find src/ -iname "*.c"
+SRCS_H != find include/ -iname "*.h"
+DEPS = $(addsuffix /src,$(LIBPATHS))
 
-# Project name
-PROJECT != cd . && pwd | xargs basename
+# Set targets
+BINDIR = bin
+BIN = $(BINDIR)/$(NAME).so
+OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
+OBJDIRS = $(dir $(OBJS))
 
-# Project structure
-SRCDIR=src/
-IDIR=include/
-OBJDIR=obj/
-BINDIR=bin/
+# Set header files' directories to (-I)nclude
+IDIRS = $(addsuffix /include,$(LIBPATHS) .)
 
-# Functions
-import = $(shell make --no-print-directory -C $(1) $(2) | xargs -i echo $(3)$(1)/{})
-import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
+# Set library files' directories to (-L)ook
+LIBDIRS = $(addsuffix /bin,$(LIBPATHS))
 
-# Directories
-MKDIR=mkdir -pv
-RM=rm -rfv
-SOURCE_DIRECTORIES != find $(SRCDIR) -type d
-DIRECTORIES=$(SOURCE_DIRECTORIES:$(SRCDIR)%=$(OBJDIR)%) $(BINDIR)
+# ===========================[ Compilation rules ]=========================== #
 
-# Compiler
-CC=gcc
-CFLAGS=-Wall -DDEBUG -g
-SOURCES != find $(SRCDIR) -iname "*.c"
-HEADERS != find $(IDIR) -iname "*.h"
-INCLUDES=$(call import_all,$(LIBRARY_PATHS),IDIR,-I) $(IDIR:%=-I%)
-
-# Objects
-BINARY=$(BINDIR)lib$(PROJECT).so
-OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
-
-# Dependencies
-DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS)
-
-# Installation targets
-INSTLIB=/usr/lib/
-INSTINCLUDE=/usr/include/
-INSTBIN=$(BINARY:$(BINDIR)%=$(INSTLIB)%)
-INSTHEADERS=$(HEADERS:$(IDIR)%=$(INSTINCLUDE)%)
-
-# ==============================================================================================================
-
-.PHONY: all
-
-all: $(BINARY)
-
-.PHONY: clean
-
-clean:
-	$(RM) $(OBJDIR) $(BINARY) $(BINDIR)
+.PHONY: debug
+debug: CFLAGS = $(CDEBUG)
+debug: $(BIN)
 
 .PHONY: release
+release: CFLAGS = $(CRELEASE)
+release: $(BIN)
 
-release: CFLAGS = -Wall -DNDEBUG
-release: clean
-release: all
+$(BIN): $(OBJS) | $(BINDIR)
+	gcc $(CFLAGS) -shared -o "$@" $^ $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+
+obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
+	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
+
+$(BINDIR) $(OBJDIRS):
+	mkdir -pv $@
+
+.PHONY: clean
+clean:
+	-rm -rfv $(OBJS) $(BIN)
 
 .PHONY: watch
-
 watch:
 	while true; do \
-		find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
-	done;
+		find src/ include/ | entr -d make debug --no-print-directory; \
+	done
+
+# ============================[ Installing rules ]============================ #
 
 .PHONY: install
-
 install: release
-	sudo cp -uv $(BINARY) $(INSTLIB)
-	sudo cp -uva $(IDIR). $(INSTINCLUDE)
+	sudo cp -uva $(BINDIR)/. $(INST_LIB)
+	sudo cp -uva include/. $(INST_H)
 
 .PHONY: uninstall
-
 uninstall:
-	sudo rm -fv $(INSTBIN)
-	sudo rm -fvr $(INSTHEADERS)
+	sudo rm -fv $(patsubst bin/%,$(INST_LIB)%,$(BIN))
+	sudo rm -fvr $(patsubst include/%,$(INST_H)%,$(SRCS_H))
 
-# ==============================================================================================================
-
-# Build project
-$(BINARY): $(DIRECTORIES) $(OBJECTS)
-	$(CC) -shared -o "$@" $(OBJECTS)
-
-# Create directories for objects
-$(DIRECTORIES):
-	$(MKDIR) $@
-
-# Build objects
-$(OBJDIR)%.o: $(SRCDIR)%.c $(HEADERS) $(DEPENDENCIES)
-	$(CC) $(INCLUDES) $(CFLAGS) -fPIC -c -o "$@" "$<"
-
-# ==============================================================================================================
+# ==================================[ Help ]================================== #
 
 .PHONY: help
 
 help:
-	@echo "COMMANDS:"
-	@echo "    make / make all -- Build project using debug flags."
-	@echo "    make release    -- Build project using release flags."
-	@echo "    make watch      -- Run make when files change."
-	@echo "    make clean      -- Remove generated files from file system."
-	@echo "    make install    -- Install the shared library and headers."
-	@echo "    make uninstall  -- Remove the shared object and its corresponding headers."
-	@echo "VARIABLES:"
-	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
-	@echo "    PROJECT       -- Your project name. By default it will be your pwd basename."
-
-.PHONY: maketest
-
-maketest:
-	@echo "PROJECT:       $(PROJECT)"
-	@echo "DIRECTORIES:   $(DIRECTORIES)"
-	@echo "SOURCES:       $(SOURCES)"
-	@echo "HEADERS:       $(HEADERS)"
-	@echo "INCLUDES:      $(INCLUDES)"
-	@echo "OBJECTS:       $(OBJECTS)"
-	@echo "DEPENDENCIES:  $(DEPENDENCIES)"
-	@echo "INSTBIN:       $(INSTBIN)"
-	@echo "INSTHEADERS:   $(INSTHEADERS)"
-
-%:
-	@echo $($@) | tr ' ' '\n'
+	@echo "COMPILATION COMMANDS:"
+	@echo "    make / make debug -- Build project using debug flags."
+	@echo "    make release      -- Build project using release flags."
+	@echo "    make clean        -- Remove generated files from file system."
+	@echo "    make watch        -- Run 'make debug' when any file is modified."
+	@echo "INSTALLATION COMMANDS:"
+	@echo "    make install      -- Install the shared library and its headers."
+	@echo "    make uninstall    -- Remove the shared object and its headers."

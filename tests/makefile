@@ -6,23 +6,21 @@ PROJECT_PATH=
 PROJECT != cd . && pwd | xargs basename
 
 # Project structure
-SRCDIR=src/
-BINDIR=bin/
+SRC_DIR=src/
+BIN_DIR=bin/
 
 # Functions
 import = $(shell make --no-print-directory -C $(1) $(2) | xargs -i echo $(3)$(1)/{})
 import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
 
 # Directories
-MKDIR=mkdir -pv
-RM=rm -rfv
-SOURCE_DIRECTORIES != find $(SRCDIR) -type d
-DIRECTORIES=$(BINDIR)
+SOURCE_DIRECTORIES != find src/ -type d
+DIRECTORIES=bin/
 
 # Compiler
 CC=gcc
 CFLAGS=-Wall -DDEBUG -g
-SOURCES != find $(SRCDIR) -iname "*.c"
+SOURCES != find src/ -iname "*.c"
 
 ifneq ($(PROJECT_PATH),)
 
@@ -30,75 +28,75 @@ ifneq ($(PROJECT_PATH),)
 SOURCES+=$(call import_all,$(PROJECT_PATH),SOURCES HEADERS)
 
 # Project libraries (except readline)
-LIBRARIES=$(shell make --no-print-directory -C $(PROJECT_PATH) LIBRARIES | grep -v "readline")
+LIBS=$(shell make --no-print-directory -C $(PROJECT_PATH) LIBS | grep -v "readline")
 
 # Project library paths
-SHARED_LIBRARY_PATHS=$(call import_all,$(PROJECT_PATH),SHARED_LIBRARY_PATHS)
+SHARED_LIBS_PATHS=$(call import_all,$(PROJECT_PATH),SHARED_LIBS_PATHS)
 STATIC_LIBRARY_PATHS=$(call import_all,$(PROJECT_PATH),STATIC_LIBRARY_PATHS)
 
 endif
 
-LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
-INCLUDES=$(call import_all,$(LIBRARY_PATHS),IDIR,-I)
+LIBRARY_PATHS=$(SHARED_LIBS_PATHS) $(STATIC_LIBRARY_PATHS)
+INCLUDES=$(call import_all,$(LIBRARY_PATHS),INC_DIR,-I)
 
 # Linker
-LIBRARIES+=cspecs
-LINKS=$(call import_all,$(LIBRARY_PATHS),BINDIR,-L) $(LIBRARIES:%=-l%)
+LIBS+=cspecs
+LINKS=$(call import_all,$(LIBRARY_PATHS),BIN_DIR,-L) $(LIBS:%=-l%)
 
 # Objects
-BINARY=$(BINDIR)$(PROJECT).out
+BIN=bin/$(PROJECT).out
 
 # Dependencies
 DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS)
 
 # Shared Libraries
-RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBRARY_PATHS),BINDIR) | tr ' ' ':'
+RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBS_PATHS),BIN_DIR) | tr ' ' ':'
 
 # ==============================================================================================================
 
 .PHONY: all
 
-all: $(BINARY)
+all: $(BIN)
 
 .PHONY: clean
 
 clean:
-	$(RM) $(BINARY) $(BINDIR)
+	-rm -rv $(BIN) bin/
 
 .PHONY: watch
 
 watch:
 	while true; do \
-		find $(SRCDIR) $(PROJECT_PATH) | entr -d make --no-print-directory; \
+		find src/ $(PROJECT_PATH) | entr -d make --no-print-directory; \
 	done;
 
 .PHONY: start
 
 start: all
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
-	valgrind --tool=none ./$(BINARY) $(ARGS)
+	valgrind --tool=none ./$(BIN) $(ARGS)
 
 .PHONY: memcheck
 
 memcheck: all
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
-	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
+	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" ./$(BIN) $(ARGS)
 
 .PHONY: helgrind
 
 helgrind: all
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
-	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
+	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" ./$(BIN) $(ARGS)
 
 # ==============================================================================================================
 
 # Build project
-$(BINARY): $(DIRECTORIES) $(SOURCES) $(DEPENDENCIES)
-	$(CC) $(INCLUDES) $(CFLAGS) -o "$@" $(SOURCES) $(LINKS)
+$(BIN): $(DIRECTORIES) $(SOURCES) $(DEPENDENCIES)
+	gcc $(INCLUDES) $(CFLAGS) -o "$@" $(SOURCES) $(LINKS)
 
 # Create directories for binary
 $(DIRECTORIES):
-	$(MKDIR) $@
+	mkdir -pv $@
 
 # ==============================================================================================================
 

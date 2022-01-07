@@ -1,139 +1,84 @@
-# Include libraries here
-LIBRARIES=
-# Include custom library paths here
-SHARED_LIBRARY_PATHS=
-STATIC_LIBRARY_PATHS=
+include settings.mk
 
-# ==============================================================================================================
+# Set prerrequisites
+SRCS_C != find src/ -iname "*.c" -not -iwholename "$(MAIN)"
+SRCS_H != find include/ -iname "*.h"
+DEPS = $(addsuffix /src,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
-# Project name
-PROJECT != cd . && pwd | xargs basename
+# Set targets
+BINDIR = bin
+BIN = $(BINDIR)/$(NAME).out
+OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
+OBJDIRS = $(dir $(OBJS))
 
-# Project structure
-ENTRYPOINT=src/main.c
-SRCDIR=src/
-IDIR=include/
-OBJDIR=obj/
-BINDIR=bin/
+# Set header files' directories to (-I)nclude
+IDIRS = $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
 
-# Functions
-import = $(shell make --no-print-directory -C $(1) $(2) | xargs -i echo $(3)$(1)/{})
-import_all = $(foreach var,$(1),$(call import,$(var),$(2),$(3)))
+# Set library files' directories to (-L)ook
+LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
-# Directories
-MKDIR=mkdir -pv
-RM=rm -rfv
-SOURCE_DIRECTORIES != find $(SRCDIR) -type d
-DIRECTORIES=$(SOURCE_DIRECTORIES:$(SRCDIR)%=$(OBJDIR)%) $(BINDIR)
+# ===========================[ Compilation rules ]=========================== #
 
-# Compiler
-CC=gcc
-CFLAGS=-Wall -DDEBUG -g
-SOURCES != find $(SRCDIR) -iname "*.c" -not -iwholename "$(ENTRYPOINT)"
-HEADERS != find $(IDIR) -iname "*.h"
-LIBRARY_PATHS=$(SHARED_LIBRARY_PATHS) $(STATIC_LIBRARY_PATHS)
-INCLUDES=$(call import_all,$(LIBRARY_PATHS),IDIR,-I) $(IDIR:%=-I%)
-
-# Linker
-LINKS=$(call import_all,$(LIBRARY_PATHS),BINDIR,-L) $(LIBRARIES:%=-l%)
-
-# Objects
-BINARY=$(BINDIR)$(PROJECT).out
-OBJECTS=$(SOURCES:$(SRCDIR)%.c=$(OBJDIR)%.o)
-
-# Dependencies
-DEPENDENCIES=$(call import_all,$(LIBRARY_PATHS),SOURCES HEADERS)
-
-# Shared Libraries
-RUNTIME_LINKS != echo $(call import_all,$(SHARED_LIBRARY_PATHS),BINDIR) | tr ' ' ':'
-
-# ==============================================================================================================
-
-.PHONY: all
-
-all: $(BINARY)
-
-.PHONY: clean
-
-clean:
-	$(RM) $(OBJDIR) $(BINARY) $(BINDIR)
+.PHONY: debug
+debug: CFLAGS = $(CDEBUG)
+debug: $(BIN)
 
 .PHONY: release
+release: CFLAGS = $(CRELEASE)
+release: $(BIN)
 
-release: CFLAGS = -Wall -DNDEBUG
-release: clean
-release: all
+$(BIN): $(MAIN) $(OBJS) | $(BINDIR)
+	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+
+obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
+	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
+
+$(BINDIR) $(OBJDIRS):
+	mkdir -pv $@
+
+.PHONY: clean
+clean:
+	-rm -rfv $(OBJS) $(BIN)
 
 .PHONY: watch
-
 watch:
 	while true; do \
-		find $(SRCDIR) $(IDIR) | entr -d make --no-print-directory; \
-	done;
+		find src/ include/ | entr -d make debug --no-print-directory; \
+	done
+
+# ============================[ Profiling rules ]============================ #
+
+# Shared library files paths
+LD_LIBRARY_PATH != echo $(addsuffix /bin,$(SHARED_LIBPATHS)) | tr ' ' ':'
 
 .PHONY: start
+start: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+	valgrind --tool=none ./$(BIN) $(ARGS)
 
-start: all
-	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
-	valgrind --tool=none ./$(BINARY) $(ARGS)
+.PHONY: demon
+demon:
+	while true; do \
+		find src/ include/ | entr -d make start --no-print-directory; \
+	done
 
 .PHONY: memcheck
-
-memcheck: all
-	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
-	valgrind --leak-check=full --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
+memcheck: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+	valgrind --leak-check=full $(MEMCHECK_FLAGS) ./$(BIN) $(ARGS)
 
 .PHONY: helgrind
+helgrind: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+	valgrind --tool=helgrind $(HELGRIND_FLAGS) ./$(BIN) $(ARGS)
 
-helgrind: all
-	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(RUNTIME_LINKS); \
-	valgrind --tool=helgrind --log-file="$@_$(PROJECT).log" ./$(BINARY) $(ARGS)
-
-# ==============================================================================================================
-
-# Build project
-$(BINARY): $(DIRECTORIES) $(OBJECTS) $(ENTRYPOINT)
-	$(CC) $(INCLUDES) $(CFLAGS) -o "$@" $(ENTRYPOINT) $(OBJECTS) $(LINKS)
-
-# Create directories for objects
-$(DIRECTORIES):
-	$(MKDIR) $@
-
-# Build objects
-$(OBJDIR)%.o: $(SRCDIR)%.c $(HEADERS) $(DEPENDENCIES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c -o "$@" "$<"
-
-# ==============================================================================================================
+# ==================================[ Help ]================================== #
 
 .PHONY: help
-
 help:
 	@echo "COMMANDS:"
-	@echo "    make / make all -- Build project using debug flags."
-	@echo "    make release    -- Build project using release flags."
-	@echo "    make clean      -- Remove generated files from file system."
-	@echo "    make watch      -- Run make when files change."
-	@echo "    make start      -- Run using valgrind without any extra tool."
-	@echo "    make memcheck   -- Run using valgrind memcheck tool. Output will be redirected to an external log file."
-	@echo "    make helgrind   -- Run using valgrind helgrind tool. Output will be redirected to an external log file."
-	@echo "VARIABLES:"
-	@echo "    ARGS          -- Arguments to be passed to main() using valgrind tools (eg: 'make helgrind ARGS=\"arg1 arg2 arg3\"')."
-	@echo "    LIBRARIES     -- External libraries to be included and linked, separated by spaces (eg: 'utils pthread commons')."
-	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
-	@echo "    PROJECT       -- Your project name. By default it will be your pwd basename."
-
-.PHONY: maketest
-
-maketest:
-	@echo "PROJECT:       $(PROJECT)"
-	@echo "DIRECTORIES:   $(DIRECTORIES)"
-	@echo "SOURCES:       $(SOURCES)"
-	@echo "HEADERS:       $(HEADERS)"
-	@echo "INCLUDES:      $(INCLUDES)"
-	@echo "LINKS:         $(LINKS)"
-	@echo "OBJECTS:       $(OBJECTS)"
-	@echo "DEPENDENCIES:  $(DEPENDENCIES)"
-	@echo "RUNTIME_LINKS: $(RUNTIME_LINKS)"
-
-%:
-	@echo $($@) | tr ' ' '\n'
+	@echo "    make / make debug -- Build project using debug flags."
+	@echo "    make release      -- Build project using release flags."
+	@echo "    make clean        -- Remove generated files from file system."
+	@echo "    make watch        -- Run 'make debug' when any file is modified."
+	@echo "    make start        -- Run using valgrind without any extra tool."
+	@echo "    make demon        -- Run 'make start' when any file is modified."
+	@echo "    make memcheck     -- Run using valgrind memcheck tool."
+	@echo "    make helgrind     -- Run using valgrind helgrind tool."
