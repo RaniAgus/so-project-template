@@ -4,7 +4,7 @@ include $(PROJ_PATH)/settings.mk
 # ===========================[ Compilation rules ]=========================== #
 
 # Testing libraries
-TEST_LIBS=$(TEST_LIB) $(filter-out readline,$(LIBS))
+TEST_LIBS=$(TEST_LIB) $(LIBS)
 
 # Custom libraries' paths
 TEST_SHARED_LIBPATHS=$(addprefix $(PROJ_PATH)/,$(SHARED_LIBPATHS))
@@ -30,7 +30,7 @@ TEST_LIBDIRS = $(addsuffix /bin,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS))
 .PHONY: debug
 debug: $(TEST_BIN)
 
-$(TEST_BIN): $(SRCS_C) $(TEST_SRCS_C) | $(TEST_BINDIR)
+$(TEST_BIN): $(SRCS_C) $(SRCS_H) $(TEST_SRCS_C) $(TEST_SRCS_H) | $(TEST_BINDIR)
 	gcc $(CFLAGS) -o "$@" $^ $(TEST_IDIRS:%=-I%) $(TEST_LIBDIRS:%=-L%) $(TEST_LIBS:%=-l%)
 
 $(TEST_BINDIR):
@@ -38,7 +38,7 @@ $(TEST_BINDIR):
 
 .PHONY: clean
 clean:
-	-rm -rfv $(BIN)
+	-rm -rfv $(TEST_BIN)
 
 .PHONY: watch
 watch:
