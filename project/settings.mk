@@ -12,7 +12,7 @@ STATIC_LIBPATHS=
 
 # Compiler flags
 CDEBUG=-Wall -DDEBUG -g
-CRELEASE=-Wall -DNDEBUG
+CRELEASE=-O3 -Wall -DNDEBUG
 
 # ==========================[ Profiling variables ]========================== #
 
