@@ -17,7 +17,7 @@ más organizada.
 u entorno de desarrollo.
 
 ✔️ Permiten que el repo se pueda desplegar en una VM Server usando el script 
-[so-deploy](/sisoputnfrba/so-deploy).
+[so-deploy](https://github.com/sisoputnfrba/so-deploy).
 
 ✔️ No requieren que se especifique el nombre del proyecto al que pertenecen 
 (alcanza con copiar la carpeta correspondiente y modificar su nombre para 
@@ -48,7 +48,7 @@ ejecutar automáticamente (similar a herramientas como
 ## Guía de uso
 
 La guía de uso se encuentra en la 
-[wiki de este repo](/RaniAgus/so-project-template/wiki/Gu%C3%ADa-de-uso).
+[wiki de este repo](https://github.com/RaniAgus/so-project-template/wiki/Gu%C3%ADa-de-uso).
 
 ## Contacto
 
