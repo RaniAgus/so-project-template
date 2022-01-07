@@ -2,6 +2,8 @@
 Template para facilitar la creación de proyectos en C con una biblioteca 
 compartida.
 
+![image](https://user-images.githubusercontent.com/39303639/142050605-baf2a8d1-a583-413f-a9b5-4ca6d1fa7777.png)
+
 ## Features
 
 Ambos makefiles:
