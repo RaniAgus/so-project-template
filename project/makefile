@@ -55,8 +55,8 @@ LD_LIBRARY_PATH != echo $(addsuffix /bin,$(SHARED_LIBPATHS)) | tr ' ' ':'
 start: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
 	valgrind --tool=none ./$(BIN) $(ARGS)
 
-.PHONY: demon
-demon:
+.PHONY: daemon
+daemon:
 	while sleep 0.1; do \
 		find src/ include/ | entr -d make start --no-print-directory; \
 	done
@@ -79,6 +79,6 @@ help:
 	@echo "    make clean        -- Remove generated files from file system."
 	@echo "    make watch        -- Run 'make debug' when any file is modified."
 	@echo "    make start        -- Run using valgrind without any extra tool."
-	@echo "    make demon        -- Run 'make start' when any file is modified."
+	@echo "    make daemon       -- Run 'make start' when any file is modified."
 	@echo "    make memcheck     -- Run using valgrind memcheck tool."
 	@echo "    make helgrind     -- Run using valgrind helgrind tool."
