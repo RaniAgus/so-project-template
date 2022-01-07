@@ -1,5 +1,7 @@
 include settings.mk
 
+# ===========================[ Compilation rules ]=========================== #
+
 # Set prerrequisites
 SRCS_C != find src/ -iname "*.c" -not -iwholename "$(MAIN)"
 SRCS_H != find include/ -iname "*.h"
@@ -16,8 +18,6 @@ IDIRS = $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
 
 # Set library files' directories to (-L)ook
 LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
-
-# ===========================[ Compilation rules ]=========================== #
 
 .PHONY: debug
 debug: CFLAGS = $(CDEBUG)
