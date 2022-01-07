@@ -6,43 +6,68 @@ compartida.
 
 Ambos makefiles:
 
-✔️ Compilan solamente los archivos fuente necesarios, incluso detecta cuándo las
-bibliotecas hechas por el usuario fueron modificadas para volver a compilar
-todos los objetos.
+✔️ Compilan solamente los archivos fuente necesarios.
 
-✔️ Permiten el uso de subcarpetas.
+✔️ Permiten el uso de subcarpetas para poder estructurar el proyecto de forma
+más organizada.
 
-✔️ Se pueden importar desde Eclipse, CLion, VSCode o cualquier editor de texto u
- entorno de desarrollo.
+✔️ Se pueden importar desde Eclipse, CLion, VSCode o cualquier editor de texto 
+u entorno de desarrollo.
 
-✔️ Permiten que el repo se pueda deployar usando el script 
+✔️ Permiten que el repo se pueda desplegar en una VM Server usando el script 
 [so-deploy](https://github.com/sisoputnfrba/so-deploy).
 
 ✔️ No requieren que se especifique el nombre del proyecto al que pertenecen 
-(alcanza con copiar la carpeta `./project` o `./static` y modificar su nombre para 
+(alcanza con copiar la carpeta correspondiente y modificar su nombre para 
 configurar el nombre del proyecto).
 
-✔️ Incluyen flags de debug para `make all` y flags de release para `make release`.
+✔️ Permite configurar por separado flags de debug y release para `gcc`.
 
-✔️ Poder observar cambios en los archivos y recompilar
-automáticamente mediante `make watch`.
+✔️ Incluyen reglas para observar cambios en los archivos y recompilar 
+automáticamente.
 
-✔️ ¡No hace falta configurar variables de entorno! La biblioteca compartida es una
-static library, que luego es compilada directamente en el binario final del
-proyecto. Para saber más info sobre static vs shared libraries, podés
-[ver este video](https://www.youtube.com/watch?v=JbHmin2Wtmc).
+✔️ El proyecto de `static` library permite compartir código sin necesidad de 
+configurar `LD_LIBRARY_PATH`. Para saber más info sobre static vs shared 
+libraries, te recomiendo ver
+[este video](https://www.youtube.com/watch?v=JbHmin2Wtmc).
 
-✔️ En caso de que tu TP también requiera utilizar la interfaz de una shared library,
-podés utilizar el proyecto que se enucuentra en `./shared`. Incluye reglas para
-instalarla y desinstalarla: `make install` y `make uninstall`.
+✔️ En caso de que tu TP también requiera utilizar la interfaz de una `shared` 
+library, el mismo incluye reglas para instalarla y desinstalarla.
 
-Además, el makefile del proyecto incluye:
+Además, el makefile del proyecto:
 
-✔️ Ejecución con Valgrind mediante `make start`, `make memcheck` y `make helgrind`.
+✔️ Incluye ejecución con Valgrind con las herramientas Nulgrind, Memcheck y 
+Helgrind.
+
+✔️ Incluye reglas para observar cambios en los archivos y, además de recompilar,
+ejecutar automáticamente (similar a herramientas como 
+[nodemon](https://www.npmjs.com/package/nodemon)).
 
 ## Uso
 
-### Cómo estructurar cada proyecto
+### 1. ¿Cómo creo mis proyectos?
+
+- Para crear un proyecto estándar podés descargar la carpeta `project/` desde 
+las [releases](https://github.com/RaniAgus/so-project-template/releases):
+
+```
+bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) project
+```
+
+- Para crear una static library se deberá hacer el mismo procedimiento, en este
+caso mediante la carpeta `static/`:
+
+```
+bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) static
+```
+
+- Para crear una shared library se deberá hacer el mismo procedimiento, en este
+caso mediante la carpeta `shared/`:
+```
+bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) shared
+```
+
+### 2. ¿Dónde dejo mi código?
 
 Los proyectos funcionan bajo la siguiente estructura, adaptada para que
 [so-deploy](https://github.com/sisoputnfrba/so-deploy) funcione:
@@ -51,129 +76,202 @@ Los proyectos funcionan bajo la siguiente estructura, adaptada para que
 .
 └─── {ProjectName}
       └─── bin
-      |     └─── {ProjectName}.out    # Archivo binario final 
+      |     └─── {ProjectName}[.out|.so|.a]   # Archivo binario final 
       └─── include
-      |     └─── *.h                  # Headers
+      |     └─── *.h                          # Headers
       └─── obj
-      |     └─── *.o / *.d            # Archivos generados al compilar
+      |     └─── *.o / *.d                    # Archivos generados al compilar
       └─── src
-      |     └─── *.c                  # Código
-      └─── makefile
+      |     └─── *.c                          # Código
+      └─── makefile                           # Makefile
+      └─── settings.mk                        # Configuración del makefile
 ```
 
-### ¿Cómo creo mis proyectos?
+### 3. ¿Cómo configuro el proyecto?
 
-- Para crear un proyecto estándar podés descargar la carpeta `project/` desde las 
-[releases](https://github.com/RaniAgus/so-project-template/releases):
+Podés configurar cada proyecto editando las variables que se encuentran en el 
+archivo `settings.mk` del mismo.
 
-```
-bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) project
-```
+#### Cambiar el nombre del proyecto
 
-Luego, deberás [incluir las bibliotecas](#cómo-incluyo-una-biblioteca) que utilices.
-
-- Para crear una static library se deberá hacer el mismo procedimiento, en este
-caso mediante la carpeta `static/`:
-
-```
-bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) static
-```
-Luego, deberás [incluir esa library](#cómo-incluyo-una-biblioteca) en los proyectos 
-que la utilicen.
-
-- Para crear una shared library se deberá hacer el mismo procedimiento, en este
-caso mediante la carpeta `shared/`:
-```
-bash <(wget -qO- https://github.com/RaniAgus/so-project-template/releases/latest/download/init.sh) shared
-```
-Luego, deberás [incluir esa library](#cómo-incluyo-una-biblioteca) en los proyectos 
-que la utilicen.
-
-### ¿Cómo incluyo una biblioteca?
-
-#### 1. Incluir en el makefile
-
-Para incluir una biblioteca alcanza con editar la macro `LIBS` del makefile. 
-También, para incluir una biblioteca propia se debe editar tanto `LIBS` como 
-`LIBRARY_PATHS`. 
-
-Por ejemplo, para incluir las `commons` y una biblioteca propia llamada `utils`
-ubicada en el mismo repo se deberá agregar lo siguiente:
+Por defecto, el makefile toma el nombre de la carpeta raíz como nombre del 
+proyecto. Para cambiar esto, se puede editar la variable `NAME`:
 
 ```makefile
-# Include libraries here
-LIBS=utils commons pthread
-
-# Include custom library paths here
-SHARED_LIBS_PATHS=
-STATIC_LIBRARY_PATHS=../utils
+# Project name
+NAME=$(shell cd . && pwd | xargs basename)
 ```
 
-#### 2. Incluir en el código
+#### Agregar una biblioteca
 
-Los includes se pueden poner entre `<>` como path relativo a 
-`{LIBRARY_PATH}/{INC_DIR}`.
+Para incluir una biblioteca alcanza con editar la macro `LIBS` del makefile. 
+Si esta biblioteca no se encuentra instalada, para incluirla también se debe 
+editar la variable `XXXXXX_LIBS_PATHS`. 
 
-Por ejemplo, para incluir las funciones de `utils` podemos hacer:
+Por ejemplo, para incluir las `commons`, `pthread`, una biblioteca estática 
+llamada `utils` y una biblioteca compartida llamada `hilolay`, (las dos últimas
+ubicadas en el mismo repo) se deberá agregar lo siguiente:
+
+```makefile
+# Libraries
+LIBS=hilolay utils commons pthread
+
+# Custom libraries' paths
+SHARED_LIBPATHS=../hilolay
+STATIC_LIBPATHS=../utils
+```
+
+Algo que nos puede ocurrir es que algunas bibliotecas dependan de otras. 
+De ser así, es importante que ordenemos las bibliotecas en `LIBS` de izquierda a
+derecha (o sea, si `hilolay` depende de `utils` y ésta depende de 
+`commons` y `pthread`, el orden correcto es el que figura arriba de este 
+párrafo).
+
+#### Incluir una biblioteca desde el código
+
+Luego, para incluirla desde el código, los `#include`s se pueden poner entre 
+`<>` como path relativo a `{LIB_PATH}/include/`, por ejemplo, si 
+`STATIC_LIBS_PATHS` incluye `../utils`, el siguiente `#include`: 
 
 ```c
 #include <utils/hello.h>
 ```
 
-Ya que `LIBRARY_PATH` es `../utils` e `INC_DIR` es `src/`, entonces 
-`{LIBRARY_PATH}/{INC_DIR}utils/hello.h` nos da por resultado lo mismo que:
+Termina siendo equivalente a:
 
 ```c
-#include "../utils/src/utils/hello.h"
+#include "../utils/include/utils/hello.h"
 ```
 
-### ¿Cómo importo los proyectos en el IDE?
+Ya que la ruta es de la forma `{LIB_PATH}/include/utils/hello.h`. 
+
+La ventaja de usar `<>` es que si la ruta relativa cambia no hace falta hacer 
+cambios en el código, simplemente alcanza con modificar el archivo 
+`settings.mk`.
+
+#### Configurar `gcc`
+
+Se puede cambiar los flags que se le pasen a `gcc` editando dos variables que
+pertenecen a configuraciones distintas (una de debug y otra de release):
+
+```makefile
+# Compiler flags
+CDEBUG=-Wall -DDEBUG -g
+CRELEASE=-O3 -Wall -DNDEBUG
+```
+
+De esta forma, si querés agregarle optimizaciones o definir macros de 
+preprocesador, este es el lugar para hacerlo. Para más info sobre los flags de 
+`gcc` te aconsejo ver
+[esta página](https://www.rapidtables.com/code/linux/gcc.html). También podés
+revisar la
+[docu oficial](https://gcc.gnu.org/onlinedocs/gcc-9.1.0/gcc/Invoking-GCC.html#Invoking-GCC).
+
+### 4. ¿Cómo lo importo en el IDE?
 
 - [Cómo importar en Eclipse](../../wiki/Eclipse)
+- Cómo importar en Visual Studio Code (WIP)
 
-### Comandos básicos
+### 5. ¿Qué comandos uso para compilar?
 
-#### All
-Compila el proyecto con flags de Debug (cualquiera de los dos es válido):
-```
+#### `make` / `make debug`
+
+Compila el proyecto con flags para debugear.
+
+- Si algún archivo fuente que se encuentre en `./src`, `./include` o en las
+bibliotecas de las que depende fue modificado, vuelve a compilar:
+```bash
 $ make
-$ make all
+gcc -Wall -DDEBUG -g -c -o "obj/main.o" src/main.c -I./include
+gcc -Wall -DDEBUG -g -o "bin/project.out" obj/main.o -I./include  
 ```
 
-#### Clean
+- Si ninguno de esos archivos fue modificado y ya existe un ejecutable, 
+aparecerá el mensaje:
+```
+$ make debug
+make: Nothing to be done for 'debug'.
+```
+
+#### `make release`
+
+Compila el proyecto con flags de release. Al igual que `make debug`, solamente
+recompila cuando es necesario:
+
+```bash
+$ make release
+gcc -O3 -Wall -DNDEBUG -c -o "obj/main.o" src/main.c -I./include
+gcc -O3 -Wall -DNDEBUG -o "bin/project.out" obj/main.o -I./include  
+```
+
+#### `make clean`
+
 Elimina los archivos generados al compilar:
-```
+```bash
 $ make clean
+rm -rfv obj/main.o bin/project.out
+removed 'obj/main.o'
+removed 'bin/project.out'
 ```
-Nos permite, por ejemplo, realizar una compilación limpia utilizando `clean all`:
-```
-$ make clean all
+
+Con esta regla podemos, por ejemplo, forzar una compilación completa utilizando 
+`clean debug`:
+```bash
+$ make clean debug
+rm -rfv obj/main.o bin/project.out
+removed 'obj/main.o'
+removed 'bin/project.out'
+gcc -Wall -DDEBUG -g -c -o "obj/main.o" src/main.c -I./include
+gcc -Wall -DDEBUG -g -o "bin/project.out" obj/main.o -I./include  
 ```
 
 #### Watch
+
 Esta regla utiliza la herramienta [entr](http://eradman.com/entrproject/), que 
-debemos instalar de la siguiente forma:
-```
+se deberá tener instalada antes de usar esta regla:
+```bash
 $ sudo apt install entr
 ```
 
-Sirve para observar cambios en los archivos del proyecto y ejecutar `make all`
+Sirve para observar cambios en los archivos del proyecto y ejecutar `make debug`
 cada vez que esto suceda:
-```
+```bash
 $ make watch
+while sleep 0.1; do \
+        find src/ include/ | entr -d make debug --no-print-directory; \
+done
+make[1]: Nothing to be done for 'debug'.
+# Guardo un cambio en el archivo "src/main.c"
+gcc -Wall -DDEBUG -g -c -o "obj/main.o" src/main.c -I./include
+gcc -Wall -DDEBUG -g -o "bin/project.out" obj/main.o -I./include  
 ```
 
-### Comandos de Valgrind
+### 6. ¿Cómo uso Valgrind?
 
 Para ejecutar Valgrind utilizamos las reglas `start`, `memcheck` o `helgrind`.
+Se pueden agregar flags extra para los dos últimos editando sus respectivas
+variables en el archivo `settings.mk`:
+
+```makefile
+# Valgrind flags
+MEMCHECK_FLAGS=--track-origins=yes --log-file="memcheck-$(NAME).log"
+HELGRIND_FLAGS=--log-file="helgrind-$(NAME).log"
+```
 
 ¡También se pueden pasar parámetros al `main()`! Para esto, le asignamos un 
 valor a la variable `ARGS` de la siguiente forma:
 ```
 $ make start ARGS="arg1 arg2 arg3"
+valgrind --tool=none ./bin/project.out arg1 arg2 arg3
+```
+O editando la variable en el archivo `settings.mk`:
+
+```makefile
+# Arguments when executing with start, memcheck or helgrind
+ARGS=arg1 arg2 arg3
 ```
 
-#### Start
+#### `make start`
 
 Útil para su uso al debugear el TP sin ninguna herramienta extra, ya que 
 Valgrind permite imprimir stack traces custom utilizando la función de Valgrind
@@ -182,9 +280,53 @@ Valgrind permite imprimir stack traces custom utilizando la función de Valgrind
 
 ```
 $ make start
+valgrind --tool=none ./bin/project.out arg1 arg2 arg3
+==12843== Nulgrind, the minimal Valgrind tool
+==12843== Copyright (C) 2002-2017, and GNU GPL'd, by Nicholas Nethercote.
+==12843== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==12843== Command: ./bin/project.out arg1 arg2 arg3
+==12843== 
+Hello world!!
+==12843== 
 ```
 
-#### Memcheck
+#### `make daemon`
+
+Es una mezcla de `watch` y `start`, ya que permite observar cambios en los 
+archivos del proyecto y, en este caso, ejecutar `make start`:
+
+```bash
+make daemon
+while sleep 0.1; do \
+        find src/ include/ | entr -d make start --no-print-directory; \
+done
+valgrind --tool=none ./bin/project.out 
+==14557== Nulgrind, the minimal Valgrind tool
+==14557== Copyright (C) 2002-2017, and GNU GPL-d, by Nicholas Nethercote.
+==14557== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==14557== Command: ./bin/project.out
+==14557== 
+Hello world!!
+==14557== 
+# Cambio "Hello world!!" por "Hola mundo!!"
+gcc -Wall -DDEBUG -g -c -o "obj/main.o" src/main.c -I./include
+gcc -Wall -DDEBUG -g -o "bin/project.out" obj/main.o -I./include  
+valgrind --tool=none ./bin/project.out 
+==14652== Nulgrind, the minimal Valgrind tool
+==14652== Copyright (C) 2002-2017, and GNU GPL-d, by Nicholas Nethercote.
+==14652== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==14652== Command: ./bin/project.out
+==14652== 
+Hola mundo!!
+==14652== 
+```
+
+También requiere tener `entr` instalado:
+```
+$ sudo apt install entr
+```
+
+#### `make memcheck`
 
 Útil para verificar errores de manejo de memoria: uso de variables sin 
 inicializar, memory leaks, etc. Para más info, ver 
@@ -192,10 +334,23 @@ inicializar, memory leaks, etc. Para más info, ver
 
 ```
 $ make memcheck
+valgrind --leak-check=full --track-origins=yes ./bin/project.out 
+==13429== Memcheck, a memory error detector
+==13429== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==13429== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==13429== Command: ./bin/project.out
+==13429== 
+Hello world!!
+==13429== 
+==13429== HEAP SUMMARY:
+==13429==     in use at exit: 0 bytes in 0 blocks
+==13429==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==13429== 
+==13429== All heap blocks were freed -- no leaks are possible
+==13429== 
+==13429== For lists of detected and suppressed errors, rerun with: -s
+==13429== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
-
-Los resultados se imprimen en un log file con el formato 
-`memcheck_<proyecto>.log`.
 
 #### Helgrind
 
@@ -204,10 +359,18 @@ condiciones de carrera. Para más info, ver: https://youtu.be/knRei6OBU4Q?t=536
 
 ```
 $ make helgrind
+==13540== Helgrind, a thread error detector
+==13540== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==13540== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==13540== Command: ./bin/project.out
+==13540== 
+Hello world!!
+==13540== 
+==13540== Use --history-level=approx or =none to gain increased speed, at
+==13540== the cost of reduced accuracy of conflicting-access information
+==13540== For lists of detected and suppressed errors, rerun with: -s
+==13540== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
-
-Los resultados se imprimen en un log file con el formato 
-`helgrind_<proyecto>.log`.
 
 ### ¿Cómo hago para acordarme de todos estos comandos?
 
@@ -231,38 +394,8 @@ VARIABLES:
     PROJECT       -- Your project name. By default it will be your pwd basename.
 ```
 
-## Consejos extra
-
-### Uso de un .gitignore
-
-Aconsejo agregar al archivo .gitignore del repo del proyecto las siguientes
-reglas para evitar pushear archivos que no son necesarios para que funcione el
-TP:
-
-```makefile
-# Eclipse files
-**/RemoteSystemsTempFiles/
-**/Debug/
-**/Release/
-**/.settings/
-**/.cproject
-**/.project
-
-# CLion files
-**/.idea/
-
-# Visual Studio Code files
-**/.vscode/
-*.code-workspace
-
-# Other
-**/bin/
-**/obj/
-*.log
-```
-
 ## Contacto
 
 Si encontrás algun error en los makefiles o tenés alguna sugerencia, ¡no dudes 
-en levantar un issue en este repositorio!
+en abrir un issue en este repositorio!
 
