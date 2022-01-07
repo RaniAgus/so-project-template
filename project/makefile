@@ -42,7 +42,7 @@ clean:
 
 .PHONY: watch
 watch:
-	while true; do \
+	while sleep 0.1; do \
 		find src/ include/ | entr -d make debug --no-print-directory; \
 	done
 
@@ -57,7 +57,7 @@ start: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
 
 .PHONY: demon
 demon:
-	while true; do \
+	while sleep 0.1; do \
 		find src/ include/ | entr -d make start --no-print-directory; \
 	done
 

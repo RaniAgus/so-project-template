@@ -42,7 +42,7 @@ clean:
 
 .PHONY: watch
 watch:
-	while true; do \
+	while sleep 0.1; do \
 		find src/ include/ | entr -d make debug --no-print-directory; \
 	done
 
