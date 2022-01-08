@@ -1,18 +1,22 @@
-PROJECTS=project
+PROJECTS=./project
 LIBS=
+TESTS=
 
 all: $(PROJECTS)
 
 $(PROJECTS): $(LIBS)
-	$(MAKE) -C $@ all
+	$(MAKE) -C $@
 
 $(LIBS):
-	$(MAKE) -C $@ all
+	$(MAKE) -C $@
 
 clean:
-	$(foreach P, $(LIBS) $(PROJECTS), $(MAKE) -C $P clean;)
+	$(foreach PROJ, $(LIBS) $(PROJECTS) $(TESTS), $(MAKE) -C $(PROJ) clean;)
 
-release:
-	$(foreach P, $(LIBS) $(PROJECTS), $(MAKE) -C $P release;)
+release: test
+	$(foreach PROJ, $(LIBS) $(PROJECTS), $(MAKE) -C $(PROJ) release;)
 
-.PHONY: all $(PROJECTS) $(LIBS) clean release
+test:
+	$(foreach PROJ, $(TESTS), $(MAKE) -C $(PROJ) start;)
+
+.PHONY: all $(PROJECTS) $(LIBS) $(TESTS) clean release test

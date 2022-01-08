@@ -1,104 +1,73 @@
-# Include custom library paths here
-LIBRARY_PATHS=
+include settings.mk
 
-# ==============================================================================================================
+# ===========================[ Compilation rules ]=========================== #
 
-# Project name
-PROJECT=$(shell basename $(shell cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd))
+# Set prerrequisites
+SRCS_C != find src/ -iname "*.c"
+SRCS_H != find include/ -iname "*.h"
+DEPS = $(addsuffix /src,$(LIBPATHS))
 
-# Project structure
-SRCDIR=src/
-IDIR=include/
-OBJDIR=obj/
-BINDIR=bin/
+# Set targets
+BINDIR = bin
+BIN = $(BINDIR)/$(NAME).so
+OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
+OBJDIRS = $(dir $(OBJS))
 
-# Directories
-MKDIR=mkdir -pv
-RM=rm -rfv
-DIRECTORIES=$(patsubst %,$(OBJDIR)%,$(shell find $(SRCDIR) -type d | tr '\n' ' ')) $(BINDIR)
+# Set header files' directories to (-I)nclude
+IDIRS = $(addsuffix /include,$(LIBPATHS) .)
 
-# Compiler
-CC=gcc
-CFLAGS=-Wall -DDEBUG -g
-SOURCES=$(shell find $(SRCDIR) -iname "*.c" | tr '\n' ' ')
-INCLUDES=$(foreach LIBPATH,$(LIBRARY_PATHS),-I$(LIBPATH)/$(shell make --no-print-directory -C $(LIBPATH) idir)) $(IDIR:%=-I%)
+# Set library files' directories to (-L)ook
+LIBDIRS = $(addsuffix /bin,$(LIBPATHS))
 
-# Objects
-BINARY=$(BINDIR)lib$(PROJECT).so
-OBJECTS=$(SOURCES:%.c=$(OBJDIR)%.o)
+.PHONY: debug
+debug: CFLAGS = $(CDEBUG)
+debug: $(BIN)
 
-# Dependencies
-DEPENDENCIES=$(foreach LIBPATH,$(LIBRARY_PATHS),$(patsubst %,$(LIBPATH)/%,$(shell make --no-print-directory -C $(LIBPATH) sources)))
+.PHONY: release
+release: CFLAGS = $(CRELEASE)
+release: $(BIN)
 
-# Installation targets
-HEADERS=$(shell find $(IDIR) -iname "*.h" | tr '\n' ' ')
-INSTDIR=/usr/lib/
-INCLDIR=/usr/include/
+$(BIN): $(OBJS) | $(BINDIR)
+	gcc $(CFLAGS) -shared -o "$@" $^ $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
 
-# ==============================================================================================================
+obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
+	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
 
-all: $(BINARY)
+$(BINDIR) $(OBJDIRS):
+	mkdir -pv $@
 
+.PHONY: clean
 clean:
-	$(RM) $(OBJDIR) $(BINARY)
+	-rm -rfv $(OBJS) $(BIN)
 
-release: CFLAGS = -Wall -DNDEBUG
-release: clean
-release: all
+.PHONY: watch
+watch:
+	while sleep 0.1; do \
+		find src/ include/ | entr -d make debug --no-print-directory; \
+	done
 
+# ============================[ Installing rules ]============================ #
+
+.PHONY: install
 install: release
-	sudo cp -uv $(BINARY) $(INSTDIR)
-	sudo cp -uva $(IDIR). $(INCLDIR)
+	sudo cp -uva $(BINDIR)/. $(INST_LIB)
+	sudo cp -uva include/. $(INST_H)
 
+.PHONY: uninstall
 uninstall:
-	sudo rm -fv $(BINARY:$(BINDIR)%=$(INSTDIR)%)
-	sudo rm -fvr $(HEADERS:$(IDIR)%=$(INCLDIR)%)
+	sudo rm -fv $(patsubst bin/%,$(INST_LIB)%,$(BIN))
+	sudo rm -fvr $(patsubst include/%,$(INST_H)%,$(SRCS_H))
+
+# ==================================[ Help ]================================== #
+
+.PHONY: help
 
 help:
-	@echo "COMMANDS:"
-	@echo "    make / make all -- Build project using debug flags."
-	@echo "    make project    -- Build project using release flags."
-	@echo "    make clean      -- Remove generated files from file system."
-	@echo "    make install    -- Install the shared library and headers."
-	@echo "    make uninstall  -- Remove the shared object and its corresponding headers."
-	@echo "VARIABLES:"
-	@echo "    LIBRARY_PATHS -- Relative path to own static libraries root, separated by spaces (eg: '../utils')."
-	@echo "    PROJECT       -- Your project name. By default it will be your pwd basename."
-
-# ==============================================================================================================
-
-# Build project
-$(BINARY): $(DIRECTORIES) $(OBJECTS)
-	$(CC) -shared -o "$@" $(OBJECTS)
-
-# Create directories for objects
-$(DIRECTORIES):
-	$(MKDIR) $@
-
-# Build objects
-$(OBJDIR)$(SRCDIR)%.o: $(SRCDIR)%.c $(IDIR)%.h $(DEPENDENCIES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-
-$(OBJDIR)%.o: %.c $(DEPENDENCIES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
-
-# ==============================================================================================================
-
-makefile-test:
-	@echo "Project name:  $(PROJECT)"
-	@echo "Source files:  $(SOURCES)"
-	@echo "Header files:  $(HEADERS)"
-	@echo "Dependencies:  $(DEPENDENCIES)"
-	@echo "Include flags: $(INCLUDES)"
-	@echo "Directories:   $(DIRECTORIES)"
-
-sources:
-	@echo $(SOURCES) $(HEADERS)
-
-idir:
-	@echo $(IDIR)
-
-bindir:
-	@echo $(BINDIR)
-
-.PHONY: all clean debug release dependencies makefile-test help idir bindir
+	@echo "COMPILATION COMMANDS:"
+	@echo "    make / make debug -- Build project using debug flags."
+	@echo "    make release      -- Build project using release flags."
+	@echo "    make clean        -- Remove generated files from file system."
+	@echo "    make watch        -- Run 'make debug' when any file is modified."
+	@echo "INSTALLATION COMMANDS:"
+	@echo "    make install      -- Install the shared library and its headers."
+	@echo "    make uninstall    -- Remove the shared object and its headers."
