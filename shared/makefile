@@ -9,7 +9,7 @@ DEPS = $(addsuffix /src,$(LIBPATHS))
 
 # Set targets
 BINDIR = bin
-BIN = $(BINDIR)/$(NAME).so
+BIN = $(BINDIR)/lib$(NAME).so
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 OBJDIRS = $(dir $(OBJS))
 
@@ -55,8 +55,8 @@ install: release
 
 .PHONY: uninstall
 uninstall:
-	sudo rm -fv $(patsubst bin/%,$(INST_LIB)%,$(BIN))
-	sudo rm -fvr $(patsubst include/%,$(INST_H)%,$(SRCS_H))
+	sudo rm -fv $(patsubst bin/%,$(INST_LIB)/%,$(BIN))
+	sudo rm -fvr $(patsubst include/%,$(INST_H)/%,$(SRCS_H))
 
 # ==================================[ Help ]================================== #
 
