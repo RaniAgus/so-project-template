@@ -1,6 +1,6 @@
 #!/bin/bash
 REPONAME="RaniAgus/so-project-template"
-TEMPLATENAME="${1:-project}"
+TEMPLATENAME="${1:?}"
 
 read -p "$TEMPLATENAME name: ($TEMPLATENAME) " PROJNAME
 
