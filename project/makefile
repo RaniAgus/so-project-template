@@ -2,22 +2,9 @@ include settings.mk
 
 # ===========================[ Compilation rules ]=========================== #
 
-# Set prerrequisites
-SRCS_C != find src/ -iname "*.c"
-SRCS_H != find include/ -iname "*.h"
-DEPS = $(addsuffix /src,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
-
-# Set targets
+# Executable file
 BINDIR = bin
 BIN = $(BINDIR)/$(NAME).out
-OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
-OBJDIRS = $(dir $(OBJS))
-
-# Set header files' directories to (-I)nclude
-IDIRS = $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
-
-# Set library files' directories to (-L)ook
-LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
 .PHONY: debug
 debug: CFLAGS = $(CDEBUG)
@@ -27,18 +14,9 @@ debug: $(BIN)
 release: CFLAGS = $(CRELEASE)
 release: $(BIN)
 
-$(BIN): $(OBJS) | $(BINDIR)
-	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
-
-obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
-	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
-
-$(BINDIR) $(OBJDIRS):
-	mkdir -pv $@
-
 .PHONY: clean
 clean:
-	-rm -rfv $(OBJS) $(BIN)
+	-rm -rf $(OBJDIRS) $(BINDIR)
 
 .PHONY: watch
 watch:
@@ -86,3 +64,40 @@ help:
 	@echo "    make daemon       -- Run 'make start' when any file is modified."
 	@echo "    make memcheck     -- Run using valgrind memcheck tool."
 	@echo "    make helgrind     -- Run using valgrind helgrind tool."
+
+# =============================[ Private rules ]============================= #
+
+# Set prerrequisites
+SRCS_C != find src/ -iname "*.c"
+SRCS_H != find include/ -iname "*.h"
+
+# Set targets
+OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
+DEPS = $(patsubst src/%.c,obj/%.d,$(SRCS_C))
+OBJDIRS = $(dir $(OBJS))
+
+# Set header files' directories to (-I)nclude
+IDIRS = $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
+
+# Set library files' directories to (-L)ook
+LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
+
+$(BIN): $(OBJS) | $(BINDIR)
+	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+
+$(BINDIR) $(OBJDIRS):
+	mkdir -p $@
+
+include $(DEPS)
+
+obj/%.o: src/%.c include/%.h | $(OBJDIRS)
+	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
+
+obj/%.o: src/%.c | $(OBJDIRS)
+	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
+
+# https://gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html
+obj/%.d: src/%.c | $(OBJDIRS)
+	@set -e; \
+		gcc -MM -MP -MF"$@" $< $(IDIRS:%=-I%); \
+  	sed -i 's,\($*\)\.o[ :]*,$(dir $@)\1.o $@ : ,g' $@
