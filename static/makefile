@@ -28,7 +28,7 @@ release: CFLAGS = $(CRELEASE)
 release: $(BIN)
 
 $(BIN): $(OBJS) | $(BINDIR)
-	ar rcs -o "$@" $(OBJECTS)
+	ar rcs -o "$@" $^
 
 obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
 	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
