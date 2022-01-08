@@ -52,7 +52,8 @@ watch:
 LD_LIBRARY_PATH != echo $(addsuffix /bin,$(TEST_SHARED_LIBPATHS)) | tr ' ' ':'
 
 .PHONY: start
-start: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+start: debug
+	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --tool=none ./$(TEST_BIN) $(TEST_ARGS)
 
 .PHONY: daemon
@@ -62,11 +63,13 @@ daemon:
 	done
 
 .PHONY: memcheck
-memcheck: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+memcheck: debug
+	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --leak-check=full $(TEST_MEMCHECK_FLAGS) ./$(TEST_BIN) $(TEST_ARGS)
 
 .PHONY: helgrind
-helgrind: debug ; export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH)
+helgrind: debug
+	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --tool=helgrind $(TEST_HELGRIND_FLAGS) ./$(TEST_BIN) $(TEST_ARGS)
 
 # ==================================[ Help ]================================== #
