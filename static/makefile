@@ -9,7 +9,7 @@ DEPS = $(addsuffix /src,$(LIBPATHS))
 
 # Set targets
 BINDIR = bin
-BIN = $(BINDIR)/$(NAME).a
+BIN = $(BINDIR)/lib$(NAME).a
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 OBJDIRS = $(dir $(OBJS))
 
