@@ -1,6 +1,6 @@
 include settings.mk
 
-# ===========================[ Compilation rules ]=========================== #
+# =======================[ Generic compilation rules ]======================= #
 
 # Set project name
 NAME=$(shell cd . && pwd | xargs basename)
@@ -10,15 +10,17 @@ SRCS_C != find src/ -iname "*.c"
 SRCS_H != find include/ -iname "*.h"
 DEPS = $(addsuffix /src,$(LIBPATHS))
 
-# Set targets
-BIN = bin/lib$(NAME).so
-OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
-
 # Set header files' directories to (-I)nclude
 IDIRS = $(addsuffix /include,$(LIBPATHS) .)
 
 # Set library files' directories to (-L)ook
 LIBDIRS = $(addsuffix /bin,$(LIBPATHS))
+
+# Set intermediate objects
+OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
+
+# Set targets
+BIN = bin/lib$(NAME).so
 
 .PHONY: debug
 debug: CFLAGS = $(CDEBUG)
@@ -27,15 +29,6 @@ debug: $(BIN)
 .PHONY: release
 release: CFLAGS = $(CRELEASE)
 release: $(BIN)
-
-$(BIN): $(OBJS) | $(dir $(BIN))
-	gcc $(CFLAGS) -shared -o "$@" $^ $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
-
-obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
-	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
-
-$(dir $(BIN) $(OBJS)):
-	mkdir -pv $@
 
 .PHONY: clean
 clean:
@@ -46,6 +39,17 @@ watch:
 	while sleep 0.1; do \
 		find src/ include/ | entr -d make debug --no-print-directory; \
 	done
+
+# ===================[ Shared-specific compilation rules ]=================== #
+
+$(BIN): $(OBJS) | $(dir $(BIN))
+	gcc $(CFLAGS) -shared -o "$@" $^ $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+
+obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
+	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
+
+$(dir $(BIN) $(OBJS)):
+	mkdir -pv $@
 
 # ============================[ Installing rules ]============================ #
 
