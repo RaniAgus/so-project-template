@@ -1,5 +1,3 @@
-# [ Compilation variables ] #
-
 # Custom libraries' paths
 LIBPATHS=
 
