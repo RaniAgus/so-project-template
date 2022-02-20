@@ -1,6 +1,6 @@
 include settings.mk
 
-# =======================[ Generic compilation rules ]======================= #
+# [ Generic compilation variables ] #
 
 # Set project name
 NAME=$(shell cd . && pwd | xargs basename)
@@ -19,8 +19,12 @@ LIBDIRS = $(addsuffix /bin,$(LIBPATHS))
 # Set intermediate objects
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 
+# [ Static-specific compilation variables ] #
+
 # Set targets
 BIN = bin/lib$(NAME).a
+
+# [ Generic compilation rules ] #
 
 .PHONY: debug
 debug: CFLAGS = $(CDEBUG)
@@ -40,7 +44,7 @@ watch:
 		find src/ include/ | entr -d make debug --no-print-directory; \
 	done
 
-# ===================[ Static-specific compilation rules ]=================== #
+# [ Static-specific compilation rules ] #
 
 $(BIN): $(OBJS) | $(dir $(BIN))
 	ar rcs -o "$@" $^
@@ -51,7 +55,7 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 $(dir $(BIN) $(OBJS)):
 	mkdir -pv $@
 
-# ==================================[ Help ]================================== #
+# [ Help ] #
 
 .PHONY: help
 
