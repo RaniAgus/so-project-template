@@ -82,18 +82,3 @@ memcheck: debug
 helgrind: debug 
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --tool=helgrind $(HELGRIND_FLAGS) ./$(BIN) $(ARGS)
-
-# [ Help ] #
-
-.PHONY: help
-help:
-	@echo "COMPILATION COMMANDS:"
-	@echo "    make / make debug -- Build project using debug flags."
-	@echo "    make release      -- Build project using release flags."
-	@echo "    make clean        -- Remove generated files from file system."
-	@echo "    make watch        -- Run 'make debug' when any file is modified."
-	@echo "PROFILING COMMANDS:"
-	@echo "    make start        -- Run using valgrind without any extra tool."
-	@echo "    make daemon       -- Run 'make start' when any file is modified."
-	@echo "    make memcheck     -- Run using valgrind memcheck tool."
-	@echo "    make helgrind     -- Run using valgrind helgrind tool."
