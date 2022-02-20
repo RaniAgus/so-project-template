@@ -66,17 +66,3 @@ install: release
 uninstall:
 	sudo rm -fv $(patsubst bin/%,$(INST_LIB)/%,$(BIN))
 	sudo rm -fvr $(patsubst include/%,$(INST_H)/%,$(SRCS_H))
-
-# [ Help ] #
-
-.PHONY: help
-
-help:
-	@echo "COMPILATION COMMANDS:"
-	@echo "    make / make debug -- Build project using debug flags."
-	@echo "    make release      -- Build project using release flags."
-	@echo "    make clean        -- Remove generated files from file system."
-	@echo "    make watch        -- Run 'make debug' when any file is modified."
-	@echo "INSTALLATION COMMANDS:"
-	@echo "    make install      -- Install the shared library and its headers."
-	@echo "    make uninstall    -- Remove the shared object and its headers."

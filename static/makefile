@@ -54,14 +54,3 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 
 $(dir $(BIN) $(OBJS)):
 	mkdir -pv $@
-
-# [ Help ] #
-
-.PHONY: help
-
-help:
-	@echo "COMPILATION COMMANDS:"
-	@echo "    make / make debug -- Build project using debug flags."
-	@echo "    make release      -- Build project using release flags."
-	@echo "    make clean        -- Remove generated files from file system."
-	@echo "    make watch        -- Run 'make debug' when any file is modified."
