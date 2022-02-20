@@ -1,6 +1,6 @@
 include settings.mk
 
-# =======================[ Generic compilation rules ]======================= #
+# [ Generic compilation variables ] #
 
 # Set project name
 NAME=$(shell cd . && pwd | xargs basename)
@@ -19,8 +19,12 @@ LIBDIRS = $(addsuffix /bin,$(LIBPATHS))
 # Set intermediate objects
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 
+# [ Shared-specific compilation variables ] #
+
 # Set targets
 BIN = bin/lib$(NAME).so
+
+# [ Generic compilation rules ] #
 
 .PHONY: debug
 debug: CFLAGS = $(CDEBUG)
@@ -40,7 +44,7 @@ watch:
 		find src/ include/ | entr -d make debug --no-print-directory; \
 	done
 
-# ===================[ Shared-specific compilation rules ]=================== #
+# [ Shared-specific compilation rules ] #
 
 $(BIN): $(OBJS) | $(dir $(BIN))
 	gcc $(CFLAGS) -shared -o "$@" $^ $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
@@ -51,7 +55,7 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 $(dir $(BIN) $(OBJS)):
 	mkdir -pv $@
 
-# ============================[ Installing rules ]============================ #
+# [ Installing rules ] #
 
 .PHONY: install
 install: release
@@ -63,7 +67,7 @@ uninstall:
 	sudo rm -fv $(patsubst bin/%,$(INST_LIB)/%,$(BIN))
 	sudo rm -fvr $(patsubst include/%,$(INST_H)/%,$(SRCS_H))
 
-# ==================================[ Help ]================================== #
+# [ Help ] #
 
 .PHONY: help
 

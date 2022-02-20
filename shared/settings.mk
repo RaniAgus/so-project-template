@@ -1,4 +1,4 @@
-# =========================[ Compilation variables ]========================= #
+# [ Compilation variables ] #
 
 # Libraries
 LIBS=
@@ -10,7 +10,7 @@ LIBPATHS=
 CDEBUG=-Wall -DDEBUG -g
 CRELEASE=-O3 -Wall -DNDEBUG
 
-# =========================[ Installation variables ]========================= #
+# [ Installation variables ] #
 
 # Path where the library will be installed
 INST_LIB=/usr/local/lib

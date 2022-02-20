@@ -1,4 +1,4 @@
-# =========================[ Compilation variables ]========================= #
+# [ Compilation variables ] #
 
 # Libraries
 LIBS=
@@ -11,7 +11,7 @@ STATIC_LIBPATHS=
 CDEBUG=-Wall -DDEBUG -g
 CRELEASE=-O3 -Wall -DNDEBUG
 
-# ==========================[ Profiling variables ]========================== #
+# [ Profiling variables ] #
 
 # Arguments when executing with start, memcheck or helgrind
 ARGS=

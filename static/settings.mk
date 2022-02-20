@@ -1,4 +1,4 @@
-# =========================[ Compilation variables ]========================= #
+# [ Compilation variables ] #
 
 # Custom libraries' paths
 LIBPATHS=

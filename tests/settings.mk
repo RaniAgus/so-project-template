@@ -1,4 +1,4 @@
-# =========================[ Compilation variables ]========================= #
+# [ Compilation variables ] #
 
 # Original project path
 PROJ_PATH=../project
@@ -12,7 +12,7 @@ TEST_LIB=cspecs
 # All libraries except 'readline', custom libraries' paths and compiled flags
 # will be imported from PROJ_PATH
 
-# ==========================[ Profiling variables ]========================== #
+# [ Profiling variables ] #
 
 # Arguments when executing with start, memcheck or helgrind
 TEST_ARGS=

@@ -1,7 +1,7 @@
 include settings.mk
 include $(PROJ_PATH)/settings.mk
 
-# ===========================[ Compilation rules ]=========================== #
+# [ Compilation rules ] #
 
 # Set test project name
 TEST_NAME=$(shell cd . && pwd | xargs basename)
@@ -48,7 +48,7 @@ watch:
 		find src/ $(PROJ_PATH)/src/ $(PROJ_PATH)/include/ | entr -d make debug --no-print-directory; \
 	done
 
-# ============================[ Profiling rules ]============================ #
+# [ Profiling rules ] #
 
 # Shared library files paths
 LD_LIBRARY_PATH != echo $(addsuffix /bin,$(TEST_SHARED_LIBPATHS)) | tr ' ' ':'
@@ -74,7 +74,7 @@ helgrind: debug
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --tool=helgrind $(TEST_HELGRIND_FLAGS) ./$(TEST_BIN) $(TEST_ARGS)
 
-# ==================================[ Help ]================================== #
+# [ Help ] #
 
 .PHONY: help
 help:

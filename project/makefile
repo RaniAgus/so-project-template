@@ -2,7 +2,7 @@ include settings.mk
 
 LIBPATHS = $(SHARED_LIBPATHS) $(STATIC_LIBPATHS)
 
-# =======================[ Generic compilation rules ]======================= #
+# [ Generic compilation variables ] #
 
 # Set project name
 NAME=$(shell cd . && pwd | xargs basename)
@@ -21,8 +21,12 @@ LIBDIRS = $(addsuffix /bin,$(LIBPATHS))
 # Set intermediate objects
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 
+# [ Project-specific compilation variables ] #
+
 # Set targets
 BIN = bin/$(NAME).out
+
+# [ Generic compilation rules ] #
 
 .PHONY: debug
 debug: CFLAGS = $(CDEBUG)
@@ -42,7 +46,7 @@ watch:
 		find src/ include/ | entr -d make debug --no-print-directory; \
 	done
 
-# ===================[ Project-specific compilation rules ]=================== #
+# [ Project-specific compilation rules ] #
 
 $(BIN): $(OBJS) | $(dir $(BIN))
 	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
@@ -53,7 +57,7 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 $(dir $(BIN) $(OBJS)):
 	mkdir -pv $@
 
-# ============================[ Profiling rules ]============================ #
+# [ Profiling rules ] #
 
 # Shared library files paths
 LD_LIBRARY_PATH != echo $(addsuffix /bin,$(SHARED_LIBPATHS)) | tr ' ' ':'
@@ -79,7 +83,7 @@ helgrind: debug
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --tool=helgrind $(HELGRIND_FLAGS) ./$(BIN) $(ARGS)
 
-# ==================================[ Help ]================================== #
+# [ Help ] #
 
 .PHONY: help
 help:
