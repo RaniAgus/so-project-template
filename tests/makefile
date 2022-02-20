@@ -21,8 +21,7 @@ TEST_SRCS_H != find src/ -iname "*.h"
 DEPS = $(addsuffix /src,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS))
 
 # Set targets
-TEST_BINDIR = bin
-TEST_BIN = $(TEST_BINDIR)/$(TEST_NAME).out
+TEST_BIN = bin/$(TEST_NAME).out
 
 # Set header files' directories to (-I)nclude
 TEST_IDIRS = $(addsuffix /include,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS) $(PROJ_PATH) .)
@@ -33,15 +32,15 @@ TEST_LIBDIRS = $(addsuffix /bin,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS))
 .PHONY: debug
 debug: $(TEST_BIN)
 
-$(TEST_BIN): $(SRCS_C) $(SRCS_H) $(TEST_SRCS_C) $(TEST_SRCS_H) | $(TEST_BINDIR)
+$(TEST_BIN): $(SRCS_C) $(SRCS_H) $(TEST_SRCS_C) $(TEST_SRCS_H) | $(dir $(TEST_BIN))
 	gcc $(CFLAGS) -o "$@" $^ $(TEST_IDIRS:%=-I%) $(TEST_LIBDIRS:%=-L%) $(TEST_LIBS:%=-l%)
 
-$(TEST_BINDIR):
+$(dir $(TEST_BIN)):
 	mkdir -pv $@
 
 .PHONY: clean
 clean:
-	-rm -rfv $(TEST_BIN)
+	-rm -rfv $(dir $(TEST_BIN))
 
 .PHONY: watch
 watch:

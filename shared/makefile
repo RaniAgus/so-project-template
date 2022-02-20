@@ -11,10 +11,8 @@ SRCS_H != find include/ -iname "*.h"
 DEPS = $(addsuffix /src,$(LIBPATHS))
 
 # Set targets
-BINDIR = bin
-BIN = $(BINDIR)/lib$(NAME).so
+BIN = bin/lib$(NAME).so
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
-OBJDIRS = $(dir $(OBJS))
 
 # Set header files' directories to (-I)nclude
 IDIRS = $(addsuffix /include,$(LIBPATHS) .)
@@ -30,18 +28,18 @@ debug: $(BIN)
 release: CFLAGS = $(CRELEASE)
 release: $(BIN)
 
-$(BIN): $(OBJS) | $(BINDIR)
+$(BIN): $(OBJS) | $(dir $(BIN))
 	gcc $(CFLAGS) -shared -o "$@" $^ $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
 
-obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
+obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
 
-$(BINDIR) $(OBJDIRS):
+$(dir $(BIN) $(OBJS)):
 	mkdir -pv $@
 
 .PHONY: clean
 clean:
-	-rm -rfv $(OBJS) $(BIN)
+	-rm -rfv $(dir $(BIN) $(OBJS))
 
 .PHONY: watch
 watch:
@@ -53,7 +51,7 @@ watch:
 
 .PHONY: install
 install: release
-	sudo cp -uva $(BINDIR)/. $(INST_LIB)
+	sudo cp -uva $(dir $(BIN))/. $(INST_LIB)
 	sudo cp -uva include/. $(INST_H)
 
 .PHONY: uninstall
