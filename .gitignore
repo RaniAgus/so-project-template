@@ -12,8 +12,3 @@
 # Visual Studio Code files
 **/.vscode/
 *.code-workspace
-
-# Other
-**/bin/
-**/obj/
-*.log
