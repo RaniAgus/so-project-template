@@ -1,6 +1,8 @@
 include settings.mk
 
-# ===========================[ Compilation rules ]=========================== #
+LIBPATHS = $(SHARED_LIBPATHS) $(STATIC_LIBPATHS)
+
+# =======================[ Generic compilation rules ]======================= #
 
 # Set project name
 NAME=$(shell cd . && pwd | xargs basename)
@@ -8,17 +10,19 @@ NAME=$(shell cd . && pwd | xargs basename)
 # Set prerrequisites
 SRCS_C != find src/ -iname "*.c"
 SRCS_H != find include/ -iname "*.h"
-DEPS = $(addsuffix /src,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
+DEPS = $(addsuffix /src,$(LIBPATHS))
+
+# Set header files' directories to (-I)nclude
+IDIRS = $(addsuffix /include,$(LIBPATHS) .)
+
+# Set library files' directories to (-L)ook
+LIBDIRS = $(addsuffix /bin,$(LIBPATHS))
+
+# Set intermediate objects
+OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 
 # Set targets
 BIN = bin/$(NAME).out
-OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
-
-# Set header files' directories to (-I)nclude
-IDIRS = $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
-
-# Set library files' directories to (-L)ook
-LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
 .PHONY: debug
 debug: CFLAGS = $(CDEBUG)
@@ -27,15 +31,6 @@ debug: $(BIN)
 .PHONY: release
 release: CFLAGS = $(CRELEASE)
 release: $(BIN)
-
-$(BIN): $(OBJS) | $(dir $(BIN))
-	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
-
-obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
-	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
-
-$(dir $(BIN) $(OBJS)):
-	mkdir -pv $@
 
 .PHONY: clean
 clean:
@@ -46,6 +41,17 @@ watch:
 	while sleep 0.1; do \
 		find src/ include/ | entr -d make debug --no-print-directory; \
 	done
+
+# ===================[ Project-specific compilation rules ]=================== #
+
+$(BIN): $(OBJS) | $(dir $(BIN))
+	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+
+obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
+	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
+
+$(dir $(BIN) $(OBJS)):
+	mkdir -pv $@
 
 # ============================[ Profiling rules ]============================ #
 
