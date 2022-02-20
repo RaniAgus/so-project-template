@@ -2,6 +2,9 @@ include settings.mk
 
 # ===========================[ Compilation rules ]=========================== #
 
+# Set project name
+NAME=$(shell cd . && pwd | xargs basename)
+
 # Set prerrequisites
 SRCS_C != find src/ -iname "*.c"
 SRCS_H != find include/ -iname "*.h"

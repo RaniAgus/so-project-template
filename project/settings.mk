@@ -1,8 +1,5 @@
 # =========================[ Compilation variables ]========================= #
 
-# Project name
-NAME=$(shell cd . && pwd | xargs basename)
-
 # Libraries
 LIBS=
 
@@ -20,5 +17,5 @@ CRELEASE=-O3 -Wall -DNDEBUG
 ARGS=
 
 # Valgrind flags
-MEMCHECK_FLAGS=--track-origins=yes --log-file="memcheck-$(NAME).log"
-HELGRIND_FLAGS=--log-file="helgrind-$(NAME).log"
+MEMCHECK_FLAGS=--track-origins=yes --log-file="memcheck.log"
+HELGRIND_FLAGS=--log-file="helgrind.log"

@@ -1,8 +1,5 @@
 # =========================[ Compilation variables ]========================= #
 
-# Test project name
-TEST_NAME=$(shell cd . && pwd | xargs basename)
-
 # Original project path
 PROJ_PATH=../project
 
@@ -21,5 +18,5 @@ TEST_LIB=cspecs
 TEST_ARGS=
 
 # Valgrind flags
-TEST_MEMCHECK_FLAGS=--track-origins=yes --log-file="memcheck-$(NAME).log"
-TEST_HELGRIND_FLAGS=--log-file="helgrind-$(NAME).log"
+TEST_MEMCHECK_FLAGS=--track-origins=yes --log-file="memcheck.log"
+TEST_HELGRIND_FLAGS=--log-file="helgrind.log"

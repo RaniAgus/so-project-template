@@ -3,6 +3,9 @@ include $(PROJ_PATH)/settings.mk
 
 # ===========================[ Compilation rules ]=========================== #
 
+# Set test project name
+TEST_NAME=$(shell cd . && pwd | xargs basename)
+
 # Testing libraries
 TEST_LIBS=$(TEST_LIB) $(LIBS)
 
