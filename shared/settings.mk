@@ -1,8 +1,5 @@
 # =========================[ Compilation variables ]========================= #
 
-# Project name
-NAME=$(shell cd . && pwd | xargs basename)
-
 # Libraries
 LIBS=
 
