@@ -11,10 +11,8 @@ SRCS_H != find include/ -iname "*.h"
 DEPS = $(addsuffix /src,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
 # Set targets
-BINDIR = bin
-BIN = $(BINDIR)/$(NAME).out
+BIN = bin/$(NAME).out
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
-OBJDIRS = $(dir $(OBJS))
 
 # Set header files' directories to (-I)nclude
 IDIRS = $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
@@ -30,18 +28,18 @@ debug: $(BIN)
 release: CFLAGS = $(CRELEASE)
 release: $(BIN)
 
-$(BIN): $(OBJS) | $(BINDIR)
+$(BIN): $(OBJS) | $(dir $(BIN))
 	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
 
-obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(OBJDIRS)
+obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
 
-$(BINDIR) $(OBJDIRS):
+$(dir $(BIN) $(OBJS)):
 	mkdir -pv $@
 
 .PHONY: clean
 clean:
-	-rm -rfv $(OBJS) $(BIN)
+	-rm -rfv $(dir $(BIN) $(OBJS))
 
 .PHONY: watch
 watch:
