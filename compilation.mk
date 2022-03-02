@@ -13,7 +13,8 @@ endif
 # Set prerrequisites
 SRCS_C != find src/ -iname "*.c"
 SRCS_H != find include/ -iname "*.h"
-DEPS = $(addsuffix /src,$(LIBPATHS))
+DEPS = $(shell find $(addsuffix /src,$(LIBPATHS)) -iname "*.c") \
+ $(shell find $(addsuffix /include,$(LIBPATHS)) -iname "*.h")
 
 # Set header files' directories to (-I)nclude
 IDIRS = $(addsuffix /include,$(LIBPATHS) .)
