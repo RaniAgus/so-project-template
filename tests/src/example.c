@@ -15,7 +15,7 @@ context (example) {
         } end
 
         it("this test will fail because 10 is not equal to 11") {
-            should_int(10) be equal to(11);
+            should_int(hello()) be equal to(11);
         } end
 
         skip("this test will fail because \"Hello\" is not \"Bye\"") {

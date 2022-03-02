@@ -1,75 +1,20 @@
 include settings.mk
-include $(PROJ_PATH)/settings.mk
 
-# [ Compilation rules ] #
+LIBPATHS = $(SHARED_LIBPATHS) $(STATIC_LIBPATHS)
+filename = $(1).out
 
-# Set test project name
-TEST_NAME=$(shell cd . && pwd | xargs basename)
+PROJ_C = $(filter-out $(PROJ_PATH)/src/$(PROJ_MAIN),$(shell find $(PROJ_PATH) -iname "*.c"))
+PROJ_H = $(shell find $(PROJ_PATH) -iname "*.h")
+DEPS = $(PROJ_C) $(PROJ_H)
+IDIRS = $(addsuffix /include,$(PROJ_PATH))
 
-# Testing libraries
-TEST_LIBS=$(TEST_LIB) $(LIBS)
+define compile_bin
+	gcc $(CFLAGS) -o "$@" $^ $(PROJ_C) $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+endef
 
-# Custom libraries' paths
-TEST_SHARED_LIBPATHS=$(addprefix $(PROJ_PATH)/,$(SHARED_LIBPATHS))
-TEST_STATIC_LIBPATHS=$(addprefix $(PROJ_PATH)/,$(STATIC_LIBPATHS))
+define compile_objs
+	gcc $(CFLAGS) -c -o "$@" $< $(IDIRS:%=-I%)
+endef
 
-# Set prerrequisites 
-SRCS_C != find $(PROJ_PATH)/src/ -iname "*.c" -not -iwholename "$(PROJ_MAIN)"
-TEST_SRCS_C != find src/ -iname "*.c"
-SRCS_H != find src/ -iname "*.h"
-TEST_SRCS_H != find src/ -iname "*.h"
-DEPS = $(addsuffix /src,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS))
-
-# Set targets
-TEST_BIN = bin/$(TEST_NAME).out
-
-# Set header files' directories to (-I)nclude
-TEST_IDIRS = $(addsuffix /include,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS) $(PROJ_PATH) .)
-
-# Set library files' directories to (-L)ook
-TEST_LIBDIRS = $(addsuffix /bin,$(TEST_SHARED_LIBPATHS) $(TEST_STATIC_LIBPATHS))
-
-.PHONY: debug
-debug: $(TEST_BIN)
-
-$(TEST_BIN): $(SRCS_C) $(SRCS_H) $(TEST_SRCS_C) $(TEST_SRCS_H) | $(dir $(TEST_BIN))
-	gcc $(CFLAGS) -o "$@" $^ $(TEST_IDIRS:%=-I%) $(TEST_LIBDIRS:%=-L%) $(TEST_LIBS:%=-l%)
-
-$(dir $(TEST_BIN)):
-	mkdir -pv $@
-
-.PHONY: clean
-clean:
-	-rm -rfv $(dir $(TEST_BIN))
-
-.PHONY: watch
-watch:
-	while sleep 0.1; do \
-		find src/ $(PROJ_PATH)/src/ $(PROJ_PATH)/include/ | entr -d make debug --no-print-directory; \
-	done
-
-# [ Profiling rules ] #
-
-# Shared library files paths
-LD_LIBRARY_PATH != echo $(addsuffix /bin,$(TEST_SHARED_LIBPATHS)) | tr ' ' ':'
-
-.PHONY: start
-start: debug
-	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
-	valgrind --tool=none ./$(TEST_BIN) $(TEST_ARGS)
-
-.PHONY: daemon
-daemon:
-	while sleep 0.1; do \
-		find src/ include/ | entr -d make start --no-print-directory; \
-	done
-
-.PHONY: memcheck
-memcheck: debug
-	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
-	valgrind --leak-check=full $(TEST_MEMCHECK_FLAGS) ./$(TEST_BIN) $(TEST_ARGS)
-
-.PHONY: helgrind
-helgrind: debug
-	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
-	valgrind --tool=helgrind $(TEST_HELGRIND_FLAGS) ./$(TEST_BIN) $(TEST_ARGS)
+include ../compilation.mk
+include ../execution.mk
