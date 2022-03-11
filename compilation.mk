@@ -1,15 +1,3 @@
-ifndef filename
-$(error filename function not set)
-endif
-
-ifndef compile_bin
-$(error compile_bin function not set)
-endif
-
-ifndef compile_objs
-$(error compile_objs function not set)
-endif
-
 # Set prerrequisites
 SRCS_C != find src/ -iname "*.c"
 SRCS_H != find include/ -iname "*.h"

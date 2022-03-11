@@ -1,11 +1,3 @@
-ifndef BIN
-$(error BIN variable not set)
-endif
-
-ifndef SRCS_H
-$(error SRCS_H variable not set)
-endif
-
 LIB_PATH=/usr/local/lib
 INCLUDE_PATH=/usr/local/include
 

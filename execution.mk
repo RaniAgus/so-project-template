@@ -1,7 +1,3 @@
-ifndef BIN
-$(error BIN variable not set)
-endif
-
 LD_LIBRARY_PATH != echo $(addsuffix /bin,$(SHARED_LIBPATHS)) | tr ' ' ':'
 
 .PHONY: start
