@@ -1,9 +1,9 @@
-#ifndef UTILS_HELLO_H_
-#define UTILS_HELLO_H_
+#ifndef STATIC_HELLO_H_
+#define STATIC_HELLO_H_
 
 #include <stdlib.h>
 #include <stdio.h>
 
-void helloWorld();
+void hello_world();
 
 #endif

@@ -1,5 +1,5 @@
 #include <utils/hello.h>
 
-void helloWorld() {
+void hello_world() {
     puts("Hello world!!");
 }

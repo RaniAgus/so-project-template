@@ -4,6 +4,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void helloWorld();
+void hello_world();
 
 #endif
