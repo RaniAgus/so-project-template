@@ -5,9 +5,9 @@ include settings.mk
 LIBPATHS = $(SHARED_LIBPATHS) $(STATIC_LIBPATHS)
 filename = $(1).out
 
-PROJ_C = $(filter-out $(PROJ_PATH)/src/$(PROJ_MAIN),$(shell find $(PROJ_PATH) -iname "*.c"))
-PROJ_H = $(shell find $(PROJ_PATH) -iname "*.h")
-DEPS = $(PROJ_C) $(PROJ_H)
+# Include source files from the main project
+SRCS_C = $(filter-out $(EXCLUDE:%=$(PROJ_PATH)/src/%),$(shell find $(PROJ_PATH)/src -iname "*.c"))
+SRCS_H = $(shell find $(PROJ_PATH)/include -iname "*.h")
 IDIRS = $(addsuffix /include,$(PROJ_PATH))
 
 define compile_bin

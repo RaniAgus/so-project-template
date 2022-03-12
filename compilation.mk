@@ -1,6 +1,6 @@
 # Set prerrequisites
-SRCS_C != find src/ -iname "*.c"
-SRCS_H != find include/ -iname "*.h"
+SRCS_C += $(shell find src/ -iname "*.c")
+SRCS_H += $(shell find include/ -iname "*.h")
 DEPS += $(shell find $(addsuffix /src,$(LIBPATHS)) -iname "*.c") \
  $(shell find $(addsuffix /include,$(LIBPATHS)) -iname "*.h")
 

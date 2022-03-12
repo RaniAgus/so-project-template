@@ -1,8 +1,8 @@
 # Original project path
 PROJ_PATH=../project
 
-# Original project main function source file path (will be excluded from tests)
-PROJ_MAIN=main.c
+# Excluded source files (eg: main() function)
+EXCLUDE=main.c
 
 # Libraries
 LIBS=cspecs
