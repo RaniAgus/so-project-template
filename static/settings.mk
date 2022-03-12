@@ -2,5 +2,5 @@
 LIBPATHS=
 
 # Compiler flags
-CDEBUG=-Wall -DDEBUG -g
+CDEBUG=-g -Wall -DDEBUG
 CRELEASE=-O3 -Wall -DNDEBUG

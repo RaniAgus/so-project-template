@@ -12,7 +12,7 @@ SHARED_LIBPATHS=
 STATIC_LIBPATHS=
 
 # Compiler flags
-CDEBUG=-Wall -DDEBUG -g
+CDEBUG=-g -Wall -DDEBUG
 CRELEASE=-O3 -Wall -DNDEBUG
 
 # Arguments when executing with start, memcheck or helgrind
