@@ -1,11 +1,11 @@
 # Original project path
-PROJ_PATH=../project
+PROJ_PATH=$(error PROJ_PATH variable not set)
 
 # Excluded source files (eg: main() function)
-EXCLUDE=main.c
+EXCLUDE=
 
 # Libraries
-LIBS=cspecs
+LIBS=
 
 # Custom libraries' paths
 SHARED_LIBPATHS=
