@@ -40,5 +40,5 @@ $(BIN): $(OBJS) | $(dir $(BIN))
 obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 	$(call compile_objs)
 
-$(dir $(BIN) $(OBJS)):
+$(sort $(dir $(BIN) $(OBJS))):
 	mkdir -pv $@
