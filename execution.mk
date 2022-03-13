@@ -1,7 +1,7 @@
 LD_LIBRARY_PATH != echo $(addsuffix /bin,$(SHARED_LIBPATHS)) | tr ' ' ':'
 
 .PHONY: start
-start: debug
+start: all
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --tool=none ./$(BIN) $(ARGS)
 
@@ -12,11 +12,11 @@ daemon:
 	done
 
 .PHONY: memcheck
-memcheck: debug
+memcheck: all
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --leak-check=full $(MEMCHECK_FLAGS) ./$(BIN) $(ARGS)
 
 .PHONY: helgrind
-helgrind: debug
+helgrind: all
 	export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH); \
 	valgrind --tool=helgrind $(HELGRIND_FLAGS) ./$(BIN) $(ARGS)
