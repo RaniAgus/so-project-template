@@ -1,5 +1,5 @@
 #include <shared/hello.h>
 
-void hello_world() {
-    puts("Hello world!!");
+int say_hello(char* who) {
+    return printf("Hello %s!!", who);
 }
