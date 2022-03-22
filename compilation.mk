@@ -30,7 +30,7 @@ clean:
 
 .PHONY: watch
 watch:
-	@test $(shell command -v entr) || entr
+	@test $(shell which entr) || entr
 	while sleep 0.1; do \
 		find src/ include/ | entr -d make all --no-print-directory; \
 	done
