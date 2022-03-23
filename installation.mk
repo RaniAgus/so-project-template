@@ -3,7 +3,7 @@ INCLUDE_PATH=/usr/local/include
 
 .PHONY: install
 install: release
-	sudo cp -uva $(dir $(BIN))/. $(LIB_PATH)
+	sudo cp -uva $(dir $(BIN)). $(LIB_PATH)
 	sudo cp -uva include/. $(INCLUDE_PATH)
 
 .PHONY: uninstall
