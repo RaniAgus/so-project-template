@@ -1,12 +1,12 @@
-LIB_PATH=/usr/local/lib
-INCLUDE_PATH=/usr/local/include
+PATH_TO_LIB=/usr/local/lib
+PATH_TO_INCLUDE=/usr/local/include
 
 .PHONY: install
 install: release
-	sudo cp -uva $(dir $(BIN)). $(LIB_PATH)
-	sudo cp -uva include/. $(INCLUDE_PATH)
+	sudo cp -uva $(dir $(BIN)). $(PATH_TO_LIB)
+	sudo cp -uva include/. $(PATH_TO_INCLUDE)
 
 .PHONY: uninstall
 uninstall:
-	sudo rm -fv $(patsubst bin/%,$(LIB_PATH)/%,$(BIN))
-	sudo rm -fvr $(patsubst include/%,$(INCLUDE_PATH)/%,$(SRCS_H))
+	sudo rm -fv $(patsubst bin/%,$(PATH_TO_LIB)/%,$(BIN))
+	sudo rm -fvr $(patsubst include/%,$(PATH_TO_INCLUDE)/%,$(SRCS_H))
