@@ -2,7 +2,6 @@ include settings.mk
 
 ################################################################################
 
-LIBPATHS = $(SHARED_LIBPATHS) $(STATIC_LIBPATHS)
 filename = $(1).out
 
 define compile_bin
