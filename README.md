@@ -9,8 +9,8 @@ compartida.
 mkdir project && cd project
 
 # descargar el template
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v3.0.0/project.tar.gz \
-  | tar -xzf - --strip-components 1 
+wget -qO- https://github.com/RaniAgus/c-project-template/archive/refs/tags/latest.tar.gz \
+  | tar -xzvf - --strip-components 1
 
 # compilar con make
 make

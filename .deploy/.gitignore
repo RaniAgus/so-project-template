@@ -1,1 +1,4 @@
-*.tar.gz
+project*
+shared*
+static*
+tests*
