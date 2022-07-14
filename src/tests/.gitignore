@@ -1,0 +1,18 @@
+# Generated files
+bin/
+obj/
+*.log
+
+# Eclipse files
+RemoteSystemsTempFiles/
+Debug/
+Release/
+.settings/
+.cproject
+.project
+
+# CLion files
+.idea/
+
+# Visual Studio Code files
+.vscode/
