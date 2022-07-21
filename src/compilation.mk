@@ -10,6 +10,9 @@ IDIRS += $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
 # Set library files' directories to (-L)ook
 LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
+# Set shared library files to be linked using (-Wl,-rpath,) option
+SHARED_LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS))
+
 # Set intermediate objects
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 

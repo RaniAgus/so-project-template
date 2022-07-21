@@ -5,7 +5,7 @@ include settings.mk
 filename = $(1).out
 
 define compile_bin
-	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(SHARED_LIBDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%)
 endef
 
 define compile_objs
