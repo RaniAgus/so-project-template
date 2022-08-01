@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-TAG="v3.0.0"
+TAG="v3.1.0"
 TEMPLATES=('project' 'static' 'shared' 'tests')
 
 SRC="src"
