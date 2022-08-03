@@ -10,7 +10,7 @@ SRCS_H = $(shell find $(PROJ_PATH)/include -iname "*.h")
 IDIRS = $(addsuffix /include,$(PROJ_PATH))
 
 define compile_bin
-	gcc $(CFLAGS) -o "$@" $^ $(PROJ_C) $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(LIBS:%=-l%)
+	gcc $(CFLAGS) -o "$@" $^ $(PROJ_C) $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%)
 endef
 
 define compile_objs

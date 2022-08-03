@@ -11,7 +11,7 @@ IDIRS += $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
 LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
 # Set shared library paths to be found in runtime (-rpath)
-SHARED_LIBDIRS = $(SHARED_LIBPATHS:%=$(shell cd . && pwd)/%/bin)
+RUNDIRS = $(SHARED_LIBPATHS:%=$(shell cd . && pwd)/%/bin)
 
 # Set intermediate objects
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
