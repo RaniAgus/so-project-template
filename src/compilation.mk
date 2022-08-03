@@ -4,14 +4,14 @@ SRCS_H += $(shell find include/ -iname "*.h")
 DEPS = $(foreach SHL,$(SHARED_LIBPATHS),$(SHL:%=%/bin/lib$(notdir $(SHL)).so)) \
 	$(foreach STL,$(STATIC_LIBPATHS),$(STL:%=%/bin/lib$(notdir $(STL)).a))
 
-# Set header files' directories to (-I)nclude
+# Set header paths to (-I)nclude
 IDIRS += $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
 
-# Set library files' directories to (-L)ook
+# Set library paths to (-L)ook
 LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
 
-# Set shared library files to be linked using (-Wl,-rpath,) option
-SHARED_LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS))
+# Set shared library paths to be found in runtime (-rpath)
+SHARED_LIBDIRS = $(SHARED_LIBPATHS:%=$(shell cd . && pwd)/%/bin)
 
 # Set intermediate objects
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
