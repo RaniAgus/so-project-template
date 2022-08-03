@@ -5,7 +5,7 @@ PROJ_PATH=$(error PROJ_PATH variable not set)
 EXCLUDE=
 
 # Libraries
-LIBS=
+LIBS=cspecs
 
 # Custom libraries' paths
 SHARED_LIBPATHS=
