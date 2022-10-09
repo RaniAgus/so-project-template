@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
-TAG=$1
-TEMPLATES=('project' 'static' 'shared' 'tests')
+TAG=${1:-"SNAPSHOT"}
+TEMPLATES=('project' 'static' 'shared')
 
 SRC="src"
 DIST="dist"
