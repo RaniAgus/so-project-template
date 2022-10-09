@@ -1,11 +1,11 @@
 # Set prerrequisites
 SRCS_C += $(shell find src/ -iname "*.c")
-SRCS_H += $(shell find include/ -iname "*.h")
+SRCS_H += $(shell find src/ -iname "*.h")
 DEPS = $(foreach SHL,$(SHARED_LIBPATHS),$(SHL:%=%/bin/lib$(notdir $(SHL)).so)) \
 	$(foreach STL,$(STATIC_LIBPATHS),$(STL:%=%/bin/lib$(notdir $(STL)).a))
 
 # Set header paths to (-I)nclude
-IDIRS += $(addsuffix /include,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
+IDIRS += $(addsuffix /src,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS) .)
 
 # Set library paths to (-L)ook
 LIBDIRS = $(addsuffix /bin,$(SHARED_LIBPATHS) $(STATIC_LIBPATHS))
@@ -35,7 +35,7 @@ clean:
 watch:
 	@test $(shell which entr) || entr
 	while sleep 0.1; do \
-		find src/ include/ | entr -d make all --no-print-directory; \
+		find src/ | entr -d make all --no-print-directory; \
 	done
 
 $(BIN): $(OBJS) | $(dir $(BIN))
@@ -46,7 +46,7 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 
 .SECONDEXPANSION:
 $(DEPS): $$(shell find $$(patsubst %bin/,%src/,$$(dir $$@)) -iname "*.c") \
-	$$(shell find $$(patsubst %bin/,%include/,$$(dir $$@)) -iname "*.h")
+	$$(shell find $$(patsubst %bin/,%src/,$$(dir $$@)) -iname "*.h")
 	make --no-print-directory -C $(patsubst %bin/,%,$(dir $@))
 
 $(sort $(dir $(BIN) $(OBJS))):
