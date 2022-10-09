@@ -14,8 +14,11 @@ do
    make -C "$SRC/$template" clean
    cp -R "$SRC/$template" "$DIST/$template"
    ./makegen.py "$SRC/$template" | tee "$DIST/$template/makefile"
-   tar -czf "$DIST/$template-$TAG.tar.gz" "$DIST/$template"
-   md5sum "$DIST/$template-$TAG.tar.gz" > "$DIST/$template-$TAG.tar.gz.md5"
-   sha1sum "$DIST/$template-$TAG.tar.gz" > "$DIST/$template-$TAG.tar.gz.sha1"
-   rm -rf "$DIST/$template"
+   (
+      cd "$DIST" || exit 1
+      tar -czf "$template-$TAG.tar.gz" "$template"
+      md5sum "$template-$TAG.tar.gz" > "$template-$TAG.tar.gz.md5"
+      sha1sum "$template-$TAG.tar.gz" > "$template-$TAG.tar.gz.sha1"
+      rm -rf "$template"
+   )
 done
