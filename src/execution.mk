@@ -6,7 +6,7 @@ start: all
 daemon:
 	@test $(shell which entr) || entr
 	while sleep 0.1; do \
-		find src/ include/ | entr -d make start --no-print-directory; \
+		find src/ | entr -d make start --no-print-directory; \
 	done
 
 .PHONY: memcheck
