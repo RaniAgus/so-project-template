@@ -32,9 +32,6 @@ jobs:
             dist/static-${{ github.ref_name }}.tar.gz
             dist/static-${{ github.ref_name }}.tar.gz.md5
             dist/static-${{ github.ref_name }}.tar.gz.sha1
-            dist/tests-${{ github.ref_name }}.tar.gz
-            dist/tests-${{ github.ref_name }}.tar.gz.md5
-            dist/tests-${{ github.ref_name }}.tar.gz.sha1
           prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
