@@ -2,9 +2,9 @@ PATH_TO_LIB=/usr/lib
 PATH_TO_INCLUDE=/usr/include
 
 .PHONY: install
-install: release test
-	sudo cp -v $(BIN) $(PATH_TO_LIB)
-	sudo cp -v $(SRCS_H) $(PATH_TO_INCLUDE)
+install: release
+	sudo cp -uv $(BIN) $(PATH_TO_LIB)
+	cd src; sudo cp --parents -uva $(SRCS_H:src/%=%) $(PATH_TO_INCLUDE)
 
 .PHONY: uninstall
 uninstall:
