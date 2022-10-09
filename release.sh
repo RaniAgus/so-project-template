@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-TAG="v3.1.0"
+TAG=$1
 TEMPLATES=('project' 'static' 'shared' 'tests')
 
 SRC="src"
@@ -14,14 +14,8 @@ do
    make -C "$SRC/$template" clean
    cp -R "$SRC/$template" "$DIST/$template"
    ./makegen.py "$SRC/$template" | tee "$DIST/$template/makefile"
-   (
-      cd "$DIST/$template" || exit 1
-      git init || exit 1
-      git add -A || exit 1
-      git commit -m "$template template" || exit 1
-      git tag "$TAG" || exit 1
-      git tag latest || exit 1
-      git push -f https://github.com/RaniAgus/c-"$template"-template.git main || exit 1
-      git push -f --tags https://github.com/RaniAgus/c-"$template"-template.git || exit 1
-   ) || exit 1
+   tar -czf "$DIST/$template-$TAG.tar.gz" "$DIST/$template"
+   md5sum "$DIST/$template-$TAG.tar.gz" > "$DIST/$template-$TAG.tar.gz.md5"
+   sha1sum "$DIST/$template-$TAG.tar.gz" > "$DIST/$template-$TAG.tar.gz.sha1"
+   rm -rf "$DIST/$template"
 done

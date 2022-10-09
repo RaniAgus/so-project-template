@@ -1,0 +1,40 @@
+name: Publish release including template tarballs
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          check-latest: true
+      - name: Generate release files
+        run: ./release.sh ${{ github.ref_name }}
+      - name: Create pre-release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/project-${{ github.ref_name }}.tar.gz
+            dist/project-${{ github.ref_name }}.tar.gz.md5
+            dist/project-${{ github.ref_name }}.tar.gz.sha1
+            dist/shared-${{ github.ref_name }}.tar.gz
+            dist/shared-${{ github.ref_name }}.tar.gz.md5
+            dist/shared-${{ github.ref_name }}.tar.gz.sha1
+            dist/static-${{ github.ref_name }}.tar.gz
+            dist/static-${{ github.ref_name }}.tar.gz.md5
+            dist/static-${{ github.ref_name }}.tar.gz.sha1
+            dist/tests-${{ github.ref_name }}.tar.gz
+            dist/tests-${{ github.ref_name }}.tar.gz.md5
+            dist/tests-${{ github.ref_name }}.tar.gz.sha1
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
