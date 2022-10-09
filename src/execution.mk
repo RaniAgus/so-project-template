@@ -1,5 +1,5 @@
 .PHONY: start
-start: all
+start: $(BIN)
 	valgrind --tool=none ./$(BIN) $(ARGS)
 
 .PHONY: daemon
@@ -10,9 +10,9 @@ daemon:
 	done
 
 .PHONY: memcheck
-memcheck: all
+memcheck: $(BIN)
 	valgrind --leak-check=full $(MEMCHECK_FLAGS) ./$(BIN) $(ARGS)
 
 .PHONY: helgrind
-helgrind: all
+helgrind: $(BIN)
 	valgrind --tool=helgrind $(HELGRIND_FLAGS) ./$(BIN) $(ARGS)
