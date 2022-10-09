@@ -29,7 +29,7 @@ all: $(BIN) $(SPEC)
 
 .PHONY: release
 release: CFLAGS = $(CRELEASE)
-release: $(BIN) $(SPEC)
+release: clean $(BIN) $(SPEC)
 
 .PHONY: clean
 clean:
