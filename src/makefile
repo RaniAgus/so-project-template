@@ -1,6 +1,5 @@
 PROJECTS=./project
-LIBS=
-TESTS=
+LIBS=./shared ./static
 
 all: $(PROJECTS)
 
@@ -11,12 +10,12 @@ $(LIBS):
 	$(MAKE) -C $@
 
 clean:
-	$(foreach PROJ, $(LIBS) $(PROJECTS) $(TESTS), $(MAKE) -C $(PROJ) clean;)
+	$(foreach PROJ, $(LIBS) $(PROJECTS), $(MAKE) -C $(PROJ) clean;)
 
-release: test
+release:
 	$(foreach PROJ, $(LIBS) $(PROJECTS), $(MAKE) -C $(PROJ) release;)
 
 test:
-	$(foreach PROJ, $(TESTS), $(MAKE) -C $(PROJ) start;)
+	$(foreach PROJ, $(LIBS) $(PROJECTS), $(MAKE) -C $(PROJ) test;)
 
-.PHONY: all $(PROJECTS) $(LIBS) $(TESTS) clean release test
+.PHONY: all $(PROJECTS) $(LIBS) clean release test
