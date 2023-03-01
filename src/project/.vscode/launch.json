@@ -11,7 +11,7 @@
       "args": [
         // TODO: Agregar los argumentos que se necesiten
       ],
-      "stopAtEntry": true,
+      "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
