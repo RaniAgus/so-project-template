@@ -1,8 +1,8 @@
 # Set prerrequisites
 SRCS_C += $(shell find src/ -iname "*.c")
 SRCS_H += $(shell find src/ -iname "*.h")
-SPECS_C += $(shell find spec/ -iname "*.c")
-SPECS_H += $(shell find spec/ -iname "*.h")
+TESTS_C += $(shell find tests/ -iname "*.c")
+TESTS_H += $(shell find tests/ -iname "*.h")
 DEPS = $(foreach SHL,$(SHARED_LIBPATHS),$(SHL:%=%/bin/lib$(notdir $(SHL)).so)) \
 	$(foreach STL,$(STATIC_LIBPATHS),$(STL:%=%/bin/lib$(notdir $(STL)).a))
 
@@ -17,19 +17,19 @@ RUNDIRS = $(SHARED_LIBPATHS:%=$(shell cd . && pwd)/%/bin)
 
 # Set intermediate objects
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
-SPEC_OBJS = $(SPECS_C) $(filter-out $(SPEC_EXCLUDE), $(SRCS_C))
+TEST_OBJS = $(TESTS_C) $(filter-out $(TEST_EXCLUDE), $(SRCS_C))
 
 # Set binary targets
 BIN = bin/$(call filename,$(shell cd . && pwd | xargs basename))
-SPEC = bin/$(shell cd . && pwd | xargs basename)_specs.out
+TEST = bin/$(shell cd . && pwd | xargs basename)_tests.out
 
 .PHONY: all
 all: CFLAGS = $(CDEBUG)
-all: $(BIN) $(SPEC)
+all: $(BIN) $(TEST)
 
 .PHONY: release
 release: CFLAGS = $(CRELEASE)
-release: clean $(BIN) $(SPEC)
+release: clean $(BIN) $(TEST)
 
 .PHONY: clean
 clean:
@@ -48,7 +48,7 @@ $(BIN): $(OBJS) | $(dir $(BIN))
 obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 	$(call compile_objs)
 
-$(SPEC): $(SPEC_OBJS) | $(dir $(SPEC))
+$(TEST): $(TEST_OBJS) | $(dir $(TEST))
 	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%) -lcspecs
 
 .SECONDEXPANSION:
