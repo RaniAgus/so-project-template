@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "project",
+			"path": "project"
+		},
+		{
+			"name": "static",
+			"path": "static"
+		},
+		{
+			"name": "shared",
+			"path": "shared"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.h": "c",
+		},
+	}
+}
