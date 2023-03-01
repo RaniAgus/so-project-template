@@ -29,7 +29,7 @@
       "name": "test",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}_specs.out",
+      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}_tests.out",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
