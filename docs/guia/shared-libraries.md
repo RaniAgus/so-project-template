@@ -1,3 +1,7 @@
+<script setup>
+import { version } from '../../package.json'
+</script>
+
 # Shared Libraries
 
 ::: warning NOTA
@@ -49,10 +53,10 @@ error while loading shared libraries: lib*****.so: cannot open shared object fil
 Una vez más, descargaremos otro template en una carpeta con el nombre de nuestra
 biblioteca compartida:
 
-```bash
+```bash-vue
 mkdir shared && cd shared
 
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v3.1.1/shared-v3.1.1.tar.gz \
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/shared-v{{version}}.tar.gz \
   | tar -xzvf - --strip-components 1
 ```
 

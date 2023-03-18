@@ -1,3 +1,7 @@
+<script setup>
+import { version } from '../../package.json'
+</script>
+
 # Código común entre proyectos
 
 Cuando empecemos a desarrollar cada módulo, notaremos que hay algunas funciones
@@ -18,10 +22,10 @@ incluirla dentro del ejecutable final de nuestro proyecto al momento de
 Al igual que con un proyecto común, vamos a comenzar descargando un
 template en una carpeta con el nombre de nuestra static library de esta forma:
 
-```bash
+```bash-vue
 mkdir static && cd static
 
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v3.1.1/static-v3.1.1.tar.gz \
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/static-v{{version}}.tar.gz \
   | tar -xzvf - --strip-components 1
 ```
 

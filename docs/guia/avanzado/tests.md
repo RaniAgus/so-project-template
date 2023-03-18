@@ -1,3 +1,7 @@
+<script setup>
+import { version } from '../../../package.json'
+</script>
+
 # Agregar tests unitarios
 
 Si bien no es obligatorio agregar tests unitarios al código del TP, contar con
@@ -60,8 +64,8 @@ mkdir tests tests/project-tests && cd tests/project-tests
 
 ## Descargar el template
 
-```bash
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v3.1.1/tests-v3.1.1.tar.gz \
+```bash-vue
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/tests-v{{version}}.tar.gz \
   | tar -xzvf - --strip-components 1
 ```
 ```

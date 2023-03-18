@@ -1,3 +1,7 @@
+<script setup>
+import { version } from '../../package.json'
+</script>
+
 # Primeros pasos
 
 ## Inicialización
@@ -5,10 +9,10 @@
 Primero, vamos a descargar el template en una carpeta con el nombre del
 proyecto:
 
-```bash
+```bash-vue
 mkdir project && cd project
 
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v3.1.1/project-v3.1.1.tar.gz \
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/project-v{{version}}.tar.gz \
   | tar -xzvf - --strip-components 1
 ```
 
