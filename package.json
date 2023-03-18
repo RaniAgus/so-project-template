@@ -14,7 +14,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "vitepress": "^1.0.0-alpha.13",
+    "@types/markdown-it": "^12.2.3",
+    "@types/markdown-it-footnote": "^3.0.0",
+    "@types/node": "^18.15.3",
+    "markdown-it-footnote": "^3.0.3",
+    "sass": "^1.59.3",
+    "vitepress": "1.0.0-alpha.60",
     "vue": "^3.2.38"
   }
 }

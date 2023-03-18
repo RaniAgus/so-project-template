@@ -1,14 +1,17 @@
+import MarkdownItFootnotePlugin from 'markdown-it-footnote';
 import { defineConfig } from 'vitepress';
 import { description, repository } from '../../package.json';
 import { sidebar } from './configs/sidebar';
 import { navbar } from './configs/navbar';
 
 export default defineConfig({
-  title: 'SisOp Templates',
+  lang: 'es-AR',
+  title: 'Templates | Sistemas Operativos - UTN FRBA',
   description: description,
-  base: '/so-project-template-guide/',
+  base: '/so-project-template/',
   lastUpdated: true,
-  cleanUrls: 'without-subfolders',
+  cleanUrls: true,
+  titleTemplate: 'Sistemas Operativos - UTN FRBA',
   head: [
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
     ['link', { rel: 'icon', href: '/img/logo.png' }],
@@ -16,6 +19,9 @@ export default defineConfig({
   themeConfig: {
     siteTitle: 'SisOp Templates',
     logo: '/img/logo.png',
+    outline: 'deep',
+    outlineTitle: 'En esta página',
+    lastUpdatedText: 'Última actualización',
     nav: navbar,
     sidebar: sidebar,
     socialLinks: [
@@ -24,9 +30,18 @@ export default defineConfig({
         link: `${repository}/issues?q=is%3Aissue+label%3Aquestion`
       },
     ],
-    // editLink: {
-    //   pattern: `${repository}-guide/edit/main/src/:path`,
-    //   text: 'Editar esta página en GitHub',
-    // },
+    editLink: {
+      pattern: `${repository}/edit/main/src/:path`,
+      text: 'Editar esta página en GitHub',
+    },
+    docFooter: {
+      prev: 'Página anterior',
+      next: 'Página siguiente',
+    },
+  },
+  markdown: {
+    config: (md) => {
+      md.use(MarkdownItFootnotePlugin);
+    },
   },
 });
