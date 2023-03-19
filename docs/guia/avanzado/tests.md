@@ -25,7 +25,7 @@ debemos configurar el makefile para que excluya todo el código de este archivo:
 
 ```makefile
 # Excluded source files (eg: main() function)
-EXCLUDE=main.c
+TEST_EXCLUDE=src/main.c
 ```
 
 Ya que, de otra forma, nos va a parecer el error debido a que CSpec define su
