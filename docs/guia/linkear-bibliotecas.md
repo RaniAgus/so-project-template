@@ -11,7 +11,12 @@ Por ejemplo, si intentamos compilar este código:
 Nos aparecerá el error:
 
 ```bash
-undefined reference to 'commons'
+undefined reference to 'list_create'
+undefined reference to 'list_add'
+undefined reference to 'list_add'
+undefined reference to 'list_add'
+undefined reference to 'list_add'
+undefined reference to 'list_iterate'
 ```
 
 Si estuviéramos compilando con `gcc` a mano, tendríamos que acordarnos de
