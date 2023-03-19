@@ -101,7 +101,7 @@ variable de entorno `C_INCLUDE_PATH`.
 Por último, vamos a hacer que nuestra función `main()` utilice las funciones del
 nuevo TAD `t_persona` para crear a `messi`:
 
-<<< @/snippets/guia/multiples-archivos/main.c{1,4,6,10}
+<<< @/snippets/guia/multiples-archivos/main.c{3,6,8,12}
 
 En conclusión, nos quedó un `main()` mucho más simple y con un TAD que nos
 permite crear nuevas instancias de `t_persona` en el proyecto de forma más

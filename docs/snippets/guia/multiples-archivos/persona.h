@@ -1,10 +1,6 @@
 #ifndef PROJECT_PERSONA_H_
 #define PROJECT_PERSONA_H_
 
-    // Podemos ocultar la definición de t_persona para que no se puedan manipular
-    // los elementos de la estructura desde fuera usando Opaque Types.
-    // Más info: https://www.youtube.com/watch?v=TsUOhPsZk6k
-
     typedef struct persona t_persona;
 
     // También podemos agregar Docstrings como incluyen las Commons.
