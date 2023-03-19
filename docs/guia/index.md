@@ -21,6 +21,9 @@ wget -qO- {{ repository }}/releases/download/v{{ version }}/project-v{{ version 
 Se va a descargar la estructura de archivos mínima para crear un "hello world":
 
 ```bash
+tree .
+```
+```
 .
 ├── makefile
 ├── settings.mk
@@ -50,6 +53,10 @@ make
 ```
 
 Lo cual creará dos directorios con archivos dentro:
+
+```bash
+tree bin obj
+```
 
 ```
 .
