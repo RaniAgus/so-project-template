@@ -77,6 +77,21 @@ a través de `Terminal > Run Build Task...`:
 ¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
 [agregar bibliotecas externas](./linkear-bibliotecas).
 
+### Cómo ejecutar
+
+Para ejecutar el proyecto, nos movemos hacia la pestaña de `Run and Debug`,
+seleccionamos la opción `run (nombre-del-proyecto)` y le damos al botón play
+:arrow_forward:
+
+![run configurations](/img/code/run-configurations.png)
+
+::: tip
+
+El proyecto ya se encuentra configurado para compilar con `make all` antes de
+ejecutar.
+
+:::
+
 ## Eclipse
 
 
