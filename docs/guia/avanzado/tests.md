@@ -48,6 +48,49 @@ En general es una buena práctica que el archivo fuente que contiene la función
 aplicación, delegando cada tarea a otras funciones de otros archivos fuente, que
 sí van a estar disponibles para ser testeadas.
 
+### Agregar unit tests
+
+Todas las test suites se guardan dentro de la carpeta `tests/`. El template ya
+incluye una suite a modo de ejemplo:
+
+```
+.
+└── tests
+    └── example_test.c
+```
+
+::: tip
+
+Es una buena práctica replicar la estructura de archivos que tenemos en `src/`
+para poder identificar bien qué parte del código cubre cada suite:
+
+```
+ .
+ ├── src
+ │   ├── dto
+ │   │   ├── handshake.c
+ │   │   └── handshake.h
+ │   ├── sockets
+ │   │   ├── cliente.c
+ │   │   ├── cliente.h
+ │   │   ├── servidor.c
+ │   │   └── servidor.h
+ │   └── utils
+ │       ├── string.c
+ │       └── string.h
+ └── tests
+     ├── dto
+     │   └── handshake_test.c
+     ├── sockets
+     │   ├── cliente_test.c
+     │   └── servidor_test.c
+     └── utils
+         └── string_test.c
+```
+
+:::
+
+
 ## Ejecutar el proyecto
 
 - Desde Visual Studio Code: ya contamos con la configuración necesaria para

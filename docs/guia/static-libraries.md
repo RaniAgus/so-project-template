@@ -146,7 +146,7 @@ Hay dos formas de incluir los headers de la biblioteca en nuestro código. La m�
 "sucia" es utilizar rutas relativas entre comillas:
 
 ```c{1}
-#include "../../static/include/utils/hello.h"
+#include "../../static/src/utils/hello.h"
 
 int main(void) {
   return hello_world();
@@ -156,8 +156,8 @@ int main(void) {
 Sin embargo, existe una mejor forma de hacerlo: la variable `STATIC_LIBPATHS`
 que configuramos también permite que el makefile le indique al
 [compilador](https://linux.die.net/man/1/gcc) que vaya a buscar los headers de
-la biblioteca a la carpeta `include` donde se encuentran, agregando el flag
-`-I{path}/include`.
+la biblioteca a la carpeta `src` donde se encuentran, agregando el flag
+`-I{path}/src`.
 
 ::: tip ¿Cómo funciona el `#include`?
 
@@ -190,15 +190,18 @@ El template permite agrupar el código en varias carpetas:
 
 ```
 static
- ├── include
- │   ├── dto
- │   |   └── handshake.h
- │   ├── sockets
- │   |   ├── cliente.h
- │   |   └── servidor.h
- │   └── utils
- │       └── string.h
- └── ...
+ └── src
+     ├── dto
+     │   ├── handshake.c
+     │   └── handshake.h
+     ├── sockets
+     │   ├── cliente.c
+     │   ├── cliente.h
+     │   ├── servidor.c
+     │   └── servidor.h
+     └── utils
+         ├── string.c
+         └── string.h
 ```
 Para luego incluirlos evitando colisiones de nombres:
 

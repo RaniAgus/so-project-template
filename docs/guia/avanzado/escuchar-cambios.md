@@ -20,8 +20,8 @@ que nos permite observar cambios en el código para inmediatamente buscar errore
 de sintaxis o semántica.
 
 En nuestro caso, lo usaremos para compilar con `make` cada vez que ocurra un
-cambio en cualquier archivo que se encuentre en `./src` o `./include`. Para
-esto, ejecutaremos:
+cambio en cualquier archivo que se encuentre en `./src`. Para esto,
+ejecutaremos:
 
 ```bash
 make watch

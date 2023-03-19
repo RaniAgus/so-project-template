@@ -66,7 +66,7 @@ principio.
 
 ::: tip
 
-Los makefiles, por defecto, incluyen el flag `-I./include` a la hora de compilar
+Los makefiles, por defecto, incluyen el flag `-I./src` a la hora de compilar
 el proyecto con `gcc`. De esta forma, se puede incluir cualquier header que se
 encuentre en esa carpeta y sus subcarpetas utilizando corchetes angulares
 `< >` como en el ejemplo de arriba.
@@ -75,7 +75,7 @@ Sin este flag, también se podría lograr el mismo resultado utilizando rutas
 relativas entre comillas:
 
 ```c
-#include "../include/persona.h"
+#include "../src/persona.h"
 ```
 
 :::
