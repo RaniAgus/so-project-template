@@ -115,11 +115,14 @@ Empezaremos creando el proyecto de Eclipse a través de la opción
 
 ![project-01](/img/eclipse/project-01.png)
 
+::: warning
+
 Si no aparece ahí, también la pueden encontrar en
 `File > New > Other...` y buscando "makefile":
 
 ![project-02](/img/eclipse/project-02.png)
 
+:::
 
 Luego, seleccionaremos la carpeta del proyecto ayudándonos con el botón
 `Browse...` y dejaremos todo tildado como en la imagen:
@@ -133,7 +136,18 @@ Nos aparecerá la carpeta del proyecto en el `Solution Explorer` de Eclipse:
 ### Compilar y ejecutar el proyecto
 
 Por último, compilaremos con el martillito :hammer: y ejecutaremos con el botón
-play :arrow_forward:. Eclipse se va a encargar de buscar el ejecutable generado.
+play :arrow_forward:.
+
+La primera vez nos preguntará qué tipo de aplicación es la que queremos
+ejecutar, para lo cual seleccionaremos `Local C/C++ Application`.
+
+![run-config](/img/importar-proyecto/eclipse-run-config.png)
+
+Y luego seleccionaremos nuestro ejecutable:
+
+![run](/img/importar-proyecto/eclipse-run.png)
+
+::: warning
 
 En caso de que no funcione el botón de play, nos iremos a la pestaña de al lado
 y haremos click en `Run Configurations...`:
@@ -148,6 +162,8 @@ Y, por último, en la nueva configuración apuntaremos hacia `bin/{name}.out` co
 en el ejemplo:
 
 ![project-07](/img/eclipse/project-07.png)
+
+:::
 
 ¡Y listo!
 
@@ -167,6 +183,7 @@ que se encuentra en la carpeta base del repo:
 ```bash
 # Eclipse files
 RemoteSystemsTempFiles/
+.metadata/
 .settings/
 .cproject
 .project
