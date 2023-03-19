@@ -149,7 +149,8 @@ Hay dos formas de incluir los headers de la biblioteca en nuestro código. La m�
 #include "../../utils/src/utils/hello.h"
 
 int main(void) {
-  return hello_world();
+  hello_world();
+  return 0;
 }
 ```
 
@@ -180,7 +181,8 @@ Por lo tanto, también podemos hacer el `#include` de esta forma:
 #include <utils/hello.h>
 
 int main(void) {
-  return hello_world();
+  hello_world();
+  return 0;
 }
 ```
 
