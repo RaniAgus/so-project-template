@@ -125,7 +125,7 @@ make clean all
 
 :::
 
-## Cierre
+## Próximos pasos
 
 Ya logramos inicializar el proyecto desde la consola, pero para empezar a
 desarrollar vamos a necesitar un IDE o editor de texto. En la próxima sección
