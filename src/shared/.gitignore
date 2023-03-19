@@ -5,8 +5,7 @@ obj/
 
 # Eclipse files
 RemoteSystemsTempFiles/
-Debug/
-Release/
+.metadata/
 .settings/
 .cproject
 .project

@@ -1,4 +1,6 @@
-
+# Eclipse files
+RemoteSystemsTempFiles/
+.metadata/
 
 # Prerequisites
 *.d
