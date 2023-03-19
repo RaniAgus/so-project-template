@@ -43,17 +43,17 @@ como código C (y no código C++, que es el valor por defecto):
 
 ```json
 {
+	"settings": {             // [!code ++]
+		"files.associations": { // [!code ++]
+			"*.h": "c",           // [!code ++]
+		},                      // [!code ++]
+	},                        // [!code ++]
 	"folders": [
 		{
 			"name": "nombre-del-proyecto",
 			"path": "nombre-del-proyecto"
 		},
-	],
-	"settings": { // [!code ++]
-		"files.associations": { // [!code ++]
-			"*.h": "c", // [!code ++]
-		}, // [!code ++]
-	} // [!code ++]
+	]
 }
 ```
 
