@@ -26,12 +26,12 @@ debugger integrado:
 
 Para importarlo, vamos a irnos a `File > Add Folder to Workspace...`
 
-![project-01](https://user-images.githubusercontent.com/39303639/197107912-7e2c49cc-efcb-45ef-8dce-c7b9c75c9027.png)
+![add-folder](/img/importar-proyecto/code-add-folder.png)
 
 Y seleccionaremos **la carpeta del proyecto**. Nos debe quedar algo parecido a
 esto:
 
-![project-02](/img/code/project-02.png)
+![explorer](/img/importar-proyecto/code-explorer.png)
 
 Luego, para guardar el workspace y contar con él para más adelante, vamos a ir
 a la opción `File > Save Workspace As...` y lo guardaremos en la carpeta raíz
@@ -71,8 +71,8 @@ Con esto ya podremos compilar el proyecto presionando `Ctrl+Shift+B` o
 a través de `Terminal > Run Build Task...`:
 
 
-![project-06](https://user-images.githubusercontent.com/39303639/197194695-9e079198-3313-42d9-a20e-ce04580f778f.png)
-![project-07](/img/code/project-07.png)
+![run-build-task](/img/importar-proyecto/code-run-build-task.png)
+![build](/img/importar-proyecto/code-build.png)
 
 ¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
 [agregar bibliotecas externas](./linkear-bibliotecas).
