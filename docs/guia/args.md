@@ -11,7 +11,7 @@ Es probable que para el TP requieran pasar argumentos a `main()` para, por
 ejemplo, parametrizar el archivo config que se va a utilizar:
 
 ```bash
-./bin/project.out project.config
+./bin/ejemplo.out ejemplo.config
 ```
 
 Y recibir el path hacia el archivo config en la función `config_create()`:
@@ -46,7 +46,7 @@ Debemos agregar los argumentos a la variable `ARGS` del archivo `settings.mk`:
 
 ```makefile
 # Arguments when executing with start, memcheck or helgrind
-ARGS=project.config
+ARGS=ejemplo.config
 ```
 
 Esto nos será útil para cuando querramos [ejecutar con Valgrind](./valgrind.md).

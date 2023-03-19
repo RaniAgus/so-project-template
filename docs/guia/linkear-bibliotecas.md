@@ -19,7 +19,7 @@ incluir el flag `-lcommons` para _linkear_ la biblioteca al momento de la
 compilación:
 
 ```bash
-gcc src/main.c -o bin/project.out -lcommons
+gcc src/main.c -o bin/ejemplo.out -lcommons
 ```
 
 Esto mismo lo podemos lograr usando el template agregando el nombre de cada

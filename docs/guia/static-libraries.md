@@ -23,7 +23,7 @@ Al igual que con un proyecto común, vamos a comenzar descargando un
 template en una carpeta con el nombre de nuestra static library de esta forma:
 
 ```bash-vue
-mkdir static && cd static
+mkdir utils && cd utils
 
 wget -qO- {{ repository }}/releases/download/v{{ version }}/static-v{{ version }}.tar.gz \
   | tar -xzvf - --strip-components 1
@@ -36,12 +36,12 @@ esta:
 
 ```
 repo
-├── project
+├── ejemplo
 │   ├── src
 │   │   └── main.c
 │   ├── makefile
 │   └── settings.mk
-└── static
+└── utils
     ├── src
     │   └── utils
     │       ├── hello.c
@@ -62,9 +62,9 @@ Aunque en este caso se generará un archivo de nombre
 `lib{nombre-de-la-biblioteca}.a` en la subcarpeta `bin`:
 
 ```
-static
+utils
 ├── bin
-│   └── libstatic.a
+│   └── libutils.a
 └── obj
     └── utils
         └── hello.o
@@ -97,7 +97,7 @@ importar la biblioteca en nuestro IDE o editor de texto de preferencia:
 Una vez hecho esto, deberemos incluir la biblioteca en la variable
 `LIBS` del archivo `settings.mk` al igual que con cualquier otra biblioteca:
 
-Sin embargo, aún no terminamos, ya que la biblioteca no está instalada, por lo\
+Sin embargo, aún no terminamos, ya que la biblioteca no está instalada, por lo
 que el [linker](https://linux.die.net/man/1/ld) (que es el programa encargado de
 ir a buscar esa biblioteca) no va a encontrar nuestro archivo `lib*.a` a menos
 que se lo indiquemos.
@@ -124,9 +124,9 @@ hacia el proyecto** (sin el `bin`) a la variable `STATIC_LIBPATHS` del archivo
 
 ```bash
 # Libraries
-LIBS=static commons
+LIBS=utils commons
 # Custom libraries' paths
-STATIC_LIBPATHS=../static
+STATIC_LIBPATHS=../utils
 ```
 
 ::: warning ADVERTENCIA
@@ -146,7 +146,7 @@ Hay dos formas de incluir los headers de la biblioteca en nuestro código. La m�
 "sucia" es utilizar rutas relativas entre comillas:
 
 ```c{1}
-#include "../../static/src/utils/hello.h"
+#include "../../utils/src/utils/hello.h"
 
 int main(void) {
   return hello_world();
@@ -189,7 +189,7 @@ int main(void) {
 El template permite agrupar el código en varias carpetas:
 
 ```
-static
+utils
  └── src
      ├── dto
      │   ├── handshake.c

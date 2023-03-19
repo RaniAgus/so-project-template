@@ -10,7 +10,7 @@ Primero, vamos a descargar el template en una carpeta con el nombre del
 proyecto:
 
 ```bash-vue
-mkdir project && cd project
+mkdir ejemplo && cd ejemplo
 
 wget -qO- {{ repository }}/releases/download/v{{ version }}/project-v{{ version }}.tar.gz \
   | tar -xzvf - --strip-components 1
@@ -89,15 +89,15 @@ $ ls -l bin src
 
 bin:
 total 20
--rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 project.out
--rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 project_tests.out
+-rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 ejemplo.out
+-rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 ejemplo_tests.out
 
 src:
 total 4
 -rw-rw-r-- 1 utnso utnso   118 Mar 12 11:22 main.c
 ```
 
-En este caso, se da cuenta que `project.out` fue modificado después que
+En este caso, se da cuenta que `ejemplo.out` fue modificado después que
 `main.c`, por lo que no hace falta recompilar.
 
 :::
@@ -108,7 +108,7 @@ Por último, para ejecutar el archivo compilado podemos ingresar
 `./bin/{nombre-del-proyecto}.out`:
 
 ```bash
-./bin/project.out
+./bin/ejemplo.out
 ```
 
 El cual nos mostrará el mensaje `Hello world!!`.

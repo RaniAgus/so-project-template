@@ -5,13 +5,13 @@
   "version": "0.2.0",
   "configurations": [
       {
-          "name": "(gdb) Launch",
+          "name": "run",
           "type": "cppdbg",
           "request": "launch",
-          "program": "${workspaceFolder}/bin/project.out",
-          "args": [
+          "program": "${workspaceFolder}/bin/${workspaceFolderBasename}.out",
+          "args": [ // [!code focus:4]
             // TODO: Agregar los argumentos que se necesiten // [!code --]
-            "project.config" // [!code ++]
+            "ejemplo.config" // [!code ++]
           ],
           "stopAtEntry": true,
           "cwd": "${workspaceFolder}",

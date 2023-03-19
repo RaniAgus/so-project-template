@@ -61,7 +61,7 @@ también `workspaceFolder`.
 permite conservar el output una vez que el proceso se cierre.
 - `preLaunchTask`: Que antes de ejecutar se compile el proyecto usando la tarea
 que creamos recién. Es muy importante usar el mismo campo `label` que hayamos
-elegido anteriormente (en nuestro caso, `make-project`).
+elegido para la task.
 
 ::: tip
 

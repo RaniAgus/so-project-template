@@ -12,7 +12,6 @@ cd so-deploy
 Para esto, usaremos los flags:
 
 - `-r=release` para compilar los proyectos con la regla `make release`.
-- `-d=<sharedlib>` para agregar una shared library.
 - `-p=<project|staticlib>` para agregar una static library o un proyecto.
 
 ::: tip
