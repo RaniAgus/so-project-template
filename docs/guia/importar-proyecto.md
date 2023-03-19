@@ -61,7 +61,7 @@ como código C (y no código C++, que es el valor por defecto):
 
 Si llegás a tener algún problema o querés saber más sobre cómo modificar la
 configuración de Visual Studio Code, te invitamos a revisar primero la
-[explicación detallada de cada archivo](./code).
+[explicación detallada de cada archivo](./avanzado/code).
 
 :::
 

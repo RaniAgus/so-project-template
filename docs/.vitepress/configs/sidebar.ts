@@ -44,7 +44,7 @@ export const sidebar = {
       items: [
         {
           text: 'Visual Studio Code',
-          link: '/guia/code'
+          link: '/guia/avanzado/code'
         },
         {
           text: 'Agregar Unit Testing',

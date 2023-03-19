@@ -9,7 +9,7 @@ asegurarnos que el workspace sea
 2. **Crear otro Makefile Project**
 
 Luego, vamos a crear un nuevo Makefile Project de la misma forma que hicimos con
-el [otro proyecto](./project.md#crear-un-makefile-project). Debe quedar así:
+el [otro proyecto](./importar-proyecto#eclipse). Debe quedar así:
 
 ![static-01](/img/eclipse/static-01.png)
 
