@@ -1,6 +1,9 @@
 # so-project-template
+
 Template para facilitar la creación de proyectos en C con una biblioteca
 compartida.
+
+![meme](https://raniagus.github.io/so-project-template/img/meme.png)
 
 ## Tan simple como...
 
@@ -9,7 +12,7 @@ compartida.
 mkdir project && cd project
 
 # descargar el template
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v3.1.1/project-v3.1.1.tar.gz \
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v4.0.0/project-v4.0.0.tar.gz \
   | tar -xzvf - --strip-components 1
 
 # compilar con make
@@ -21,7 +24,7 @@ make
 
 Para agregar bibliotecas, compartir código entre proyectos, importar en
 Eclipse o Visual Studio Code y otras features, consultar la
-[guía de uso](https://raniagus.github.io/so-project-template-guide/).
+[guía de uso](https://raniagus.github.io/so-project-template/).
 
 
 ## Contacto
