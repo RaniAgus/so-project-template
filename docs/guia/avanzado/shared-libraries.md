@@ -1,5 +1,5 @@
 <script setup>
-import { version } from '../../package.json'
+import { repository, version } from '../../package.json'
 </script>
 
 # Shared Libraries
@@ -56,7 +56,7 @@ biblioteca compartida:
 ```bash-vue
 mkdir shared && cd shared
 
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/shared-v{{version}}.tar.gz \
+wget -qO- {{ repository }}/releases/download/v{{ version }}/shared-v{{ version }}.tar.gz \
   | tar -xzvf - --strip-components 1
 ```
 

@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/../static/include"
+                "${workspaceFolder}/../static/include" // [!code ++]
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

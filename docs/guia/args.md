@@ -1,5 +1,12 @@
 # Pasar argumentos a `main()`
 
+::: tip
+
+Antes de continuar, te recomiendo haber leído primero la guía de
+[Argumentos para el main](https://docs.utnso.com.ar/guias/programacion/main).
+
+:::
+
 Es probable que para el TP requieran pasar argumentos a `main()` para, por
 ejemplo, parametrizar el archivo config que se va a utilizar:
 
@@ -12,7 +19,7 @@ Y recibir el path hacia el archivo config en la función `config_create()`:
 <<< @/snippets/guia/args/args.c{11}
 
 Sin embargo, para poder ejecutar el programa con todos sus parámetros desde un
-IDE o al hacer uso de los [comandos para valgrind](./valgrind) vamos a
+IDE o al hacer uso de los [comandos para Valgrind](./valgrind) vamos a
 necesitar entrar a la configuración de ejecución.
 
 ## Ejecutar desde Eclipse
@@ -28,10 +35,10 @@ donde vamos a poner nuestros argumentos separados por espacios:
 
 ## Ejecutar desde Visual Studio Code
 
-Vamos a editar la variable `args` del archivo `launch.json`, en donde vamos a
-poner nuestra lista de argumentos en formato de array de strings:
+Vamos a buscar la variable `args` del archivo `launch.json`, y vamos a editar la
+lista de argumentos en formato de array de strings de la siguiente forma:
 
-<<< @/snippets/guia/args/launch.json{12}
+<<< @/snippets/guia/args/launch.json
 
 ## Ejecutar desde la consola
 
@@ -42,4 +49,4 @@ Debemos agregar los argumentos a la variable `ARGS` del archivo `settings.mk`:
 ARGS=project.config
 ```
 
-Para más info podés visitar la [guía de uso de Valgrind](./valgrind.md).
+Esto nos será útil para cuando querramos [ejecutar con Valgrind](./valgrind.md).

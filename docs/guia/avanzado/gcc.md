@@ -1,4 +1,4 @@
-# Configurar `gcc`
+# Configurar el compilador
 
 Se puede cambiar los flags que se le pasen a `gcc` editando dos variables que
 pertenecen a configuraciones distintas (una para el desarrollo y otra para la

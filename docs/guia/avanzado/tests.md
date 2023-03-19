@@ -1,127 +1,35 @@
-<script setup>
-import { version } from '../../../package.json'
-</script>
-
-# Agregar tests unitarios
+# Agregar Unit Testing
 
 Si bien no es obligatorio agregar tests unitarios al código del TP, contar con
 ellos nos puede ahorrar un montón de tiempo a la hora de validar que los módulos
 cumplan con el comportamiento esperado, sobre todo cuando toca agregar
 funcionalidades nuevas sobre código ya probado.
 
-Es por eso que también se incluye, entre los templates, uno que permite testear
-**cualquier** tipo de proyecto del TP (ya sea un módulo o una biblioteca).
-
-## Crear el proyecto
-
-Para crear un proyecto de tests unitarios, primero podés decidir en qué carpeta
-crearlo. Se sugieren dos opciones:
-
-### Opción 1: en una subcarpeta `tests` dentro de cada proyecto o biblioteca
-
-Esta configuración es recomendada para Visual Studio Code, ya que no requiere
-importar nuevas carpetas al workspace y se pueden crear tasks para, por ejemplo,
-correr los tests antes de ejecutar.
-
-```bash
-project
-├── bin
-│   └── project.out
-├── include
-├── makefile
-├── settings.mk
-├── src
-│   └── main.c
-└── tests # <-- Acá
-```
-
-```bash
-mkdir project/tests && cd project/tests
-```
-### Opción 2: en una carpeta aparte del repo
-
-Esta configuración es recomendada para Eclipse, ya que al importar desde
-Makefile se evita contar con archivos repetidos en un mismo workspace.
-
-```bash
-.
-├── project
-│   ├── bin
-│   │   └── project.out
-│   ├── include
-│   ├── makefile
-│   ├── settings.mk
-│   └── src
-│       └── main.c
-└── tests
-    ├── project-tests # <-- Acá
-    └── ...
-```
-
-```bash
-mkdir tests tests/project-tests && cd tests/project-tests
-```
-
-## Descargar el template
-
-```bash-vue
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/tests-v{{version}}.tar.gz \
-  | tar -xzvf - --strip-components 1
-```
-```
-tests
-├── include
-│   └── .gitkeep
-├── src
-│   └── example.c
-├── makefile
-└── settings.mk
-```
-
-## Configurar el template
-
-### Especificar en qué ruta se encuentra el proyecto a testear
-
-Opción 1:
-```makefile
-# Original project path
-PROJ_PATH=..
-```
-
-Opción 2:
-```makefile
-# Original project path
-PROJ_PATH=../../project
-```
-
-### Configurar las bibliotecas
-
-Además de incluir las bibliotecas que usa el proyecto original, acá podés
-especificar qué biblioteca o framework vas a usar.
-
-En este caso lo vamos a configurar para
+Es por eso que también se incluye, entre los templates, una carpeta en donde
+guardar nuestros tests unitarios utilizando el framework
 [CSpec](https://docs.utnso.com.ar/guias/herramientas/cspec).
 
-```makefile
-# Libraries
-LIBS=cspecs
+::: warning
 
-# Custom libraries' paths
-SHARED_LIBPATHS=
-STATIC_LIBPATHS=
-```
+Sin embargo, en caso de no contar con experiencia previa desarrollando tests
+unitarios, desaconsejamos continuar con esta guía.
+
+:::
+
+## Configuración del template
 
 ### Excluir archivos fuente
 
-Por último, en caso de que estemos testeando un módulo con una función `main()`,
-debemos configurar el makefile para que excluya este archivo:
+En caso de que estemos testeando un módulo con una función `main()`,
+debemos configurar el makefile para que excluya todo el código de este archivo:
 
 ```makefile
 # Excluded source files (eg: main() function)
 EXCLUDE=main.c
 ```
 
-Ya que, de otra forma, nos va a parecer el error:
+Ya que, de otra forma, nos va a parecer el error debido a que CSpec define su
+propio `main()` para funcionar:
 
 ```
 error: redefinition of 'main'
@@ -140,7 +48,17 @@ En general es una buena práctica que el archivo fuente que contiene la función
 aplicación, delegando cada tarea a otras funciones de otros archivos fuente, que
 sí van a estar disponibles para ser testeadas.
 
-## Compilar el proyecto
+## Ejecutar el proyecto
 
-Un proyecto de tests tiene las mismas features para compilar y ejecutar que un
-proyecto común (`all`, `watch`, `start`, `memcheck`, `helgrind` y `daemon`).
+- Desde Visual Studio Code: ya contamos con la configuración necesaria para
+ejecutarlo, simplemente elegimos la alternativa `test` entre las opciones.
+
+- Desde Eclipse: hacemos click derecho sobre el ejecutable y seleccionamos
+`Run As...` > `Local C/C++ Application`.
+
+## Valgrind
+
+Para utilizar Valgrind, desde la consola podemos ejecutar:
+- `make test`: Para correr los tests con Nulgrind.
+- `make test-memcheck`: Para correr los tests con Valgrind Memcheck.
+- `make test-helgrind`: Para correr los tests con Helgrind.

@@ -31,5 +31,5 @@ sobre otra ruta. Recomiendo revisar el
   -d=matelib                      `# Instalar la shared library 'matelib'` \
   -p=sockets                      `# Compilar la static library 'sockets'` \
   -p=consola -p=kernel -p=memoria `# Compilar los proyectos 'consola', "kernel' y 'memoria'` \
-  tp-2021-2c-carpinchOS           `# Clonar el repo sisoputnfrba/tp-2021-2c-carpinchOS`
+  tp-2022-2c-geck                 `# Clonar el repo sisoputnfrba/tp-2021-2c-carpinchOS`
 ```

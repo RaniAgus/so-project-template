@@ -9,7 +9,10 @@
           "type": "cppdbg",
           "request": "launch",
           "program": "${workspaceFolder}/bin/project.out",
-          "args": [ "project.config" ],
+          "args": [
+            // TODO: Agregar los argumentos que se necesiten // [!code --]
+            "project.config" // [!code ++]
+          ],
           "stopAtEntry": true,
           "cwd": "${workspaceFolder}",
           "environment": [],

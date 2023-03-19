@@ -3,6 +3,7 @@
   // for the documentation about the launch.json format
   "version": "0.2.0",
   "configurations": [
+    // #region run
     {
       "name": "run",
       "type": "cppdbg",
@@ -25,6 +26,7 @@
       ],
       "preLaunchTask": "build"
     },
+    // #endregion run
     {
       "name": "test",
       "type": "cppdbg",

@@ -1,5 +1,5 @@
 <script setup>
-import { version } from '../../package.json'
+import { repository, version } from '../../package.json'
 </script>
 
 # Primeros pasos
@@ -12,7 +12,7 @@ proyecto:
 ```bash-vue
 mkdir project && cd project
 
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/project-v{{version}}.tar.gz \
+wget -qO- {{ repository }}/releases/download/v{{ version }}/project-v{{ version }}.tar.gz \
   | tar -xzvf - --strip-components 1
 ```
 
@@ -21,24 +21,25 @@ wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{v
 Se va a descargar la estructura de archivos mínima para crear un "hello world":
 
 ```bash
-project
-├── include
-│   └── .gitkeep
+.
+├── makefile
+├── settings.mk
 ├── src
 │   └── main.c
-├── makefile
-└── settings.mk
+└── tests
+    └── example_test.c
 ```
 
 Una breve explicación de los archivos que hay en ella:
 
-| Archivo/Carpeta | Descripción                                                                                                                                          |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `./src/`        | Carpeta en donde vamos a dejar todos los archivos fuente (.c) del proyecto                                                                           |
-| `./src/main.c`  | Archivo fuente en donde se encuentra la función `main` del proyecto                                                                                  |
-| `./include/`    | Acá vamos a dejar todos los headers (.h) del proyecto (más adelante veremos cómo [separar el código en múltiples archivos](./multiples-archivos.md)) |
-| `./makefile`    | Makefile utilizado para compilar el proyecto                                                                                                         |
-| `./settings.mk` | Configuración extra del proyecto (aprenderemos más a lo largo de la guía)                                                                            |
+| Archivo/Carpeta          | Descripción                                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| `./makefile`             | Makefile utilizado para compilar el proyecto                                        |
+| `./settings.mk`          | Configuración extra del proyecto (aprenderemos más a lo largo de la guía)           |
+| `./src/`                 | Carpeta en donde vamos a dejar todos los archivos fuente (.c y .h) del proyecto     |
+| `./src/main.c`           | Archivo fuente en donde se encuentra la función `main` del proyecto                 |
+| `./tests/`               | Acá vamos a dejar todos unit tests del proyecto (más adelante veremos cómo hacerlo) |
+| `./tests/example_test.c` | Un unit test a modo de ejemplo, podemos ignorarlo por ahora                         |
 
 ## Compilación
 
@@ -51,9 +52,10 @@ make
 Lo cual creará dos directorios con archivos dentro:
 
 ```
-project
+.
 ├── bin
-│   └── project.out
+│   ├── {nombre-del-proyecto}.out
+│   └── {nombre-del-proyecto}_tests.out
 └── obj
     └── main.o
 ```
@@ -61,7 +63,7 @@ project
 | Directorio | Descripción                                                                                                                     |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `./obj/`   | Para cada archivo fuente en `src` se va a generar un objeto en código assembly con fines de acelerar el proceso de compilación. |
-| `./bin/`   | El compilador guarda aquí el ejecutable final.                                                                                  |
+| `./bin/`   | El compilador guarda aquí el ejecutable final y el ejecutable de los unit tests.                                                |
 
 ::: tip
 
@@ -81,6 +83,7 @@ $ ls -l bin src
 bin:
 total 20
 -rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 project.out
+-rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 project_tests.out
 
 src:
 total 4
@@ -94,8 +97,8 @@ En este caso, se da cuenta que `project.out` fue modificado después que
 
 ## Ejecución
 
-Por último, para ejecutar el archivo compilado podemos hacer
-`./bin/{name}.out`:
+Por último, para ejecutar el archivo compilado podemos ingresar
+`./bin/{nombre-del-proyecto}.out`:
 
 ```bash
 ./bin/project.out
@@ -122,54 +125,8 @@ make clean all
 
 :::
 
-## Importar el proyecto en un IDE o Editor de Texto
+## Cierre
 
-Antes de continuar con la guía, probablemente quieras importar el proyecto en un
-IDE o en un Editor de Texto. En esta página podrás encontrar guías para
-importarlo en:
-
-- [Eclipse IDE (recomendado)](./eclipse/project.md)
-- [Visual Studio Code](./code/project.md)
-
-## Agregar bibliotecas
-
-Para acceder a funciones de algunas bibliotecas (como las `commons`, `pthread` o
-`readline`) hace falta avisarle al
-[linker](https://linux.die.net/man/1/ld) que las vincule al momento de compilar.
-
-Por ejemplo, si intentamos compilar este código:
-
-<<< @/snippets/guia/primeros-pasos/commons.c{3}
-
-Nos aparecerá el error:
-
-```bash
-undefined reference to 'commons'
-```
-
-La solución es agregar la biblioteca a la variable
-`LIBS` del archivo `settings.mk`.
-
-```bash
-# Libraries
-LIBS=commons
-```
-
-Lo cual hará que se incluya el flag `-lcommons` al comando `gcc` al momento de
-compilar el proyecto.
-
-::: tip ¿Cómo funciona el flag "-l"?
-
-Por defecto, el linker solamente va a buscar bibliotecas en las siguientes tres
-rutas:
-
-```
-/lib
-/usr/lib
-/usr/local/lib
-```
-
-Se pueden agregar más rutas pasándole a `gcc` el flag `-L{path}` o editando la
-variable de entorno `LIBRARY_PATH`.
-
-:::
+Ya logramos inicializar el proyecto desde la consola, pero para empezar a
+desarrollar vamos a necesitar un IDE o editor de texto. En la próxima sección
+veremos las alternativas más recomendables.

@@ -9,6 +9,14 @@ export const sidebar = {
           link: '/guia/'
         },
         {
+          text: 'Importar el proyecto',
+          link: '/guia/importar-proyecto'
+        },
+        {
+          text: 'Agregar bibliotecas',
+          link: '/guia/linkear-bibliotecas'
+        },
+        {
           text: 'Usar múltiples archivos',
           link: '/guia/multiples-archivos'
         },
@@ -31,59 +39,30 @@ export const sidebar = {
       ]
     },
     {
-      text: 'Eclipse',
-      collapsible: true,
-      items: [
-        {
-          text: 'Importar un proyecto',
-          link: '/guia/eclipse/project'
-        },
-        {
-          text: 'Importar una biblioteca',
-          link: '/guia/eclipse/static'
-        },
-      ]
-    },
-    {
-      text: 'Visual Studio Code',
-      collapsible: true,
-      items: [
-        {
-          text: 'Importar un proyecto',
-          link: '/guia/code/project'
-        },
-        {
-          text: 'Incluir código de otros archivos',
-          link: '/guia/code/include'
-        },
-        {
-          text: 'Importar una biblioteca',
-          link: '/guia/code/static'
-        },
-      ]
-    },
-    {
       text: 'Features avanzadas',
       collapsible: true,
       items: [
         {
-          text: 'Shared Libraries',
-          link: '/guia/shared-libraries'
+          text: 'Visual Studio Code',
+          link: '/guia/code'
         },
+        {
+          text: 'Agregar Unit Testing',
+          link: '/guia/avanzado/tests'
+        },
+        {
+          text: 'Configurar el compilador',
+          link: '/guia/avanzado/gcc'
+        },
+        // {
+        //   text: 'Shared Libraries',
+        //   link: '/guia/avanzado/shared-libraries'
+        // },
         {
           text: 'Escuchar cambios en el código',
           link: '/guia/avanzado/escuchar-cambios'
         },
-        {
-          text: 'Agregar tests unitarios',
-          link: '/guia/avanzado/tests'
-        },
-        {
-          text: 'Configurar gcc',
-          link: '/guia/avanzado/gcc'
-        },
       ],
     },
   ],
-  '/comandos/': []
 };

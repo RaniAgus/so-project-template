@@ -25,15 +25,28 @@ reutilizar la misma lógica que usamos para crear a `messi`.
 
 ## Crear un header
 
-Para esto, primero crearemos un header en `/include`:
+Para esto, primero crearemos un header en la carpeta `src/` con nuestro editor
+favorito o desde la consola ejecutando:
 
 ```bash
-touch include/persona.h
+touch src/persona.h
 ```
 
 En él vamos a guardar los prototipos de las funciones del nuevo TAD `t_persona`:
 
 <<< @/snippets/guia/multiples-archivos/persona.h{c}
+
+::: tip
+
+Nótese que definimos al tipo `t_persona` como un `struct persona` pero no
+expusimos los atributos que lo conforman.[^1]
+
+Si bien esto es completamente opcional, si en Paradigmas vieron el concepto de
+[encapsulamiento](https://es.wikipedia.org/wiki/Encapsulamiento_(inform%C3%A1tica)),
+esta es la forma más parecida de lograrlo en C, ya que impedimos que quienes
+incluyan este header manipulen los atributos del `struct` directamente.
+
+:::
 
 ## Crear un archivo fuente
 
@@ -43,8 +56,8 @@ Luego, crearemos un archivo fuente:
 touch src/persona.c
 ```
 
-Y moveremos ahí la implementación de ese tipo abstracto de dato, junto con todas
-las bibliotecas que necesita.
+Y moveremos ahí la implementación de ese TAD, junto con todas las bibliotecas
+que necesita.
 
 <<< @/snippets/guia/multiples-archivos/persona.c{1}
 
@@ -56,7 +69,7 @@ principio.
 Los makefiles, por defecto, incluyen el flag `-I./include` a la hora de compilar
 el proyecto con `gcc`. De esta forma, se puede incluir cualquier header que se
 encuentre en esa carpeta y sus subcarpetas utilizando corchetes angulares
-`< >`.
+`< >` como en el ejemplo de arriba.
 
 Sin este flag, también se podría lograr el mismo resultado utilizando rutas
 relativas entre comillas:
@@ -95,25 +108,13 @@ permite crear nuevas instancias de `t_persona` en el proyecto de forma más
 sencilla.
 
 ```
-project
-├── include
-│   └── persona.h
-├── src
-│   ├── main.c
-│   └── persona.c
-├── makefile
-└── settings.mk
+.
+└── src
+    ├── main.c
+    ├── persona.c
+    └── persona.h
 ```
 
-::: warning Si estás usando Visual Studio Code...
-
-Es probable que el autocompletado no reconozca las funciones que están en
-`persona.h` y aparezca el warning:
-
-```
-#include errors detected. Please update your includePath.
-```
-
-Podés solucionar esto revisando [esta guía](code/include.md).
-
-:::
+[^1]: Esta forma de declarar tipos de conoce como _Opaque Types_, si quieren
+entrar más en detalle les recomendamos
+[este video (en inglés)](https://www.youtube.com/watch?v=TsUOhPsZk6k).

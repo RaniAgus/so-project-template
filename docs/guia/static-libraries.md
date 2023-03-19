@@ -1,5 +1,5 @@
 <script setup>
-import { version } from '../../package.json'
+import { repository, version } from '../../package.json'
 </script>
 
 # Código común entre proyectos
@@ -25,7 +25,7 @@ template en una carpeta con el nombre de nuestra static library de esta forma:
 ```bash-vue
 mkdir static && cd static
 
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v{{version}}/static-v{{version}}.tar.gz \
+wget -qO- {{ repository }}/releases/download/v{{ version }}/static-v{{ version }}.tar.gz \
   | tar -xzvf - --strip-components 1
 ```
 
@@ -37,18 +37,15 @@ esta:
 ```
 repo
 ├── project
-│   ├── include
 │   ├── src
 │   │   └── main.c
 │   ├── makefile
 │   └── settings.mk
-└─── static
-    ├── include
-    │   └── utils
-    │       └── hello.h
+└── static
     ├── src
     │   └── utils
-    │       └── hello.c
+    │       ├── hello.c
+    │       └── hello.h
     ├── makefile
     └── settings.mk
 ```
@@ -61,8 +58,8 @@ Para compilarla, también ejecutaremos:
 make
 ```
 
-Aunque en este caso se generará un archivo de nombre `lib{nombre}.a` en
-la subcarpeta `bin`:
+Aunque en este caso se generará un archivo de nombre
+`lib{nombre-de-la-biblioteca}.a` en la subcarpeta `bin`:
 
 ```
 static
@@ -78,27 +75,32 @@ como veremos en la siguiente sección.
 
 ## Agregar una static library en un proyecto existente
 
-::: warning Antes de continuar...
+### Linkear en el IDE o Editor de Texto
 
-Es posible que quieras importar la biblioteca en tu IDE o Editor de Texto:
+Antes de continuar con la configuración, necesitaremos
+importar la biblioteca en nuestro IDE o editor de texto de preferencia:
 
-- [Guía para Eclipse](./eclipse/static.md)
-- [Guía para Visual Studio Code](./code/static.md)
+::: details Guía para Visual Studio Code
 
-No te preocupes por salir, al final de cada guía hay un link para volver acá
-:smile:.
+<!--@include: ./static-code.md-->
+
+:::
+
+::: details Guía para Eclipse
+
+<!--@include: ./static-eclipse.md-->
 
 :::
 
 ### Linkear en la configuración
 
-Al igual que con cualquier biblioteca, agregaremos su nombre a la variable
-`LIBS`.
+Una vez hecho esto, deberemos incluir la biblioteca en la variable
+`LIBS` del archivo `settings.mk` al igual que con cualquier otra biblioteca:
 
-Sin embargo, aún no terminamos, ya que el
-[linker](https://linux.die.net/man/1/ld) (que es el programa encargado de ir a
-buscar esa biblioteca) no va a encontrar nuestro archivo `lib*.a` a menos que se
-lo indiquemos.
+Sin embargo, aún no terminamos, ya que la biblioteca no está instalada, por lo\
+que el [linker](https://linux.die.net/man/1/ld) (que es el programa encargado de
+ir a buscar esa biblioteca) no va a encontrar nuestro archivo `lib*.a` a menos
+que se lo indiquemos.
 
 ::: tip ¿Cómo funciona el flag "-l"?
 
