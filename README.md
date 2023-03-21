@@ -1,7 +1,6 @@
 # so-project-template
 
-Template para facilitar la creación de proyectos en C con una biblioteca
-compartida.
+Templates para facilitar la creación de proyectos en Lenguaje C.
 
 ![meme](https://raniagus.github.io/so-project-template/img/meme.png)
 
