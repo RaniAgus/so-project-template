@@ -7,8 +7,8 @@ Templates para facilitar la creación de proyectos en Lenguaje C.
 ## Tan simple como...
 
 ```bash
-# crear una carpeta con el nombre del proyecto (ej: "project")
-mkdir project && cd project
+# crear una carpeta con el nombre del proyecto
+mkdir mi-nuevo-proyecto && cd mi-nuevo-proyecto
 
 # descargar el template
 wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v4.0.0/project-v4.0.0.tar.gz \
@@ -17,8 +17,8 @@ wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v4.0
 # compilar con make
 make
 
-# ejecutar ./bin/{nombre}.out
-./bin/project.out
+# ejecutar
+./bin/mi-nuevo-proyecto.out
 ```
 
 Para agregar bibliotecas, compartir código entre proyectos, importar en
