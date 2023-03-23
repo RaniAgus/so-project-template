@@ -43,11 +43,11 @@ como código C (y no código C++, que es el valor por defecto):
 
 ```json
 {
-	"settings": {             // [!code ++]
+	"settings": { // [!code ++]
 		"files.associations": { // [!code ++]
-			"*.h": "c",           // [!code ++]
-		},                      // [!code ++]
-	},                        // [!code ++]
+			"*.h": "c", // [!code ++]
+		}, // [!code ++]
+	}, // [!code ++]
 	"folders": [
 		{
 			"name": "nombre-del-proyecto",
@@ -74,9 +74,6 @@ a través de `Terminal > Run Build Task...`:
 ![run-build-task](/img/importar-proyecto/code-run-build-task.png)
 ![build](/img/importar-proyecto/code-build.png)
 
-¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
-[agregar bibliotecas externas](./linkear-bibliotecas).
-
 ### Cómo ejecutar
 
 Para ejecutar el proyecto, nos movemos hacia la pestaña de `Run and Debug`,
@@ -92,8 +89,10 @@ ejecutar.
 
 :::
 
-## Eclipse
+¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
+[agregar bibliotecas externas](./linkear-bibliotecas).
 
+## Eclipse
 
 ### Configurar el Workspace
 
