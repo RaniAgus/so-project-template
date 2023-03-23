@@ -31,7 +31,7 @@ export default defineConfig({
       },
     ],
     editLink: {
-      pattern: `${repository}/edit/main/src/:path`,
+      pattern: `${repository}/edit/main/docs/:path`,
       text: 'Editar esta página en GitHub',
     },
     docFooter: {
