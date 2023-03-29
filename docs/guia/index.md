@@ -18,6 +18,9 @@ make
 sudo make install
 ```
 
+Esto tenés que hacerlo una sola vez por máquina. Si ya lo tenés
+instalado, no hace falta volver a ejecutar estos comandos. :smile:
+
 ## Inicialización
 
 Primero, vamos a descargar el template en una carpeta con el nombre del
