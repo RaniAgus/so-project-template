@@ -18,6 +18,20 @@ unitarios, desaconsejamos continuar con esta guía.
 
 ## Configuración del template
 
+### Instalar CSpec
+
+Para instalar CSpec, ejecutá en una terminal los siguientes comandos:
+
+```bash
+git clone https://github.com/mumuki/cspec.git
+cd cspec
+make
+sudo make install
+```
+
+Esto hará que se habiliten automáticamente todas las funcionalidades de testing
+dentro de los templates.
+
 ### Excluir archivos fuente
 
 En caso de que estemos testeando un módulo con una función `main()`,
