@@ -24,6 +24,15 @@ debugger integrado:
 └── tasks.json
 ```
 
+::: warning
+
+Si llegás a tener algún problema a lo largo de esta guía o querés saber más
+sobre cómo modificar la configuración de Visual Studio Code, te invitamos a
+revisar primero la
+[explicación detallada de cada archivo](./avanzado/code).
+
+:::
+
 Para importarlo, vamos a irnos a `File > Add Folder to Workspace...`
 
 ![add-folder](/img/importar-proyecto/code-add-folder.png)
@@ -38,8 +47,7 @@ a la opción `File > Save Workspace As...` y lo guardaremos en la carpeta raíz
 del repositorio donde se encuentre el proyecto.
 
 Por último, al archivo `*.code-workspace` recién creado le agregaremos la
-siguiente configuración para que el editor reconozca todos los archivos `*.h`
-como código C (y no código C++, que es el valor por defecto):
+siguiente configuración:
 
 ```json
 {
@@ -47,6 +55,7 @@ como código C (y no código C++, que es el valor por defecto):
 		"files.associations": { // [!code ++]
 			"*.h": "c", // [!code ++]
 		}, // [!code ++]
+		"C_Cpp.errorSquiggles": "disabled", // [!code ++]
 	}, // [!code ++]
 	"folders": [
 		{
@@ -57,13 +66,15 @@ como código C (y no código C++, que es el valor por defecto):
 }
 ```
 
-::: warning
+- `files.associations` nos sirve para que el editor reconozca todos los
+   archivos `*.h` como código C (y no código C++, que es el valor por defecto).
 
-Si llegás a tener algún problema o querés saber más sobre cómo modificar la
-configuración de Visual Studio Code, te invitamos a revisar primero la
-[explicación detallada de cada archivo](./avanzado/code).
-
-:::
+- `C_Cpp.errorSquiggles` nos permite deshabilitar algunos mensajes de error que
+   nos pueden llegar a aparecer por utilizar algunas features de `gcc` que no
+   forman parte del estándar de C[^1], como por ejemplo las
+   [nested functions](https://www.youtube.com/watch?v=1kYyxZXGjp0). Además,
+   esto permite que el editor tome en cuenta solo los errores al compilar, que
+   son los verdaderamente importantes.
 
 ### Cómo compilar
 
@@ -91,6 +102,7 @@ ejecutar.
 
 ¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
 [agregar bibliotecas externas](./linkear-bibliotecas).
+
 
 ## Eclipse
 
@@ -194,3 +206,7 @@ generados por Eclipse no van a estar disponibles para ser agregados con
 
 ¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
 [agregar bibliotecas externas](./linkear-bibliotecas).
+
+[^1]: Existe una feature request al respecto en el repo de Visual Studio Code,
+  les invitamos a dar su +1 para que se pueda incorporar esta feature en un
+  futuro: [microsoft/vscode-cpptools#1035](https://github.com/microsoft/vscode-cpptools/issues/1035)
