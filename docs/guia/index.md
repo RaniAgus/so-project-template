@@ -4,6 +4,20 @@ import { repository, version } from '../../package.json'
 
 # Primeros pasos
 
+## Dependencias
+
+Antes de empezar a utilizar los templates, necesitaremos instalar un framework
+de Unit Testing llamado [CSpec](https://github.com/mumuki/cspec).
+
+Para instalarlo, ejecutá en una terminal los siguientes comandos:
+
+```bash
+git clone https://github.com/mumuki/cspec.git
+cd cspec
+make
+sudo make install
+```
+
 ## Inicialización
 
 Primero, vamos a descargar el template en una carpeta con el nombre del
