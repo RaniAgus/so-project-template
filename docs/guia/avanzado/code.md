@@ -17,7 +17,11 @@ guardar tareas para compilar nuestro proyecto ejemplo usando `make all`.
 
 El mismo cuenta con una task especificando lo siguiente:
 
+::: code-group
+
 <<< @/../src/project/.vscode/tasks.json#build{json:line-numbers}
+
+:::
 
 - `label`: El nombre de la tarea, para poder identificarla.
 - `command`: Que el comando a ejecutar sea `make all`, partiendo desde la
@@ -40,7 +44,11 @@ Para saber más sobre cómo configurar el archivo `tasks.json`, podés revisar l
 La configuración del debugger se encuentra dentro del archivo `launch.json`, en
 el cual se indica, entre otras cosas:
 
-<<< @/../src/project/.vscode/launch.json#run{2,5,6-8,9,10,12,21 json:line-numbers}
+::: code-group
+
+<<< @/../src/project/.vscode/launch.json#run{json:line-numbers}
+
+:::
 
 - `name`: El nombre de la configuración, que será el mismo que nos aparece a la
 derecha en la sección `Run and Debug`, seguido por el nombre del proyecto entre
@@ -78,7 +86,11 @@ Por último, el
 también cuenta con sus configuraciones extra para que el corrector detecte
 posibles bugs. Veamos cómo está conformado `c_cpp_properties.json`:
 
+::: code-group
+
 <<< @/../src/project/.vscode/c_cpp_properties.json{7-10 json:line-numbers}
+
+:::
 
 Entre todos los atributos que se encuentran ahí, el único que nos va a interesar
 es el `includePath`.

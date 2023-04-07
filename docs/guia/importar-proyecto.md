@@ -43,13 +43,35 @@ esto:
 ![explorer](/img/importar-proyecto/code-explorer.png)
 
 Luego, para guardar el workspace y contar con él para más adelante, vamos a ir
-a la opción `File > Save Workspace As...` y lo guardaremos en la carpeta raíz
-del repositorio donde se encuentre el proyecto.
+a la opción `File > Save Workspace As...` y lo guardaremos en **la carpeta raíz
+del repositorio** donde se encuentren todos los proyectos, ejemplo:
 
-Por último, al archivo `*.code-workspace` recién creado le agregaremos la
+```
+.
+├── tp.code-workspace
+├── client
+│   ├── makefile
+│   ├── settings.mk
+│   ├── .vscode
+│   │   └── ...
+│   └── src
+│       └── ...
+├── server
+│   ├── makefile
+│   ├── settings.mk
+│   ├── .vscode
+│   │   └── ...
+│   └── src
+│       └── ...
+└── ...
+```
+
+Por último, al archivo `tp.code-workspace` recién creado le agregaremos la
 siguiente configuración:
 
-```json
+::: code-group
+
+```json:line-numbers [tp.code-workspace]
 {
 	"settings": { // [!code ++]
 		"files.associations": { // [!code ++]
@@ -59,8 +81,12 @@ siguiente configuración:
 	}, // [!code ++]
 	"folders": [
 		{
-			"name": "nombre-del-proyecto",
-			"path": "nombre-del-proyecto"
+			"name": "client",
+			"path": "client"
+		},
+		{
+			"name": "server",
+			"path": "server"
 		},
 	]
 }

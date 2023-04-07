@@ -42,7 +42,11 @@ donde vamos a poner nuestros argumentos separados por espacios:
 Vamos a buscar la variable `args` del archivo `launch.json`, y vamos a editar la
 lista de argumentos en formato de array de strings de la siguiente forma:
 
-<<< @/snippets/guia/args/launch.json
+::: code-group
+
+<<< @/snippets/guia/args/launch.json {json:line-numbers}
+
+:::
 
 ## Ejecutar desde la consola
 

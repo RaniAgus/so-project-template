@@ -82,7 +82,21 @@ importar la biblioteca en nuestro IDE o editor de texto de preferencia:
 
 ::: details Guía para Visual Studio Code
 
-<!--@include: ./static-code.md-->
+1. Al igual que con cualquier otro proyecto, nos iremos a
+`Archivo > Agregar carpeta al área de trabajo...` y seleccionaremos **la carpeta
+de la biblioteca**. Nos va a quedar algo parecido a esto:
+
+![explorer](/img/static/code-explorer.png)
+
+2. Por último, vamos a editar el `includePath` **del proyecto que usa la
+biblioteca** para que el autocompletado reconozca las funciones que se
+encuentran allí:
+
+::: code-group
+
+<<< @/snippets/guia/code/c_cpp_properties.json {json:line-numbers}
+
+¡Y listo! Ya podemos continuar con el tutorial
 
 :::
 
