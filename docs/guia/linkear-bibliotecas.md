@@ -6,7 +6,11 @@ las vincule al momento de compilar.
 
 Por ejemplo, si intentamos compilar este código:
 
-<<< @/snippets/guia/primeros-pasos/commons.c{3}
+::: code-group
+
+<<< @/snippets/guia/primeros-pasos/commons.c{3 c:line-numbers} [main.c]
+
+:::
 
 Nos aparecerá el error:
 
@@ -52,6 +56,6 @@ editando la variable de entorno[^1] `LIBRARY_PATH`.
 
 :::
 
-[^1]: _"Pero.. ¿qué diablos es una variable de entorno?"_ No te
-preocupes, podés encontrar una explicación simple en nuestra
+[^1]: Si te estás preguntando: _"¿y qué c&@$#/°s es una variable de entorno?"_
+No te preocupes, podés encontrar una explicación simple en nuestra
 [guía de Bash](https://docs.utnso.com.ar/guias/consola/bash#variables-de-entorno)

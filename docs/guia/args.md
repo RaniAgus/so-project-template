@@ -16,7 +16,11 @@ ejemplo, parametrizar el archivo config que se va a utilizar:
 
 Y recibir el path hacia el archivo config en la función `config_create()`:
 
-<<< @/snippets/guia/args/args.c{11}
+::: code-group
+
+<<< @/snippets/guia/args/args.c{11 c:line-numbers} [main.c]
+
+:::
 
 Sin embargo, para poder ejecutar el programa con todos sus parámetros desde un
 IDE o al hacer uso de los [comandos para Valgrind](./valgrind) vamos a

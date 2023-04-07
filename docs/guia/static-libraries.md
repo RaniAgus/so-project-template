@@ -145,7 +145,9 @@ Una vez compilemos con `make` veremos que se agregó el flag `-L{path}/bin` a
 Hay dos formas de incluir los headers de la biblioteca en nuestro código. La más
 "sucia" es utilizar rutas relativas entre comillas:
 
-```c{1}
+::: code-group
+
+```c:line-numbers{1} [main.c]
 #include "../../utils/src/utils/hello.h"
 
 int main(void) {
@@ -153,6 +155,8 @@ int main(void) {
   return 0;
 }
 ```
+
+:::
 
 Sin embargo, existe una mejor forma de hacerlo: la variable `STATIC_LIBPATHS`
 que configuramos también permite que el makefile le indique al
@@ -177,7 +181,9 @@ variable de entorno `C_INCLUDE_PATH`.
 
 Por lo tanto, también podemos hacer el `#include` de esta forma:
 
-```c{1}
+::: code-group
+
+```c:line-numbers{1} [main.c]
 #include <utils/hello.h>
 
 int main(void) {
@@ -185,6 +191,7 @@ int main(void) {
   return 0;
 }
 ```
+:::
 
 ::: tip TIP
 

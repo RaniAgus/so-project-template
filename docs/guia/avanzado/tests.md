@@ -89,7 +89,7 @@ Con el siguiente código:
 
 ::: code-group
 
-```c [example_test.c]
+```c:line-numbers [example_test.c]
 #include <stdio.h>
 #include <stdbool.h>
 #include <cspecs/cspec.h>

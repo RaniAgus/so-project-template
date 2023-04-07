@@ -9,7 +9,11 @@ Para evitar esto, podemos utilizar múltiples archivos.
 
 Supongamos que tenemos un `main.c` con un tipo `t_persona`:
 
-<<< @/snippets/guia/multiples-archivos/inicial.c
+::: code-group
+
+<<< @/snippets/guia/multiples-archivos/inicial.c {c:line-numbers} [main.c]
+
+:::
 
 Sería más organizado convertir el tipo `t_persona` en un Tipo Abstracto de Dato
 (TAD) con las funciones asociadas:
@@ -34,7 +38,11 @@ touch src/persona.h
 
 En él vamos a guardar los prototipos de las funciones del nuevo TAD `t_persona`:
 
-<<< @/snippets/guia/multiples-archivos/persona.h{c}
+::: code-group
+
+<<< @/snippets/guia/multiples-archivos/persona.h{c:line-numbers} [persona.h]
+
+:::
 
 ::: tip
 
@@ -59,7 +67,11 @@ touch src/persona.c
 Y moveremos ahí la implementación de ese TAD, junto con todas las bibliotecas
 que necesita.
 
-<<< @/snippets/guia/multiples-archivos/persona.c{1}
+::: code-group
+
+<<< @/snippets/guia/multiples-archivos/persona.c{1 c:line-numbers} [persona.c]
+
+:::
 
 También es una buena práctica incluir al inicio su header, como se puede ver al
 principio.
@@ -101,7 +113,11 @@ variable de entorno `C_INCLUDE_PATH`.
 Por último, vamos a hacer que nuestra función `main()` utilice las funciones del
 nuevo TAD `t_persona` para crear a `messi`:
 
-<<< @/snippets/guia/multiples-archivos/main.c{3,6,8,12}
+::: code-group
+
+<<< @/snippets/guia/multiples-archivos/main.c{3,6,8,12 c:line-numbers} [main.c]
+
+:::
 
 En conclusión, nos quedó un `main()` mucho más simple y con un TAD que nos
 permite crear nuevas instancias de `t_persona` en el proyecto de forma más

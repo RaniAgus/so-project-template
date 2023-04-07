@@ -51,7 +51,9 @@ estemos utilizando cualquiera de sus modos a través de su biblioteca:
 Esta función se llama `VALGRIND_PRINTF_BACKTRACE` y permite darle formato de la
 misma forma que `printf` y los logs de las commons:
 
-```c{4}
+::: code-group
+
+```c:line-numbers{4} [main.c]
 #include <valgrind/valgrind.h>
 
 void funcion(char *str, int i) {
@@ -63,6 +65,9 @@ int main() {
     return 0;
 }
 ```
+
+:::
+
 Sin embargo, este stacktrace solamente se imprime mientras utilicemos
 `valgrind`, por lo que si compilamos este código y e intentamos ejecutarlo desde
 la consola no se va a imprimir nada.
