@@ -1,3 +1,4 @@
+ifeq ($(TESTS_ENABLED),1)
 .PHONY: test
 test: all
 	valgrind --tool=none ./$(TEST)
@@ -16,3 +17,4 @@ test-memcheck: all
 .PHONY: test-helgrind
 test-helgrind: all
 	valgrind --tool=helgrind $(HELGRIND_FLAGS) ./$(TEST)
+endif

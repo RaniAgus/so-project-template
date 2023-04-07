@@ -18,6 +18,16 @@ unitarios, desaconsejamos continuar con esta guía.
 
 ## Configuración del template
 
+### Instalar CSpec
+
+Para instalar CSpec, ejecutá en una terminal los siguientes comandos:
+
+```bash
+git clone https://github.com/mumuki/cspec.git
+cd cspec
+make
+sudo make install
+```
 ### Excluir archivos fuente
 
 En caso de que estemos testeando un módulo con una función `main()`,
@@ -50,14 +60,52 @@ sí van a estar disponibles para ser testeadas.
 
 ### Agregar unit tests
 
-Todas las test suites se guardan dentro de la carpeta `tests/`. El template ya
-incluye una suite a modo de ejemplo:
+Por último, para agregar tests a cualquier proyecto (ya sea ejecutable o
+biblioteca), debemos hacerlo creando una carpeta `tests` a la misma altura que
+`src`:
+
+```bash
+mkdir tests
+```
+
+Por ejemplo, partiendo del [proyecto base](../), podemos agregar un test inicial:
+
+```bash
+touch tests/example_test.c
+```
 
 ```
 .
+├── makefile
+├── settings.mk
+├── src
+│   └── main.c
 └── tests
     └── example_test.c
 ```
+
+
+Con el siguiente código:
+
+::: code-group
+
+```c [example_test.c]
+#include <stdio.h>
+#include <stdbool.h>
+#include <cspecs/cspec.h>
+
+context (example) {
+    bool la_verdad = true;
+
+    describe("Hello world") {
+        it("la_verdad should be true") {
+            should_bool(la_verdad) be equal to(true);
+        } end
+    } end
+
+}
+```
+:::
 
 ::: tip
 
