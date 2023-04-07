@@ -27,10 +27,8 @@ tree .
 .
 ├── makefile
 ├── settings.mk
-├── src
-│   └── main.c
-└── tests
-    └── example_test.c
+└── src
+    └── main.c
 ```
 
 Una breve explicación de los archivos que hay en ella:
@@ -41,8 +39,6 @@ Una breve explicación de los archivos que hay en ella:
 | `./settings.mk`          | Configuración extra del proyecto (aprenderemos más a lo largo de la guía)           |
 | `./src/`                 | Carpeta en donde vamos a dejar todos los archivos fuente (.c y .h) del proyecto     |
 | `./src/main.c`           | Archivo fuente en donde se encuentra la función `main` del proyecto                 |
-| `./tests/`               | Acá vamos a dejar todos unit tests del proyecto (más adelante veremos cómo hacerlo) |
-| `./tests/example_test.c` | Un unit test a modo de ejemplo, podemos ignorarlo por ahora                         |
 
 ## Compilación
 
@@ -61,8 +57,7 @@ tree bin obj
 ```
 .
 ├── bin
-│   ├── {nombre-del-proyecto}.out
-│   └── {nombre-del-proyecto}_tests.out
+│   └── {nombre-del-proyecto}.out
 └── obj
     └── main.o
 ```
@@ -70,7 +65,7 @@ tree bin obj
 | Directorio | Descripción                                                                                                                     |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `./obj/`   | Para cada archivo fuente en `src` se va a generar un objeto en código assembly con fines de acelerar el proceso de compilación. |
-| `./bin/`   | El compilador guarda aquí el ejecutable final y el ejecutable de los unit tests.                                                |
+| `./bin/`   | El compilador guarda aquí el ejecutable final y el ejecutable de los unit tests (en caso de haber).                             |
 
 ::: tip
 
@@ -90,7 +85,6 @@ $ ls -l bin src
 bin:
 total 20
 -rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 ejemplo.out
--rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 ejemplo_tests.out
 
 src:
 total 4
