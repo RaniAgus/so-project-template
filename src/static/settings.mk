@@ -1,5 +1,5 @@
 #Libraries
-LIBS=
+LIBS=commons
 
 # Custom libraries' paths
 SHARED_LIBPATHS=

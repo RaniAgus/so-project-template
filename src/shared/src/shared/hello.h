@@ -6,8 +6,8 @@
 
     /**
     * @NAME: hello_world
-    * @DESC: Imprime un saludo por consola.
+    * @DESC: Devuelve un saludo al mundo exterior.
     */
-    void hello_world();
+    char *hello_world();
 
 #endif

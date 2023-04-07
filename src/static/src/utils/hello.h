@@ -6,8 +6,8 @@
 
     /**
     * @NAME: say_hello
-    * @DESC: Imprime un saludo al nombre que se pase por parámetro por consola.
+    * @DESC: Devuelve un saludo al nombre que se pase por parámetro por consola.
     */
-    void say_hello(char* who);
+    char *say_hello(char* who);
 
 #endif

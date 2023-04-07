@@ -1,5 +1,6 @@
 #include <shared/hello.h>
+#include <utils/hello.h>
 
-void hello_world() {
-    puts("Hello world!!");
+char *hello_world() {
+    return say_hello("World");
 }

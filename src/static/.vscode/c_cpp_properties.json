@@ -6,7 +6,6 @@
       "name": "Linux",
       "includePath": [
         "${workspaceFolder}/src"
-        // TODO: Agregar los directorios de las bibliotecas a utilizar
       ],
       "defines": [],
       "compilerPath": "/usr/bin/gcc",

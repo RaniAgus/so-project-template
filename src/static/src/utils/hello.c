@@ -1,5 +1,6 @@
 #include <utils/hello.h>
+#include <commons/string.h>
 
-void say_hello(char* who) {
-    printf("Hello %s!!\n", who);
+char *say_hello(char* who) {
+    return string_from_format("Hello %s!!", who);
 }
