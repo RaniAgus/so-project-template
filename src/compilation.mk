@@ -1,4 +1,7 @@
-CSPEC_INSTALLED=$(shell ls /usr/lib/libcspecs.so 2>/dev/null | wc -l)
+# Check if tests folder exists
+ifneq ($(wildcard tests/*),)
+TESTS_ENABLED=1
+endif
 
 # Set prerrequisites
 SRCS_C += $(shell find src/ -iname "*.c")
@@ -7,7 +10,7 @@ DEPS = $(foreach SHL,$(SHARED_LIBPATHS),$(SHL:%=%/bin/lib$(notdir $(SHL)).so)) \
 	$(foreach STL,$(STATIC_LIBPATHS),$(STL:%=%/bin/lib$(notdir $(STL)).a))
 
 # Set test prerrequisites
-ifeq ($(CSPEC_INSTALLED),1)
+ifeq ($(TESTS_ENABLED),1)
 TESTS_C += $(shell find tests/ -iname "*.c")
 TESTS_H += $(shell find tests/ -iname "*.h")
 endif
@@ -25,7 +28,7 @@ RUNDIRS = $(SHARED_LIBPATHS:%=$(shell cd . && pwd)/%/bin)
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 
 # Set test intermediate objects
-ifeq ($(CSPEC_INSTALLED),1)
+ifeq ($(TESTS_ENABLED),1)
 TEST_OBJS = $(TESTS_C) $(filter-out $(TEST_EXCLUDE), $(SRCS_C))
 endif
 
@@ -33,7 +36,7 @@ endif
 BIN = bin/$(call filename,$(shell cd . && pwd | xargs basename))
 
 # Set test binary targets
-ifeq ($(CSPEC_INSTALLED),1)
+ifeq ($(TESTS_ENABLED),1)
 TEST = bin/$(shell cd . && pwd | xargs basename)_tests.out
 endif
 
@@ -62,7 +65,7 @@ $(BIN): $(OBJS) | $(dir $(BIN))
 obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 	$(call compile_objs)
 
-ifeq ($(CSPEC_INSTALLED),1)
+ifeq ($(TESTS_ENABLED),1)
 $(TEST): $(TEST_OBJS) | $(dir $(TEST))
 	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%) -lcspecs
 endif

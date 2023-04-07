@@ -1,4 +1,4 @@
-ifeq ($(CSPEC_INSTALLED),1)
+ifeq ($(TESTS_ENABLED),1)
 .PHONY: test
 test: all
 	valgrind --tool=none ./$(TEST)
