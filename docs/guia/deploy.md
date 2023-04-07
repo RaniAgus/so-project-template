@@ -26,9 +26,8 @@ sobre otra ruta. Recomiendo revisar el
 
 ```bash
 ./deploy.sh \
-  -r=release                      `# Usar 'make release' para compilar` \
-  -d=matelib                      `# Instalar la shared library 'matelib'` \
-  -p=sockets                      `# Compilar la static library 'sockets'` \
+  -r=release                      `# Usar 'make release' para compilar`                      \
+  -p=utils                        `# Compilar la static library 'utils'`                     \
   -p=consola -p=kernel -p=memoria `# Compilar los proyectos 'consola', "kernel' y 'memoria'` \
   tp-2022-2c-geck                 `# Clonar el repo sisoputnfrba/tp-2021-2c-carpinchOS`
 ```
