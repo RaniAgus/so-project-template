@@ -9,7 +9,7 @@ define compile_bin
 endef
 
 define compile_objs
-	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%) $(LIBS:%=-l%)
+	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
 endef
 
 ################################################################################
