@@ -1,4 +1,4 @@
-## Agregar bibliotecas
+# Agregar bibliotecas
 
 Para acceder a funciones de algunas bibliotecas (como las `commons`, `pthread` o
 `readline`) hace falta avisarle al [linker](https://linux.die.net/man/1/ld) que
