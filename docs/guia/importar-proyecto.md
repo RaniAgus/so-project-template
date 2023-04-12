@@ -43,66 +43,6 @@ esto:
 ![explorer](/img/importar-proyecto/code-explorer.png)
 ![run configurations](/img/importar-proyecto/code-run-configurations.png)
 
-Luego, para guardar el workspace y contar con él para más adelante, vamos a ir
-a la opción `File > Save Workspace As...` y ahí sí lo guardaremos en **la
-carpeta raíz del repositorio** donde se encuentren todos los proyectos, ejemplo:
-
-```
-.
-├── tp.code-workspace
-├── client
-│   ├── makefile
-│   ├── settings.mk
-│   ├── .vscode
-│   │   └── ...
-│   └── src
-│       └── ...
-├── server
-│   ├── makefile
-│   ├── settings.mk
-│   ├── .vscode
-│   │   └── ...
-│   └── src
-│       └── ...
-└── ...
-```
-
-Por último, al archivo `tp.code-workspace` recién creado le agregaremos la
-siguiente configuración:
-
-::: code-group
-
-```json:line-numbers [tp.code-workspace]
-{
-	"settings": { // [!code ++]
-		"files.associations": { // [!code ++]
-			"*.h": "c", // [!code ++]
-		}, // [!code ++]
-		"C_Cpp.errorSquiggles": "disabled", // [!code ++]
-	}, // [!code ++]
-	"folders": [
-		{
-			"name": "client",
-			"path": "client"
-		},
-		{
-			"name": "server",
-			"path": "server"
-		},
-	]
-}
-```
-
-- `files.associations` nos sirve para que el editor reconozca todos los
-   archivos `*.h` como código C (y no código C++, que es el valor por defecto).
-
-- `C_Cpp.errorSquiggles` nos permite deshabilitar algunos mensajes de error que
-   nos pueden llegar a aparecer por utilizar algunas features de `gcc` que no
-   forman parte del estándar de C[^1], como por ejemplo las
-   [nested functions](https://www.youtube.com/watch?v=1kYyxZXGjp0). Además,
-   esto permite que el editor tome en cuenta solo los errores al compilar, que
-   son los verdaderamente importantes.
-
 ### Cómo compilar
 
 Con esto ya podremos compilar el proyecto presionando `Ctrl+Shift+B` o
@@ -126,9 +66,76 @@ ejecutar.
 
 :::
 
+### Cómo guardar el workspace
+
+Por último, para guardar el workspace y que todo el grupo pueda importarlo,
+vamos a ir a la opción `File > Save Workspace As...` y ahí sí lo guardaremos en
+**la carpeta raíz del repositorio** donde se encuentren todos los proyectos,
+ejemplo:
+
+```
+.
+├── tp.code-workspace
+├── client
+│   ├── makefile
+│   ├── settings.mk
+│   ├── .vscode
+│   │   └── ...
+│   └── src
+│       └── ...
+├── server
+│   ├── makefile
+│   ├── settings.mk
+│   ├── .vscode
+│   │   └── ...
+│   └── src
+│       └── ...
+└── ...
+```
+
+Antes de terminar, al archivo `tp.code-workspace` recién creado le agregaremos
+la siguiente configuración:
+
+::: code-group
+
+```json:line-numbers [tp.code-workspace]
+{
+	"settings": { // [!code ++]
+		"debug.onTaskErrors": "abort", // [!code ++]
+		"files.associations": { // [!code ++]
+			"*.h": "c", // [!code ++]
+		}, // [!code ++]
+		"C_Cpp.errorSquiggles": "disabled", // [!code ++]
+	}, // [!code ++]
+	"folders": [
+		{
+			"name": "client",
+			"path": "client"
+		},
+		{
+			"name": "server",
+			"path": "server"
+		},
+	]
+}
+```
+- `debug.onTaskErrors` nos permite definir la acción a realizar en caso de que
+   alguna tarea previa a ejecutar el debugger falle (en nuestro caso,
+	 compilarlo). Elegí abortar la ejecución ya que no queremos estar
+	 debuggeando sobre una versión desactualizada del proyecto si éste no compila.
+
+- `files.associations` nos sirve para que el editor reconozca todos los
+   archivos `*.h` como código C (y no código C++, que es el valor por defecto).
+
+- `C_Cpp.errorSquiggles` nos permite deshabilitar algunos mensajes de error que
+   nos pueden llegar a aparecer por utilizar algunas features de `gcc` que no
+   forman parte del estándar de C[^1], como por ejemplo las
+   [nested functions](https://www.youtube.com/watch?v=1kYyxZXGjp0). Además,
+   esto permite que el editor tome en cuenta solo los errores al compilar, que
+   son los verdaderamente importantes.
+
 ¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
 [agregar bibliotecas externas](./linkear-bibliotecas).
-
 
 ## Eclipse
 
