@@ -36,12 +36,12 @@ Para importarlo, vamos a irnos a `File > Add Folder to Workspace...`
 
 ![add-folder](/img/importar-proyecto/code-add-folder.png)
 
-Y seleccionaremos la carpeta de **cada proyecto por separado** (ej: client y 
+Y seleccionaremos la carpeta de **cada proyecto por separado** (ej: client y
 server). En las pestañas de explorer y debug nos debe quedar algo parecido a
 esto:
 
 ![explorer](/img/importar-proyecto/code-explorer.png)
-![run configurations](/img/code/run-configurations.png)
+![run configurations](/img/importar-proyecto/code-run-configurations.png)
 
 Luego, para guardar el workspace y contar con él para más adelante, vamos a ir
 a la opción `File > Save Workspace As...` y ahí sí lo guardaremos en **la
@@ -117,7 +117,7 @@ Para ejecutar el proyecto, nos movemos hacia la pestaña de `Run and Debug`,
 seleccionamos la opción `run (nombre-del-proyecto)` y le damos al botón play
 :arrow_forward:
 
-![run configurations](/img/code/run-configurations.png)
+![run configurations](/img/importar-proyecto/code-run-configurations.png)
 
 ::: tip
 
