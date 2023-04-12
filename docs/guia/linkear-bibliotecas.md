@@ -23,22 +23,29 @@ undefined reference to 'list_add'
 undefined reference to 'list_iterate'
 ```
 
-Si estuviéramos compilando con `gcc` a mano, tendríamos que acordarnos de
-incluir el flag `-lcommons` para _linkear_ la biblioteca al momento de la
-compilación:
-
-```bash
-gcc src/main.c -o bin/ejemplo.out -lcommons
-```
-
-Esto mismo lo podemos lograr usando el template agregando el nombre de cada
-biblioteca a la variable `LIBS` del archivo `settings.mk`, separado por
-espacios:
+Para agregar una biblioteca debemos editar la variable `LIBS` del archivo
+`settings.mk` del proyecto. Por ejemplo:
 
 ```bash
 # Libraries
 LIBS=commons
 ```
+
+Si queremos agregar más de una, cada nombre debe ir separado por espacios.
+
+::: tip ¿Qué hicimos al editar esta variable?
+
+Editar la variable `LIBS` permite incluir el flag `-l` para _linkear_ la
+biblioteca que queremos usar al momento de la compilación con `gcc`. Al
+ejecutar `make` veremos algo como:
+
+```bash
+gcc -o bin/ejemplo.out src/main.c -lcommons
+```
+
+Ese `-lcommons` es lo que agregamos al editar `LIBS`.
+
+:::
 
 ::: tip ¿Cómo funciona el flag "-l"?
 
@@ -56,6 +63,6 @@ editando la variable de entorno[^1] `LIBRARY_PATH`.
 
 :::
 
-[^1]: Si te estás preguntando: _"¿y qué c&@$#/°s es una variable de entorno?"_
+[^1]: Si te estás preguntando: _"¿qué c&@$#/°s es una variable de entorno?"_
 No te preocupes, podés encontrar una explicación simple en nuestra
 [guía de Bash](https://docs.utnso.com.ar/guias/consola/bash#variables-de-entorno)
