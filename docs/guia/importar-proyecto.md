@@ -13,6 +13,14 @@ principiantes.
 
 ## Visual Studio Code
 
+::: warning
+
+Si llegás a tener algún problema a lo largo de esta guía o querés saber más
+sobre cómo modificar la configuración de Visual Studio Code, te invito a revisar
+primero la [explicación detallada de cada archivo](./avanzado/code).
+
+:::
+
 Todos los templates incluyen una carpeta oculta `.vscode` con las
 configuraciones mínimas necesarias para levantar el proyecto y ejecutarlo con el
 debugger integrado:
@@ -24,27 +32,20 @@ debugger integrado:
 └── tasks.json
 ```
 
-::: warning
-
-Si llegás a tener algún problema a lo largo de esta guía o querés saber más
-sobre cómo modificar la configuración de Visual Studio Code, te invitamos a
-revisar primero la
-[explicación detallada de cada archivo](./avanzado/code).
-
-:::
-
 Para importarlo, vamos a irnos a `File > Add Folder to Workspace...`
 
 ![add-folder](/img/importar-proyecto/code-add-folder.png)
 
-Y seleccionaremos **la carpeta del proyecto**. Nos debe quedar algo parecido a
+Y seleccionaremos la carpeta de **cada proyecto por separado** (ej: client y 
+server). En las pestañas de explorer y debug nos debe quedar algo parecido a
 esto:
 
 ![explorer](/img/importar-proyecto/code-explorer.png)
+![run configurations](/img/code/run-configurations.png)
 
 Luego, para guardar el workspace y contar con él para más adelante, vamos a ir
-a la opción `File > Save Workspace As...` y lo guardaremos en **la carpeta raíz
-del repositorio** donde se encuentren todos los proyectos, ejemplo:
+a la opción `File > Save Workspace As...` y ahí sí lo guardaremos en **la
+carpeta raíz del repositorio** donde se encuentren todos los proyectos, ejemplo:
 
 ```
 .
@@ -106,7 +107,6 @@ siguiente configuración:
 
 Con esto ya podremos compilar el proyecto presionando `Ctrl+Shift+B` o
 a través de `Terminal > Run Build Task...`:
-
 
 ![run-build-task](/img/importar-proyecto/code-run-build-task.png)
 ![build](/img/importar-proyecto/code-build.png)
