@@ -32,7 +32,8 @@ debugger integrado:
 └── tasks.json
 ```
 
-Para importarlo, vamos a irnos a `File > Add Folder to Workspace...`
+Para importarlo por primera vez, vamos a irnos a 
+`File > Add Folder to Workspace...`
 
 ![add-folder](/img/importar-proyecto/code-add-folder.png)
 
@@ -134,10 +135,21 @@ la siguiente configuración:
    esto permite que el editor tome en cuenta solo los errores al compilar, que
    son los verdaderamente importantes.
 
-¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
+¡Y listo! Una vez hecho esto, podemos commitear el archivo `tp.code-workspace` para
+que nuestros compañeros de grupo puedan importar el workspace directamente.
+
+Con esto, ya podemos continuar con la guía, el siguiente paso va a ser
 [agregar bibliotecas externas](./linkear-bibliotecas).
 
 ## Eclipse
+
+::: warning
+
+Recomiendo que cada integrante haga esta configuración por separado, ya que, como
+veremos más adelante, commitear los archivos generados por Eclipse puede traernos
+problemas a futuro.
+
+:::
 
 ### Configurar el Workspace
 
