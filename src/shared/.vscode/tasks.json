@@ -19,7 +19,8 @@
       "type": "shell",
       "group": {
         "kind": "none"
-      }
+      },
+      "problemMatcher": []
     }
   ]
 }
