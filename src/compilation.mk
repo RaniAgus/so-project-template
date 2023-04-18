@@ -72,7 +72,7 @@ endif
 
 .SECONDEXPANSION:
 $(DEPS): $$(shell find $$(patsubst %bin/,%src/,$$(dir $$@)) -iname "*.c" -or -iname "*.h")
-	make --no-print-directory -C $(patsubst %bin/,%,$(dir $@)) 3>&1 1>&2 2>&3 | sed -E 's,(src|tests),$(patsubst %bin/,%,$(dir $@))\1,' 3>&2 2>&1 1>&3
+	make --no-print-directory -C $(patsubst %bin/,%,$(dir $@)) 3>&1 1>&2 2>&3 | sed -E 's,(src/|tests/)[^ ]+\.(c|h)\:,$(patsubst %bin/,%,$(dir $@))&,' 3>&2 2>&1 1>&3
 
 $(sort $(dir $(BIN) $(OBJS))):
 	mkdir -pv $@
