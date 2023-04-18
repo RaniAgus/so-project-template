@@ -5,9 +5,9 @@
     #include <stdio.h>
 
     /**
-    * @NAME: hello_world
-    * @DESC: Imprime un saludo por consola.
+    * @NAME: say_hello
+    * @DESC: Imprime un saludo al nombre que se pase por parámetro por consola.
     */
-    void hello_world();
+    void say_hello(char* who);
 
 #endif
