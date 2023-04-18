@@ -32,7 +32,7 @@ debugger integrado:
 └── tasks.json
 ```
 
-Para importarlo por primera vez, vamos a irnos a 
+Para importarlo por primera vez, vamos a irnos a
 `File > Add Folder to Workspace...`
 
 ![add-folder](/img/importar-proyecto/code-add-folder.png)
@@ -157,74 +157,66 @@ Para importar un proyecto, primero vamos a cambiar la ruta del Workspace para
 que apunte a nuestro repo. Para esto, iremos a
 `File > Switch Workspace > Other...`:
 
-![workspace-01](/img/eclipse/workspace-01.png)
+![workspace-01](/img/eclipse/switch-workspace.png)
 
 Y luego, seleccionaremos la ruta ayudándonos con el botón `Browse...`, y haremos
 click en `Launch`:
 
-![workspace-02](/img/eclipse/workspace-02.png)
+![workspace-02](/img/eclipse/select-workspace-folder.png)
 
 ### Crear un Makefile Project
 
 Empezaremos creando el proyecto de Eclipse a través de la opción
 `File > New > Makefile Project with existing code`:
 
-![project-01](/img/eclipse/project-01.png)
+![project-01](/img/eclipse/file-new-makefile-project.png)
 
 ::: warning
 
 Si no aparece ahí, también la pueden encontrar en
 `File > New > Other...` y buscando "makefile":
 
-![project-02](/img/eclipse/project-02.png)
+![project-02](/img/eclipse/select-a-wizard.png)
 
 :::
 
 Luego, seleccionaremos la carpeta del proyecto ayudándonos con el botón
 `Browse...` y dejaremos todo tildado como en la imagen:
 
-![project-03](/img/eclipse/project-03.png)
+![project-03](/img/eclipse/import-existing-code.png)
 
-Nos aparecerá la carpeta del proyecto en el `Solution Explorer` de Eclipse:
+Nos aparecerá la carpeta del proyecto en el `Project Explorer` de Eclipse:
 
-![project-04](/img/eclipse/project-04.png)
+![project-04](/img/eclipse/project-explorer.png)
 
 ### Compilar y ejecutar el proyecto
 
-Por último, compilaremos con el martillito :hammer: y ejecutaremos con el botón
-play :arrow_forward:.
+Por último, vamos a generar las configuraciones necesarias para poder compilar
+y ejecutar el proyecto.
 
-La primera vez nos preguntará qué tipo de aplicación es la que queremos
-ejecutar, para lo cual seleccionaremos `Local C/C++ Application`.
+Primero, desde el `Project Explorer` haremos click derecho sobre la carpeta de
+nuestro proyecto y luego haremos click en `Build Project`:
 
-![run-config](/img/importar-proyecto/eclipse-run-config.png)
+![run-config](/img/eclipse/build-project.png)
 
-Y luego seleccionaremos nuestro ejecutable:
+Esto nos generará el ejecutable en la carpeta `bin`:
 
-![run](/img/importar-proyecto/eclipse-run.png)
+![project-explorer-with-bin](/img/eclipse/project-explorer-with-bin.png)
 
-::: warning
+Ahora, haremos click derecho sobre ese ejecutable e iremos a `Run As` >
+`Local C/C++ Application`:
 
-En caso de que no funcione el botón de play, nos iremos a la pestaña de al lado
-y haremos click en `Run Configurations...`:
+![run-config](/img/eclipse/run-as-local-c-cpp-application.png)
 
-![project-05](/img/eclipse/project-05.png)
+ Ya logramos ejecutar nuestro proyecto:
 
-Luego, click **derecho** en `C/C++ Application`, y después click en `New...`:
+![project-08](/img/eclipse/run-console.png)
 
-![project-06](/img/eclipse/project-06.png)
+¡Y listo! Arriba a la izquierda ya se nos generó una configuración por defecto
+que podemos utilizar para compilar con :hammer:, ejecutar con :arrow_forward: o
+usar el debugger :bug::
 
-Y, por último, en la nueva configuración apuntaremos hacia `bin/{name}.out` como
-en el ejemplo:
-
-![project-07](/img/eclipse/project-07.png)
-
-:::
-
-¡Y listo!
-
-![project-08](/img/eclipse/project-08.png)
-
+![run-panel](/img/eclipse/run-panel.png)
 
 ### Sobre los archivos generados por Eclipse
 
