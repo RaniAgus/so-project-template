@@ -28,14 +28,15 @@ necesitar entrar a la configuración de ejecución.
 
 ## Ejecutar desde Eclipse
 
-Vamos a entrar a las `Run Configurations...`:
+Arriba a la izquierda, vamos a seleccionar nuestra configuración de ejecución y
+hacer click en la ruedita :gear: de la derecha:
 
-![eclipse-01](/img/args/eclipse-01.png)
+![eclipse-01](/img/eclipse/edit-run-configuration.png)
 
 Y en la configuración del proyecto nos moveremos a la pestaña `Arguments`, en
 donde vamos a poner nuestros argumentos separados por espacios:
 
-![eclipse-02](/img/args/eclipse-02.png)
+![eclipse-01](/img/eclipse/edit-configuration.png)
 
 ## Ejecutar desde Visual Studio Code
 
