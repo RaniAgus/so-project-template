@@ -35,7 +35,7 @@ La idea es que en el repo de nuestro TP nos quede una estructura parecida a
 esta:
 
 ```
-repo
+tp-2023-1c-Ayudantes
 ├── ejemplo
 │   ├── src
 │   │   └── main.c
@@ -102,19 +102,56 @@ encuentran allí:
 
 ::: details Guía para Eclipse
 
-<!--@include: ./static-eclipse.md-->
+1. **Verificar el Workspace**
+
+Para importar una biblioteca (estática o compartida), primero debemos
+asegurarnos que el workspace sea
+[el mismo que usamos para importar el proyecto](./importar-proyecto#eclipse):
+
+![workspace-02](/img/eclipse/select-workspace-folder.png)
+
+2. **Crear otro Makefile Project**
+
+Luego, vamos a crear un nuevo Makefile Project de la misma forma que hicimos con
+el [otro proyecto](./importar-proyecto#eclipse). Debe quedar así:
+
+![static-01](/img/eclipse/project-explorer-with-utils.png)
+
+3. **Vincular la biblioteca al proyecto**
+
+Con la biblioteca ya importada veremos que el autocompletado no funciona si
+intentamos llamar una función de la biblioteca:
+
+![static-02](/img/eclipse/hello-world-not-working.png)
+
+Para corregir esto, haremos click derecho **en el proyecto** e iremos a
+`Properties`:
+
+![static-03](/img/eclipse/properties.png)
+
+Y en ese menú, iremos a `C/C++ General > Paths and Symbols > References` y
+tildaremos la biblioteca como se ve en la captura:
+
+![static-04](/img/eclipse/paths-and-symbols-references.png)
+
+Ahora sí podremos utilizar el autocompletado para incluir las funciones de la
+biblioteca:
+
+![static-05](/img/eclipse/hello-world-working.png)
+
+¡Y listo! Ya podemos continuar con el tutorial.
 
 :::
 
 ### Linkear en la configuración
 
 Una vez hecho esto, deberemos incluir la biblioteca en la variable
-`LIBS` del archivo `settings.mk` al igual que con cualquier otra biblioteca:
+`LIBS` del archivo `settings.mk` al igual que con cualquier otra biblioteca.
 
 Sin embargo, aún no terminamos, ya que la biblioteca no está instalada, por lo
 que el [linker](https://linux.die.net/man/1/ld) (que es el programa encargado de
-ir a buscar esa biblioteca) no va a encontrar nuestro archivo `lib*.a` a menos
-que se lo indiquemos.
+ir a buscar esa biblioteca) no va a encontrar nuestro archivo `libutils.a` a
+menos que se lo indiquemos.
 
 ::: tip ¿Cómo funciona el flag "-l"?
 
@@ -152,7 +189,11 @@ muestra arriba.
 :::
 
 Una vez compilemos con `make` veremos que se agregó el flag `-L{path}/bin` a
-`gcc`.
+`gcc`:
+
+```bash
+gcc src/main.c -o "bin/ejemplo.out" -I../utils/src -L../utils/bin -lutils
+```
 
 ### Incluir en el código
 
