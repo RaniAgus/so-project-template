@@ -164,6 +164,8 @@ las siguientes tres rutas:
 /usr/local/lib
 ```
 
+Por ejemplo, las commons se encuentran instaladas en `/usr/lib/libcommons.so`.
+
 Se pueden agregar más rutas pasándole a `gcc` el flag `-L{path}` o editando la
 variable de entorno `LIBRARY_PATH`.
 
@@ -217,7 +219,7 @@ Sin embargo, existe una mejor forma de hacerlo: la variable `STATIC_LIBPATHS`
 que configuramos también permite que el makefile le indique al
 [compilador](https://linux.die.net/man/1/gcc) que vaya a buscar los headers de
 la biblioteca a la carpeta `src` donde se encuentran, agregando el flag
-`-I{path}/src`.
+`-I{path}/src` como vimos más arriba.
 
 ::: tip ¿Cómo funciona el `#include`?
 
@@ -228,6 +230,9 @@ rutas:
 /usr/include
 /usr/local/include
 ```
+
+Por ejemplo, los headers de las commons se encuentran instalados en la carpeta
+`/usr/include/commons`.
 
 Se pueden agregar más rutas pasándole a `gcc` el flag `-I{path}` o editando la
 variable de entorno `C_INCLUDE_PATH`.
