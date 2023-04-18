@@ -1,4 +1,11 @@
 {
+	"settings": {
+		"debug.onTaskErrors": "abort",
+		"files.associations": {
+			"*.h": "c",
+		},
+		"C_Cpp.errorSquiggles": "disabled",
+	},
 	"folders": [
 		{
 			"name": "project",
@@ -12,11 +19,5 @@
 			"name": "shared",
 			"path": "shared"
 		}
-	],
-	"settings": {
-		"files.associations": {
-			"*.h": "c",
-		},
-		"C_Cpp.errorSquiggles": "disabled",
-	}
+	]
 }
