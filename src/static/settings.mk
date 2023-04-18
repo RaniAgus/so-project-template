@@ -1,4 +1,4 @@
-#Libraries
+# Libraries
 LIBS=
 
 # Custom libraries' paths
