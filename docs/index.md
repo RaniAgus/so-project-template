@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: SisOp Templates
+  name: Create SisOp App
   tagline: Templates para facilitar la creación de proyectos en Lenguaje C.
   image:
     src: /img/logo.png
