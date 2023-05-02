@@ -6,18 +6,18 @@ import { navbar } from './configs/navbar';
 
 export default defineConfig({
   lang: 'es-AR',
-  title: 'Templates | Sistemas Operativos - UTN FRBA',
+  title: 'Create SisOp App',
   description: description,
   base: '/so-project-template/',
   lastUpdated: true,
   cleanUrls: true,
-  titleTemplate: 'Sistemas Operativos - UTN FRBA',
+  titleTemplate: 'Create SisOp App',
   head: [
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
     ['link', { rel: 'icon', href: '/img/logo.png' }],
   ],
   themeConfig: {
-    siteTitle: 'SisOp Templates',
+    siteTitle: 'Create SisOp App',
     logo: '/img/logo.png',
     outline: 'deep',
     outlineTitle: 'En esta página',
