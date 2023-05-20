@@ -132,6 +132,8 @@ Ya logramos inicializar el proyecto desde la consola, pero para empezar a
 desarrollar vamos a necesitar un IDE o editor de texto. En la próxima sección
 veremos las alternativas más recomendables.
 
+<br><br>
+
 [^1]: La explicación sobre qué es un Makefile y la sintaxis para armar uno se
 encuentra fuera del scope de la guía. Si te interesa, podés arrancar viendo
 [este video](https://www.youtube.com/watch?v=a8mPKBxQ9No&list=PL9IEJIKnBJjEPxenuhKU7J5smY4XjFnyg&index=1)
