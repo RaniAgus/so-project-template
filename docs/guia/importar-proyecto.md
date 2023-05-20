@@ -244,6 +244,8 @@ generados por Eclipse no van a estar disponibles para ser agregados con
 ¡Y listo! Ya podemos continuar con la guía, el siguiente paso va a ser
 [agregar bibliotecas externas](./linkear-bibliotecas).
 
+<br><br>
+
 [^1]: Existe una feature request al respecto en el repo de Visual Studio Code,
   les invitamos a dar su +1 para que se pueda incorporar esta feature en un
   futuro: [microsoft/vscode-cpptools#1035](https://github.com/microsoft/vscode-cpptools/issues/1035)
