@@ -35,7 +35,7 @@ Una breve explicación de los archivos que hay en ella:
 
 | Archivo/Carpeta          | Descripción                                                                         |
 | ------------------------ | ----------------------------------------------------------------------------------- |
-| `./makefile`             | Makefile utilizado para compilar el proyecto                                        |
+| `./makefile`             | Makefile utilizado para compilar el proyecto[^1]                                    |
 | `./settings.mk`          | Configuración extra del proyecto (aprenderemos más a lo largo de la guía)           |
 | `./src/`                 | Carpeta en donde vamos a dejar todos los archivos fuente (.c y .h) del proyecto     |
 | `./src/main.c`           | Archivo fuente en donde se encuentra la función `main` del proyecto                 |
@@ -131,3 +131,8 @@ make clean all
 Ya logramos inicializar el proyecto desde la consola, pero para empezar a
 desarrollar vamos a necesitar un IDE o editor de texto. En la próxima sección
 veremos las alternativas más recomendables.
+
+[^1]: La explicación sobre qué es un Makefile y la sintaxis para armar uno se
+encuentra fuera del scope de la guía. Si te interesa, podés arrancar viendo
+[este video](https://www.youtube.com/watch?v=a8mPKBxQ9No&list=PL9IEJIKnBJjEPxenuhKU7J5smY4XjFnyg&index=1)
+o leyendo [este otro tutorial](https://makefiletutorial.com/).
