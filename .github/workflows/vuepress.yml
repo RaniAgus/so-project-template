@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "package.json"
+      - "yarn.lock"
+      - "docs/**"
 jobs:
   deploy:
     runs-on: ubuntu-latest
