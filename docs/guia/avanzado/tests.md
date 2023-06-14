@@ -38,12 +38,8 @@ debemos configurar el makefile para que excluya todo el código de este archivo:
 TEST_EXCLUDE=src/main.c
 ```
 
-Ya que, de otra forma, nos va a parecer el error debido a que CSpec define su
-propio `main()` para funcionar:
-
-```
-error: redefinition of 'main'
-```
+Ya que, de otra forma, CSpec va a ejecutar nuestro `main()` una vez termine de
+correr los unit tests.
 
 ::: warning IMPORTANTE
 
@@ -53,10 +49,14 @@ archivos.
 
 :::
 
+::: tip
+
 En general es una buena práctica que el archivo fuente que contiene la función
-`main()` sea reducido y solamente contenga la lógica más _core_ de la
-aplicación, delegando cada tarea a otras funciones de otros archivos fuente, que
-sí van a estar disponibles para ser testeadas.
+`main()` tenga muy poco código con la lógica más _core_ de la aplicación, 
+delegando cada tarea a otras funciones de otros archivos fuente que sí son más 
+acordes para ser testeadas de forma unitaria.
+
+:::
 
 ### Agregar unit tests
 
