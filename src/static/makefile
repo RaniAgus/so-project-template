@@ -5,11 +5,11 @@ include settings.mk
 filename = lib$(1).a
 
 define compile_bin
-	ar rcs -o "$@" $^
+	$(AR) $(ARFLAGS) -o "$@" $^
 endef
 
 define compile_objs
-	gcc $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
+	$(CC) $(CFLAGS) -fPIC -c -o "$@" $< $(IDIRS:%=-I%)
 endef
 
 ################################################################################

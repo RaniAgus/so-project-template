@@ -3,6 +3,11 @@ ifneq ($(wildcard tests/*),)
 TESTS_ENABLED=1
 endif
 
+# Set compiler and archiver options
+CC=gcc
+AR=ar
+ARFLAGS=rcs
+
 # Set prerrequisites
 SRCS_C += $(shell find src/ -iname "*.c")
 SRCS_H += $(shell find src/ -iname "*.h")
@@ -67,7 +72,7 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 
 ifeq ($(TESTS_ENABLED),1)
 $(TEST): $(TEST_OBJS) | $(dir $(TEST))
-	gcc $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%) -lcspecs
+	$(CC) $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%) -lcspecs
 endif
 
 .SECONDEXPANSION:
