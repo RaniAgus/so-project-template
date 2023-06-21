@@ -28,5 +28,5 @@ Eclipse o Visual Studio Code y otras features, consultar la
 
 ## Contacto
 
-Si encontrás algun error en los makefiles o tenés alguna sugerencia, ¡no dudes
-en abrir un issue en este repositorio!
+Si encontrás algun error en la configuración de tu proyecto o tenés alguna
+sugerencia, ¡no dudes en abrir un issue en este repositorio!
