@@ -34,7 +34,7 @@ OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 
 # Set test intermediate objects
 ifeq ($(TESTS_ENABLED),1)
-TEST_OBJS = $(TESTS_C) $(filter-out $(TEST_EXCLUDE), $(SRCS_C))
+TEST_OBJS = $(filter-out $(TEST_EXCLUDE), $(TESTS_C)) $(patsubst src/%.c,obj/%.o,$(filter-out $(TEST_EXCLUDE), $(SRCS_C)))
 endif
 
 # Set binary targets
@@ -46,12 +46,15 @@ TEST = bin/$(shell cd . && pwd | xargs basename)_tests.out
 endif
 
 .PHONY: all
-all: CFLAGS = $(CDEBUG)
-all: $(BIN) $(TEST)
+all: debug $(TEST)
+
+.PHONY: debug
+debug: CFLAGS = $(CDEBUG)
+debug: $(BIN)
 
 .PHONY: release
 release: CFLAGS = $(CRELEASE)
-release: clean $(BIN) $(TEST)
+release: $(BIN)
 
 .PHONY: clean
 clean:
@@ -71,6 +74,7 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 	$(call compile_objs)
 
 ifeq ($(TESTS_ENABLED),1)
+$(TEST): CFLAGS = $(CDEBUG)
 $(TEST): $(TEST_OBJS) | $(dir $(TEST))
 	$(CC) $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%) -lcspecs
 endif
