@@ -34,7 +34,7 @@ OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS_C))
 
 # Set test intermediate objects
 ifeq ($(TESTS_ENABLED),1)
-TEST_OBJS = $(TESTS_C) $(patsubst src/%.c,obj/%.o,$(filter-out $(TEST_EXCLUDE), $(SRCS_C)))
+TEST_OBJS = $(filter-out $(TEST_EXCLUDE), $(TESTS_C)) $(patsubst src/%.c,obj/%.o,$(filter-out $(TEST_EXCLUDE), $(SRCS_C)))
 endif
 
 # Set binary targets
