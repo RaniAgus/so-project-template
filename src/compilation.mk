@@ -46,8 +46,11 @@ TEST = bin/$(shell cd . && pwd | xargs basename)_tests.out
 endif
 
 .PHONY: all
-all: CFLAGS = $(CDEBUG)
-all: $(BIN) $(TEST)
+all: debug $(TEST)
+
+.PHONY: debug
+debug: CFLAGS = $(CDEBUG)
+debug: $(BIN)
 
 .PHONY: release
 release: CFLAGS = $(CRELEASE)
@@ -72,7 +75,7 @@ obj/%.o: src/%.c $(SRCS_H) $(DEPS) | $(dir $(OBJS))
 
 ifeq ($(TESTS_ENABLED),1)
 $(TEST): $(TEST_OBJS) | $(dir $(TEST))
-	$(CC) $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%) -lcspecs
+	$(CC) $(CDEBUG) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%) -lcspecs
 endif
 
 .SECONDEXPANSION:
