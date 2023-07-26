@@ -11,7 +11,7 @@ Templates para facilitar la creación de proyectos en Lenguaje C.
 mkdir mi-nuevo-proyecto && cd mi-nuevo-proyecto
 
 # descargar el template
-wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v4.0.1/project-v4.0.1.tar.gz \
+wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v4.0.2/project-v4.0.2.tar.gz \
   | tar -xzvf - --strip-components 1
 
 # compilar con make

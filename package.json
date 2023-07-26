@@ -1,6 +1,6 @@
 {
   "name": "so-project-template",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Templates para facilitar la creación de proyectos en Lenguaje C.",
   "main": "index.js",
   "authors": {
