@@ -132,5 +132,5 @@ sencilla.
 ```
 
 [^1]: Esta forma de declarar tipos de conoce como _Opaque Types_, si quieren
-entrar más en detalle les recomendamos
+entrar más en detalle les recomiendo
 [este video (en inglés)](https://www.youtube.com/watch?v=TsUOhPsZk6k).
