@@ -8,6 +8,7 @@ on:
       - "package.json"
       - "yarn.lock"
       - "docs/**"
+      - ".github/workflows/vitepress.yml"
 jobs:
   deploy:
     runs-on: ubuntu-latest
