@@ -6,7 +6,7 @@ SHARED_LIBPATHS=
 STATIC_LIBPATHS=
 
 # Compiler flags
-CDEBUG=-g -Wall -DDEBUG -fcommon -fdiagnostics-color=always
+CDEBUG=-g -Wall -DDEBUG -fdiagnostics-color=always
 CRELEASE=-O3 -Wall -DNDEBUG -fcommon
 
 # Arguments when executing with start, memcheck or helgrind
