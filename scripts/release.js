@@ -63,8 +63,8 @@ const parseMakefile = async (file) => {
 }
 
 const parseMakefileLine = async (file, line) => {
-  const [_, include] = line.split(/^include /);
-  return include ? parseMakefile(`${dirname(file)}/${include}`) : line;
+  const [_, include] = line.split('include ../');
+  return include ? $`cat ${dirname(file)}/../${include}`.text() : line;
 }
 
 await main(values);
