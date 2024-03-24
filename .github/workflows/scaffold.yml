@@ -4,13 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       projects:
-        description: 'Projects to generate, separated by commas'
+        description: 'Projects to generate, separated by spaces'
         required: true
-        default: 'kernel,memoria,cpu,filesystem'
+        default: 'kernel memoria cpu filesystem'
       static:
-        description: 'Static libs to generate, separated by commas'
+        description: 'Static lib to generate'
         required: true
         default: 'utils'
+      external:
+        description: 'External libs to include, separated by spaces'
+        required: true
+        default: 'commons pthread readline m'
       branch:
         description: 'Branch to push the generated files'
         required: true
@@ -26,7 +30,11 @@ jobs:
           bun-version: latest
 
       - name: Generate scaffold files
-        run: bun ./scripts/scaffold.js --projects "${{ github.event.inputs.projects }}" --staticLibs "${{ github.event.inputs.static }}"
+        run: |
+          bun ./scripts/scaffold.js \
+            --projects "${{ github.event.inputs.projects }}" \
+            --staticLib "${{ github.event.inputs.static }}" \
+            --externalLibs "${{ github.event.inputs.external }}"
 
       - name: Push to scaffold branch
         run: |

@@ -15,37 +15,48 @@ const { values } = parseArgs({
     },
     projects: {
       type: 'string',
-      default: 'kernel,memoria,cpu,filesystem',
+      default: 'kernel memoria cpu filesystem',
     },
-    staticLibs: {
+    staticLib: {
       type: 'string',
       default: 'utils',
+    },
+    externalLibs: {
+      type: 'string',
+      default: 'commons pthread readline m',
     },
   },
   allowPositionals: true,
 });
 
-const main = async ({ src, dest, staticLibs, projects }) => {
+const main = async ({ src, dest, projects, staticLib, externalLibs }) => {
+  const projectsList = projects.split(' ');
+
   await cleanupDir(dest);
 
   console.log(`\n\nparsing static libs from ${src}...\n\n`);
 
-  for (const lib of staticLibs.split(',')) {
-    await exportTemplate(src, dest, Templates.STATIC);
-    await $`mv -v ${dest}/${Templates.STATIC} ${dest}/${lib}`;
-  }
+  await exportTemplate(src, dest, Templates.STATIC);
+  await $`mv -v ${dest}/${Templates.STATIC} ${dest}/${staticLib}`;
+  await configureSettings(`${dest}/${staticLib}/settings.mk`, {
+    LIBS: externalLibs,
+  });
 
   console.log(`\n\nparsing projects from ${src}...\n\n`);
 
-  for (const project of projects.split(',')) {
+  for (const project of projectsList) {
     await exportTemplate(src, dest, Templates.PROJECT);
     await $`mv -v ${dest}/${Templates.PROJECT} ${dest}/${project}`;
-    await updateCCppProperties(`${dest}/${project}`, staticLibs.split(','));
+    await updateCCppProperties(`${dest}/${project}`, staticLib);
+    await configureSettings(`${dest}/${project}/settings.mk`, {
+      LIBS: `${staticLib} ${externalLibs}`,
+      STATIC_LIBPATHS: `../${staticLib}`,
+    });
   }
 
   console.log(`\n\ncreating workspace folder...\n\n`);
 
-  await createWorkspaceFolder(src, dest, [...projects.split(','), ...staticLibs.split(',')]);
+  await createWorkspaceFolder(src, dest, [...projectsList, staticLib]);
 
   console.log(`\n\ncopying root directory files...\n\n`);
 
@@ -54,12 +65,11 @@ const main = async ({ src, dest, staticLibs, projects }) => {
   console.log(`\n\nscaffolding complete!\n\n`);
 }
 
-const updateCCppProperties = async (projectDir, staticLibs) => {
+const updateCCppProperties = async (projectDir, staticLib) => {
   const contents = await readJSON(`${projectDir}/.vscode/c_cpp_properties.json`);
-  const staticLibIncludePaths = staticLibs.map((lib) => `\${workspaceFolder}/../${lib}/src`);
 
   contents.configurations.forEach((config) => {
-    config.includePath = [...config.includePath, ...staticLibIncludePaths];
+    config.includePath = [...config.includePath, `\${workspaceFolder}/../${staticLib}/src`];
   })
 
   await writeJSON(`${projectDir}/.vscode/c_cpp_properties.json`, contents);
@@ -70,6 +80,12 @@ const createWorkspaceFolder = async (src, dest, folders) => {
     folders: folders.map((folder) => ({ name: folder, path: folder })),
     settings: await readJSON(`${src}/configs/vscode/settings.json`),
   });
+}
+
+const configureSettings = async (file, settings) => {
+  for (const [key, value] of Object.entries(settings)) {
+    await $`sed -i 's@${key}=.*$@'${key}'='${value}'@' ${file}`;
+  }
 }
 
 await main(values);
