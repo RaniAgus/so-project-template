@@ -26,7 +26,7 @@ jobs:
           bun-version: latest
 
       - name: Generate tp-scaffold files
-        run: bun ./scripts/scaffold.js --dist tp-scaffold --projects "${{ github.event.inputs.projects }}" --staticLibs "${{ github.event.inputs.static }}"
+        run: bun ./scripts/scaffold.js --dest tp-scaffold --projects "${{ github.event.inputs.projects }}" --staticLibs "${{ github.event.inputs.static }}"
 
       - name: Push to tp-scaffold branch
         working-directory: tp-scaffold
