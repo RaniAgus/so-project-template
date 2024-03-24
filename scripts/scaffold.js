@@ -80,7 +80,7 @@ const configureCCppProperties = async (projectDir, staticLib) => {
   const properties = await readJSON(`${projectDir}/.vscode/c_cpp_properties.json`);
 
   for (const config of properties.configurations) {
-    config.includePath.push(`\${workspaceFolder}/../${staticLib}/include`);
+    config.includePath.push(`\${workspaceFolder}/../${staticLib}/src`);
   }
 
   await writeJSON(`${projectDir}/.vscode/c_cpp_properties.json`, properties);
