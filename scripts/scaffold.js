@@ -62,6 +62,10 @@ const main = async ({ src, dest, projects, staticLib, externalLibs }) => {
 
   await $`cp -av ${src}/configs/scaffold/. ${dest}`;
 
+  console.log(`\n\nadding deploy flags to README...\n\n`);
+
+  await configureDeployFlags(`${dest}/README.md`, projectsList);
+
   console.log(`\n\nscaffolding complete!\n\n`);
 }
 
@@ -86,6 +90,11 @@ const configureSettings = async (file, settings) => {
   for (const [key, value] of Object.entries(settings)) {
     await $`sed -i 's@${key}=.*$@'${key}'='${value}'@' ${file}`;
   }
+}
+
+const configureDeployFlags = async (file, projects) => {
+  const flags = projects.map(p => `-p=${p}`).join(' ');
+  await $`sed -i 's@{{ deployFlags }}@'${flags}'@' ${file}`;
 }
 
 await main(values);
