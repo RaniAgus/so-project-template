@@ -58,10 +58,6 @@ export const sidebar = {
         //   text: 'Shared Libraries',
         //   link: '/guia/avanzado/shared-libraries'
         // },
-        {
-          text: 'Escuchar cambios en el código',
-          link: '/guia/avanzado/escuchar-cambios'
-        },
       ],
     },
   ],

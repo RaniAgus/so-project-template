@@ -60,13 +60,6 @@ release: $(BIN)
 clean:
 	-rm -rfv obj bin
 
-.PHONY: watch
-watch:
-	@test $(shell which entr) || entr
-	while sleep 0.1; do \
-		find src/ | entr -d make all --no-print-directory; \
-	done
-
 $(BIN): $(OBJS) | $(dir $(BIN))
 	$(call compile_bin)
 

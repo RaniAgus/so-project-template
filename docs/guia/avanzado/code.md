@@ -19,7 +19,7 @@ El mismo cuenta con una task especificando lo siguiente:
 
 ::: code-group
 
-<<< @/../src/project/.vscode/tasks.json#build{json:line-numbers}
+<<< @/../src/configs/vscode/tasks.json{4-13 json:line-numbers}
 
 :::
 
@@ -46,7 +46,7 @@ el cual se indica, entre otras cosas:
 
 ::: code-group
 
-<<< @/../src/project/.vscode/launch.json#run{json:line-numbers}
+<<< @/../src/configs/vscode/launch.json{json:line-numbers}
 
 :::
 
@@ -88,7 +88,7 @@ posibles bugs. Veamos cómo está conformado `c_cpp_properties.json`:
 
 ::: code-group
 
-<<< @/../src/project/.vscode/c_cpp_properties.json{7-10 json:line-numbers}
+<<< @/../src/configs/vscode/c_cpp_properties.json{5-7 json:line-numbers}
 
 :::
 
