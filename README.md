@@ -18,7 +18,7 @@ wget -qO- https://github.com/RaniAgus/so-project-template/releases/download/v4.0
 make
 
 # ejecutar
-./bin/mi-nuevo-proyecto.out
+./bin/mi-nuevo-proyecto
 ```
 
 Para agregar bibliotecas, compartir código entre proyectos, importar en

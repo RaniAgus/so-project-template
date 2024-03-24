@@ -57,7 +57,7 @@ tree bin obj
 ```
 .
 ├── bin
-│   └── {nombre-del-proyecto}.out
+│   └── {nombre-del-proyecto}
 └── obj
     └── main.o
 ```
@@ -84,14 +84,14 @@ $ ls -l bin src
 
 bin:
 total 20
--rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 ejemplo.out
+-rwxrwxr-x 1 utnso utnso 17256 Mar 12 11:43 ejemplo
 
 src:
 total 4
 -rw-rw-r-- 1 utnso utnso   118 Mar 12 11:22 main.c
 ```
 
-En este caso, se da cuenta que `ejemplo.out` fue modificado después que
+En este caso, se da cuenta que `ejemplo` fue modificado después que
 `main.c`, por lo que no hace falta recompilar.
 
 :::
@@ -99,10 +99,10 @@ En este caso, se da cuenta que `ejemplo.out` fue modificado después que
 ## Ejecución
 
 Por último, para ejecutar el archivo compilado podemos ingresar
-`./bin/{nombre-del-proyecto}.out`:
+`./bin/{nombre-del-proyecto}`:
 
 ```bash
-./bin/ejemplo.out
+./bin/ejemplo
 ```
 
 El cual nos mostrará el mensaje `Hello world!!`.

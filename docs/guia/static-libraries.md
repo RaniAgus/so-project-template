@@ -194,7 +194,7 @@ Una vez compilemos con `make` veremos que se agregó el flag `-L{path}/bin` a
 `gcc`:
 
 ```bash
-gcc src/main.c -o "bin/ejemplo.out" -I../utils/src -L../utils/bin -lutils
+gcc src/main.c -o "bin/ejemplo" -I../utils/src -L../utils/bin -lutils
 ```
 
 ### Incluir en el código

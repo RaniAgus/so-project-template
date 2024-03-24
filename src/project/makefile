@@ -2,7 +2,7 @@ include settings.mk
 
 ################################################################################
 
-filename = $(1).out
+filename = $(1)
 
 define compile_bin
 	$(CC) $(CFLAGS) -o "$@" $^ $(IDIRS:%=-I%) $(LIBDIRS:%=-L%) $(RUNDIRS:%=-Wl,-rpath,%) $(LIBS:%=-l%)

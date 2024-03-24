@@ -42,7 +42,7 @@ BIN = bin/$(call filename,$(shell cd . && pwd | xargs basename))
 
 # Set test binary targets
 ifeq ($(TESTS_ENABLED),1)
-TEST = bin/$(shell cd . && pwd | xargs basename)_tests.out
+TEST = bin/$(shell cd . && pwd | xargs basename)_tests
 endif
 
 .PHONY: all

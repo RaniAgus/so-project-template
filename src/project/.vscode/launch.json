@@ -8,7 +8,7 @@
       "name": "run",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}.out",
+      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}",
       "args": [
         // TODO: Agregar los argumentos que se necesiten
       ],
@@ -31,7 +31,7 @@
       "name": "test",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}_tests.out",
+      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}_tests",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
