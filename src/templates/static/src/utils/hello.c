@@ -1,5 +1,5 @@
 #include <utils/hello.h>
 
-void say_hello(char* who) {
-    printf("Hello %s!!\n", who);
+void saludar(char* quien) {
+    printf("Hola desde %s!!\n", quien);
 }

@@ -51,6 +51,22 @@ const parseMakefileLine = async (file, line) => {
   return include ? $`cat ${dirname(file)}/../${include}`.text() : line;
 }
 
+export const replaceConfig = async (file, settings) => {
+  for (const [key, value] of Object.entries(settings)) {
+    await replace(file, `${key}=.*`, `${key}=${value}`);
+  }
+}
+
+export const replaceInterpolation = async (file, data) => {
+  for (const [key, value] of Object.entries(data)) {
+    await replace(file, `{{ ${key} }}`, value);
+  }
+}
+
+const replace = async (file, text, replacement) => {
+  await $`sed -i 's@'${text}'@'${replacement}'@' ${file}`;
+}
+
 export const readJSON = async (file) => {
   return JSON.parse(await $`cat ${file}`.text());
 }

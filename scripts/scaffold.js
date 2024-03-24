@@ -1,6 +1,6 @@
 import { $ } from 'bun';
 import { parseArgs } from 'util';
-import { Templates, cleanupDir, exportTemplate, readJSON, writeJSON } from './utils';
+import { Templates, cleanupDir, replaceInterpolation, replaceConfig, exportTemplate, readJSON, writeJSON } from './utils';
 
 const { values } = parseArgs({
   args: Bun.argv,
@@ -38,7 +38,8 @@ const main = async ({ src, dest, projects, staticLib, externalLibs }) => {
 
   await exportTemplate(src, dest, Templates.STATIC);
   await $`mv -v ${dest}/${Templates.STATIC} ${dest}/${staticLib}`;
-  await configureSettings(`${dest}/${staticLib}/settings.mk`, {
+
+  await replaceConfig(`${dest}/${staticLib}/settings.mk`, {
     LIBS: externalLibs,
   });
 
@@ -47,8 +48,12 @@ const main = async ({ src, dest, projects, staticLib, externalLibs }) => {
   for (const project of projectsList) {
     await exportTemplate(src, dest, Templates.PROJECT);
     await $`mv -v ${dest}/${Templates.PROJECT} ${dest}/${project}`;
-    await updateCCppProperties(`${dest}/${project}`, staticLib);
-    await configureSettings(`${dest}/${project}/settings.mk`, {
+
+    await $`cp ${src}/configs/main/main.c ${dest}/${project}/src/main.c`;
+    await replaceInterpolation(`${dest}/${project}/src/main.c`, { project });
+
+    await configureCCppProperties(`${dest}/${project}`, staticLib);
+    await replaceConfig(`${dest}/${project}/settings.mk`, {
       LIBS: `${staticLib} ${externalLibs}`,
       STATIC_LIBPATHS: `../${staticLib}`,
     });
@@ -64,19 +69,21 @@ const main = async ({ src, dest, projects, staticLib, externalLibs }) => {
 
   console.log(`\n\nadding deploy flags to README...\n\n`);
 
-  await configureDeployFlags(`${dest}/README.md`, projectsList);
+  await replaceInterpolation(`${dest}/README.md`, {
+    deployFlags: projectsList.map(p => `-p=${p}`).join(' '),
+  });
 
   console.log(`\n\nscaffolding complete!\n\n`);
 }
 
-const updateCCppProperties = async (projectDir, staticLib) => {
-  const contents = await readJSON(`${projectDir}/.vscode/c_cpp_properties.json`);
+const configureCCppProperties = async (projectDir, staticLib) => {
+  const properties = await readJSON(`${projectDir}/.vscode/c_cpp_properties.json`);
 
-  contents.configurations.forEach((config) => {
-    config.includePath = [...config.includePath, `\${workspaceFolder}/../${staticLib}/src`];
-  })
+  for (const config of properties.configurations) {
+    config.includePath.push(`\${workspaceFolder}/../${staticLib}/include`);
+  }
 
-  await writeJSON(`${projectDir}/.vscode/c_cpp_properties.json`, contents);
+  await writeJSON(`${projectDir}/.vscode/c_cpp_properties.json`, properties);
 }
 
 const createWorkspaceFolder = async (src, dest, folders) => {
@@ -84,17 +91,6 @@ const createWorkspaceFolder = async (src, dest, folders) => {
     folders: folders.map((folder) => ({ name: folder, path: folder })),
     settings: await readJSON(`${src}/configs/vscode/settings.json`),
   });
-}
-
-const configureSettings = async (file, settings) => {
-  for (const [key, value] of Object.entries(settings)) {
-    await $`sed -i 's@${key}=.*$@'${key}'='${value}'@' ${file}`;
-  }
-}
-
-const configureDeployFlags = async (file, projects) => {
-  const flags = projects.map(p => `-p=${p}`).join(' ');
-  await $`sed -i 's@{{ deployFlags }}@'${flags}'@' ${file}`;
 }
 
 await main(values);
