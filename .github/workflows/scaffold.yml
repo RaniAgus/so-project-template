@@ -1,0 +1,49 @@
+name: Build scaffold
+
+on:
+  workflow_dispatch:
+    inputs:
+      projects:
+        description: 'Projects to generate, separated by spaces'
+        required: true
+        default: 'kernel memoria cpu filesystem'
+      static:
+        description: 'Static lib to generate'
+        required: true
+        default: 'utils'
+      external:
+        description: 'External libs to include, separated by spaces'
+        required: true
+        default: 'commons pthread readline m'
+      branch:
+        description: 'Branch to push the generated files'
+        required: true
+        default: 'scaffold'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Generate scaffold files
+        run: |
+          bun ./scripts/scaffold.js \
+            --projects "${{ github.event.inputs.projects }}" \
+            --staticLib "${{ github.event.inputs.static }}" \
+            --externalLibs "${{ github.event.inputs.external }}"
+
+      - name: Push to scaffold branch
+        run: |
+          git switch --orphan ${{ github.event.inputs.branch }}
+          mv dist/{.gitignore,*} .
+          git add .
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Generate tp-scaffold files"
+          git push -f origin ${{ github.event.inputs.branch }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

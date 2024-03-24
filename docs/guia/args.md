@@ -11,7 +11,7 @@ Es probable que para el TP requieran pasar argumentos a `main()` para, por
 ejemplo, parametrizar el archivo config que se va a utilizar:
 
 ```bash
-./bin/ejemplo.out ejemplo.config
+./bin/ejemplo ejemplo.config
 ```
 
 Y recibir el path hacia el archivo config en la función `config_create()`:

@@ -1,13 +1,12 @@
 import { $ } from 'bun';
-import { dirname } from 'path';
 import { parseArgs } from 'util';
+import { Templates, exportTemplate } from './utils';
 
 const { values } = parseArgs({
   args: Bun.argv,
   options: {
     tag: {
       type: 'string',
-      default: 'SNAPSHOT'
     },
     src: {
       type: 'string',
@@ -17,54 +16,36 @@ const { values } = parseArgs({
       type: 'string',
       default: 'dist'
     },
-    templates: {
-      type: 'string',
-      default: 'project,static,shared'
-    },
   },
   allowPositionals: true,
 });
 
-const main = async ({ tag, src, dest, templates }) => {
-  console.log(`cleaning up ${dest}...\n\n`);
-
-  await $`rm -rfv ${dest}`;
-  await $`mkdir -p ${dest}`;
+const main = async ({ tag, src, dest }) => {
+  await cleanupDir(dest);
 
   console.log(`\n\nparsing templates from ${src}...`);
 
-  for (const template of templates.split(',')) {
-    console.log(`\n\nparsing ${template}...\n\n`);
+  for (const template of Object.values(Templates)) {
+    await exportTemplate(src, dest, template);
 
-    await $`rsync -r --exclude-from=${src}/${template}/.gitignore ${src}/${template} ${dest}`;
-    await $`rsync -r ${src}/${template}/.vscode ${dest}/${template}`
-
-    const makefile = await parseMakefile(`${src}/${template}/makefile`);
-    await $`echo ${makefile} | tee makefile`.cwd(`${dest}/${template}`);
+    if (!tag) {
+      continue;
+    }
 
     console.log(`packing ${template} with tag ${tag}...\n\n`);
 
-    await $`tar -czvf ${template}-${tag}.tar.gz ${template}`.cwd(dest)
-    await $`md5sum ${template}-${tag}.tar.gz > ${template}-${tag}.tar.gz.md5`.cwd(dest);
-    await $`sha1sum ${template}-${tag}.tar.gz > ${template}-${tag}.tar.gz.sha1`.cwd(dest);
+    await compressAndGenerateChecksums(tag, `${dest}/${template}`);
 
     console.log(`\n\ncleaning up ${template}...\n\n`);
 
-    await $`rm -rfv ${template}`.cwd(dest)
+    await $`rm -rfv ${template}`.cwd(dest);
   }
 };
 
-const parseMakefile = async (file) => {
-  const lines = []
-  for await(const line of $`cat ${file}`.lines()) {
-    lines.push(await parseMakefileLine(file, line));
-  }
-  return lines.join('\n');
-}
-
-const parseMakefileLine = async (file, line) => {
-  const [_, include] = line.split('include ../');
-  return include ? $`cat ${dirname(file)}/../${include}`.text() : line;
+const compressAndGenerateChecksums = async (tag, dir) => {
+  await $`tar -czvf ${dir}-${tag}.tar.gz ${dir}`
+  await $`md5sum ${dir}-${tag}.tar.gz > ${dir}-${tag}.tar.gz.md5`;
+  await $`sha1sum ${dir}-${tag}.tar.gz > ${dir}-${tag}.tar.gz.sha1`;
 }
 
 await main(values);

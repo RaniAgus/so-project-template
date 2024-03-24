@@ -40,7 +40,7 @@ biblioteca que queremos usar al momento de la compilación con `gcc`. Al
 ejecutar `make` veremos algo como:
 
 ```bash
-gcc -o bin/ejemplo.out src/main.c -lcommons
+gcc -o bin/ejemplo src/main.c -lcommons
 ```
 
 Ese `-lcommons` es lo que agregamos al editar `LIBS`.

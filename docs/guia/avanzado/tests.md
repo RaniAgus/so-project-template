@@ -52,8 +52,8 @@ archivos.
 ::: tip
 
 En general es una buena práctica que el archivo fuente que contiene la función
-`main()` tenga muy poco código con la lógica más _core_ de la aplicación, 
-delegando cada tarea a otras funciones de otros archivos fuente que sí son más 
+`main()` tenga muy poco código con la lógica más _core_ de la aplicación,
+delegando cada tarea a otras funciones de otros archivos fuente que sí son más
 acordes para ser testeadas de forma unitaria.
 
 :::
@@ -141,11 +141,46 @@ para poder identificar bien qué parte del código cubre cada suite:
 
 ## Ejecutar el proyecto
 
-- Desde Visual Studio Code: ya contamos con la configuración necesaria para
-ejecutarlo, simplemente elegimos la alternativa `test` entre las opciones.
-
 - Desde Eclipse: hacemos click derecho sobre el ejecutable y seleccionamos
 `Run As...` > `Local C/C++ Application`.
+
+- Desde Visual Studio Code: debemos agregar la siguiente configuración a nuestro
+archivo `launch.json` y luego simplemente elegimos la alternativa `test` entre
+las opciones:
+
+::: code-group
+
+```json [launch.json]
+{
+  // See https://go.microsoft.com/fwlink/?linkid=830387
+  // for the documentation about the launch.json format
+  "version": "0.2.0",
+  "configurations": [
+    { // [!code focus]
+      "name": "test", // [!code focus]
+      "type": "cppdbg", // [!code focus]
+      "request": "launch", // [!code focus]
+      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}_tests.out", // [!code focus]
+      "args": [], // [!code focus]
+      "stopAtEntry": false, // [!code focus]
+      "cwd": "${workspaceFolder}", // [!code focus]
+      "environment": [], // [!code focus]
+      "externalConsole": false, // [!code focus]
+      "MIMode": "gdb", // [!code focus]
+      "setupCommands": [ // [!code focus]
+        { // [!code focus]
+          "description": "Enable pretty-printing for gdb", // [!code focus]
+          "text": "-enable-pretty-printing", // [!code focus]
+          "ignoreFailures": true // [!code focus]
+        } // [!code focus]
+      ], // [!code focus]
+      "preLaunchTask": "build" // [!code focus]
+    } // [!code focus]
+  ]
+}
+```
+
+:::
 
 ## Valgrind
 
