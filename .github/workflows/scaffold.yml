@@ -1,0 +1,39 @@
+name: Generate tp-scaffold files
+
+on:
+  workflow_dispatch:
+    inputs:
+      projects:
+        description: 'Projects to generate, separated by commas'
+        required: true
+        default: 'kernel,memoria,cpu,filesystem'
+      static:
+        description: 'Static libs to generate, separated by commas'
+        required: true
+        default: 'utils'
+      repo:
+        description: 'Repository to push to'
+        required: true
+        default: 'RaniAgus/tp-scaffold'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Generate tp-scaffold files
+        run: bun ./scripts/scaffold.js --dist tp-scaffold --projects "${{ github.event.inputs.projects }}" --staticLibs "${{ github.event.inputs.static }}"
+
+      - name: Push to tp-scaffold branch
+        working-directory: tp-scaffold
+        run: |
+          git init
+          git add .
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Generate tp-scaffold files"
+          git push --force "git@github.com:${{ github.event.inputs.repo }}.git" main

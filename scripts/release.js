@@ -21,10 +21,7 @@ const { values } = parseArgs({
 });
 
 const main = async ({ tag, src, dest }) => {
-  console.log(`cleaning up ${dest}...\n\n`);
-
-  await $`rm -rfv ${dest}`;
-  await $`mkdir -p ${dest}`;
+  await cleanupDir(dest);
 
   console.log(`\n\nparsing templates from ${src}...`);
 

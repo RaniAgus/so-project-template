@@ -7,6 +7,13 @@ export const Templates = {
   SHARED: 'shared',
 };
 
+export const cleanupDir = async (dir) => {
+  console.log(`cleaning up ${dir}...\n\n`);
+
+  await $`rm -rfv ${dir}`;
+  await $`mkdir -p ${dir}`;
+}
+
 export const exportTemplate = async (src, dest, template) => {
   console.log(`copying ${template} files...\n\n`);
 
@@ -42,4 +49,12 @@ const parseMakefile = async (file) => {
 const parseMakefileLine = async (file, line) => {
   const [_, include] = line.split('include ../');
   return include ? $`cat ${dirname(file)}/../${include}`.text() : line;
+}
+
+export const readJSON = async (file) => {
+  return JSON.parse(await $`cat ${file}`.text());
+}
+
+export const writeJSON = async (file, data) => {
+  await $`echo ${JSON.stringify(data, null, 2)} > ${file}`;
 }
