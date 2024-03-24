@@ -1,13 +1,11 @@
 {
-  // See https://go.microsoft.com/fwlink/?linkid=830387
-  // for the documentation about the launch.json format
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "test",
+      "name": "run",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}_tests",
+      "program": "${workspaceFolder}/bin/${workspaceFolderBasename}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

@@ -4,7 +4,6 @@ obj/
 *.log
 
 # Eclipse files
-RemoteSystemsTempFiles/
 .metadata/
 .settings/
 .cproject
@@ -17,4 +16,5 @@ RemoteSystemsTempFiles/
 .vscode/*
 !.vscode/c_cpp_properties.json
 !.vscode/launch.json
+!.vscode/settings.json
 !.vscode/tasks.json
