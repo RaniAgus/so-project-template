@@ -37,7 +37,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Generate tp-scaffold files"
           git branch -M ${{ github.event.inputs.branch }}
-          git remote add origin "https://$GITHUB_TOKEN@github.com/${{ github.repository }}"
+          git remote add origin "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
           git push -f -u origin ${{ github.event.inputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
