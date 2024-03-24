@@ -38,6 +38,6 @@ jobs:
           git commit -m "Generate tp-scaffold files"
           git branch -M main
           git remote add origin "https://${{ github.actor }}@github.com/${{ github.event.inputs.repo }}.git"
-          git push --force main
+          git push --force origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
