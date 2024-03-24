@@ -8,6 +8,8 @@ export const Templates = {
 };
 
 export const exportTemplate = async (src, dest, template) => {
+  console.log(`copying ${template} files...\n\n`);
+
   await copyTrackedFiles(`${src}/templates/${template}`, dest);
 
   await $`cp -rv ${src}/configs/vscode ${dest}/${template}/.vscode`;
@@ -15,12 +17,14 @@ export const exportTemplate = async (src, dest, template) => {
     await $`rm -fv ${dest}/${template}/.vscode/launch.json`;
   }
 
+  console.log(`\n\nexporting ${template} Makefile...\n\n`);
+
   await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`);
   await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`, 'settings.mk');
 }
 
 const copyTrackedFiles = async (src, dest) => {
-  await $`rsync -r --exclude-from=${src}/.gitignore ${src} ${dest}`;
+  await $`rsync -rv --exclude-from=${src}/.gitignore ${src} ${dest}`;
 }
 
 const exportMakefile = async (src, dest, name = 'Makefile') => {

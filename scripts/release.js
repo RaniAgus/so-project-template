@@ -29,8 +29,6 @@ const main = async ({ tag, src, dest }) => {
   console.log(`\n\nparsing templates from ${src}...`);
 
   for (const template of Object.values(Templates)) {
-    console.log(`\n\nparsing ${template}...\n\n`);
-
     await exportTemplate(src, dest, template);
 
     if (!tag) {
