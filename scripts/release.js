@@ -1,13 +1,12 @@
 import { $ } from 'bun';
 import { parseArgs } from 'util';
-import { copyTrackedFiles, compressAndGenerateChecksums, exportMakefile } from './utils';
+import { Templates, exportTemplate } from './utils';
 
 const { values } = parseArgs({
   args: Bun.argv,
   options: {
     tag: {
       type: 'string',
-      default: '',
     },
     src: {
       type: 'string',
@@ -29,18 +28,10 @@ const main = async ({ tag, src, dest }) => {
 
   console.log(`\n\nparsing templates from ${src}...`);
 
-  for (const template of ['project', 'static', 'shared']) {
+  for (const template of Object.values(Templates)) {
     console.log(`\n\nparsing ${template}...\n\n`);
 
-    await copyTrackedFiles(`${src}/templates/${template}`, dest);
-
-    await $`cp -rv ${src}/configs/vscode ${dest}/${template}/.vscode`;
-    if (template !== 'project') {
-      await $`rm -fv ${dest}/${template}/.vscode/launch.json`;
-    }
-
-    await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`);
-    await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`, 'settings.mk');
+    await exportTemplate(src, dest, template);
 
     if (!tag) {
       continue;
@@ -55,5 +46,11 @@ const main = async ({ tag, src, dest }) => {
     await $`rm -rfv ${template}`.cwd(dest);
   }
 };
+
+const compressAndGenerateChecksums = async (tag, dir) => {
+  await $`tar -czvf ${dir}-${tag}.tar.gz ${dir}`
+  await $`md5sum ${dir}-${tag}.tar.gz > ${dir}-${tag}.tar.gz.md5`;
+  await $`sha1sum ${dir}-${tag}.tar.gz > ${dir}-${tag}.tar.gz.sha1`;
+}
 
 await main(values);

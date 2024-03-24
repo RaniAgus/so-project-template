@@ -1,11 +1,29 @@
 import { $ } from 'bun';
 import { dirname } from 'path';
 
-export const copyTrackedFiles = async (src, dest) => {
+export const Templates = {
+  PROJECT: 'project',
+  STATIC: 'static',
+  SHARED: 'shared',
+};
+
+export const exportTemplate = async (src, dest, template) => {
+  await copyTrackedFiles(`${src}/templates/${template}`, dest);
+
+  await $`cp -rv ${src}/configs/vscode ${dest}/${template}/.vscode`;
+  if (template !== Templates.PROJECT) {
+    await $`rm -fv ${dest}/${template}/.vscode/launch.json`;
+  }
+
+  await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`);
+  await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`, 'settings.mk');
+}
+
+const copyTrackedFiles = async (src, dest) => {
   await $`rsync -r --exclude-from=${src}/.gitignore ${src} ${dest}`;
 }
 
-export const exportMakefile = async (src, dest, name = 'Makefile') => {
+const exportMakefile = async (src, dest, name = 'Makefile') => {
   await $`echo ${await parseMakefile(`${src}/${name}`)} | tee ${name}`.cwd(dest);
 }
 
@@ -20,10 +38,4 @@ const parseMakefile = async (file) => {
 const parseMakefileLine = async (file, line) => {
   const [_, include] = line.split('include ../');
   return include ? $`cat ${dirname(file)}/../${include}`.text() : line;
-}
-
-export const compressAndGenerateChecksums = async (tag, dir) => {
-  await $`tar -czvf ${dir}-${tag}.tar.gz ${dir}`
-  await $`md5sum ${dir}-${tag}.tar.gz > ${dir}-${tag}.tar.gz.md5`;
-  await $`sha1sum ${dir}-${tag}.tar.gz > ${dir}-${tag}.tar.gz.sha1`;
 }
