@@ -1,6 +1,3 @@
-PATH_TO_LIB=/usr/lib
-PATH_TO_INCLUDE=/usr/include
-
 .PHONY: install
 install: release test
 	sudo cp -uv $(BIN) $(PATH_TO_LIB)

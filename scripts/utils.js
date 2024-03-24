@@ -5,8 +5,8 @@ export const copyTrackedFiles = async (src, dest) => {
   await $`rsync -r --exclude-from=${src}/.gitignore ${src} ${dest}`;
 }
 
-export const exportMakefile = async (src, dest) => {
-  await $`echo ${await parseMakefile(`${src}/makefile`)} | tee makefile`.cwd(dest);
+export const exportMakefile = async (src, dest, name = 'Makefile') => {
+  await $`echo ${await parseMakefile(`${src}/${name}`)} | tee ${name}`.cwd(dest);
 }
 
 const parseMakefile = async (file) => {

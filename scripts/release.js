@@ -7,7 +7,7 @@ const { values } = parseArgs({
   options: {
     tag: {
       type: 'string',
-      default: 'SNAPSHOT'
+      default: '',
     },
     src: {
       type: 'string',
@@ -40,6 +40,11 @@ const main = async ({ tag, src, dest }) => {
     }
 
     await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`);
+    await exportMakefile(`${src}/templates/${template}`, `${dest}/${template}`, 'settings.mk');
+
+    if (!tag) {
+      continue;
+    }
 
     console.log(`packing ${template} with tag ${tag}...\n\n`);
 
