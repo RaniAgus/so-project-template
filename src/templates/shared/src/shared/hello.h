@@ -5,8 +5,8 @@
     #include <stdio.h>
 
     /**
-    * @NAME: hello_world
-    * @DESC: Imprime un saludo por consola.
+    * @fn    hello_world
+    * @brief Imprime un saludo por consola.
     */
     void hello_world();
 
