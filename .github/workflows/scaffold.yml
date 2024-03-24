@@ -11,10 +11,10 @@ on:
         description: 'Static libs to generate, separated by commas'
         required: true
         default: 'utils'
-      repo:
-        description: 'Repository to push to'
+      branch:
+        description: 'Branch to push the generated files'
         required: true
-        default: 'RaniAgus/tp-scaffold'
+        default: 'scaffold'
 
 jobs:
   generate:
@@ -36,8 +36,8 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Generate tp-scaffold files"
-          git branch -M main
-          git remote add origin "https://${{ github.actor }}@github.com/${{ github.event.inputs.repo }}.git"
-          git push --force origin main
+          git branch -M ${{ github.event.inputs.branch }}
+          git remote add origin "https://github.com/${{ github.repository }}.git"
+          git push --force origin ${{ github.event.inputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
