@@ -15,8 +15,8 @@ una regla `memcheck`:
 ```bash
 make memcheck
 ```
-Este comando se puede configurar editando la regla `MEMCHECK_FLAGS` del archivo
-`settings.mk`:
+Este comando se puede configurar editando la variable `MEMCHECK_FLAGS` del
+archivo `settings.mk`:
 
 ```makefile
 # Valgrind flags
@@ -31,8 +31,8 @@ una regla `helgrind`:
 ```bash
 make helgrind
 ```
-Este comando se puede configurar editando la regla `HELGRIND_FLAGS` del archivo
-`settings.mk`:
+Este comando se puede configurar editando la variable `HELGRIND_FLAGS` del
+archivo `settings.mk`:
 
 ```makefile
 # Valgrind flags
