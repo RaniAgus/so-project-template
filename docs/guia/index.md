@@ -4,6 +4,17 @@ import { repository, version } from '../../package.json'
 
 # Primeros pasos
 
+::: danger DEPRECADO
+
+Desde el Primer Cuatrimestre de 2024, este proyecto fue integrado oficialmente
+a la cátedra de Sistemas Operativos, por lo que la guía dejará de recibir
+actualizaciones a partir de esa fecha.
+
+Podés consultar cómo empezar con la creación de un proyecto C desde el
+[sitio de documentación](http://faq.utnso.com.ar/docs/primeros-pasos/primer-proyecto-c).
+
+:::
+
 ## Inicialización
 
 Primero, vamos a descargar el template en una carpeta con el nombre del
